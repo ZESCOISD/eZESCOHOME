@@ -1,0 +1,402 @@
+/* progress bar */
+.loading-bar {
+  width: 100%;
+  height: 4px;
+  /* background: linear-gradient(to right, #178b57, #F59F37); */
+  background-color:#F59F37 ;
+  animation: loading 1s infinite;
+}
+
+@keyframes loading {
+  0% {
+      transform: scaleX(0);
+  }
+  100% {
+      transform: scaleX(1);
+  }
+}
+
+/* .dropdown-container {
+    margin-top: 400px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .scroll-button {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    margin: 0 10px;
+  }
+  
+  .scroll-left {
+    visibility: hidden;
+  }
+  
+  .dropdown-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .dropdown {
+
+    margin: 0 10px;
+  }
+  
+  .dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+  } */
+  
+
+  .container-fluid{
+    margin: 0;
+    padding: 0px;
+  }
+
+body {
+    background-color: #F2F2F2;
+    overflow: hidden;
+}
+
+body.keyboard{
+  height: calc(100% + 500px);
+}
+
+#art{
+  max-width: 100%;
+}
+
+#login-home{
+ color: #178b57;
+}
+
+#login-home p{
+  margin-top: -12px;
+}
+
+#card{
+  margin-top: 130px;
+  width: 470px;
+  height: 460px;
+  border-radius: 2rem;
+}
+
+#resetpassworcard{
+  margin-top: 100px;
+  width: 470px;
+  height: 490px;
+  border-radius: 2rem;
+}
+
+#card-logo{
+  margin: 30px;
+}
+
+.form-control{
+  letter-spacing: 0px;
+  color:#178b57;
+  padding: 15px;
+  margin: 5px;
+}
+
+#username{
+  color:#178b57;
+}
+
+.form-rounded {
+  border-radius: 3rem;
+  }
+
+.input-group{
+  width: 400px;
+}
+
+.btn{
+  width: 390px;
+  height: 47px;
+  background-color: #178b57;
+  /* border-color: #BAD873; */
+}
+
+.form-group{
+  margin-top: 5px;
+}
+
+.btn:link{
+  background-color: #178b57;
+  border-color: black;
+}
+
+.btn:visited{
+  background-color: #AECC73;
+  border-color: #AECC73;
+}
+
+.btn:hover{
+  background-color: #209c64;
+  border-color: #AECC73;
+}
+
+.btn:active{
+  background-color: #BAD873;
+  border-color: #BAD873;
+}
+
+#forgotPass{
+  color:#178b57;
+  margin-top: 5px;
+  text-decoration: none;
+}
+
+#forgotLink:link, #forgotLink:visited{
+  color: #178b57;
+  text-decoration: none;
+}
+
+#forgotLink:hover, #forgotLink:active {
+  background-color: red;
+}
+
+@media screen and (max-width: 1025px) {
+
+  #art{
+    display: none;
+    visibility: none;
+  }
+
+  #art-div{
+    display: none;
+    visibility: none;
+  }
+
+  .top-left{
+    margin-top: 25px;
+  }
+
+  #logo-top{
+    width: 140px;
+
+  }
+  
+  #card{
+    margin-top: 70px;
+    width: 400px;
+    height: 380px;
+    border-radius: 1rem;
+  }
+
+  #resetpasswordcard{
+    margin-top: 70px;
+    width: 400px;
+    height: 380px;
+    border-radius: 1rem;
+  }
+
+  #card-logo{
+    width: 210px;
+    margin: 20px 0 10px 0;
+  }
+
+  .form-control{
+    letter-spacing: 0px;
+    padding: 8px;
+    margin: 2px;
+  }
+
+  .form-rounded {
+    border-radius: 3rem;
+    }
+  
+  .input-group{
+    margin: 0 0 24px 0;
+    width: 320px;
+    height: 30px;
+  }
+
+  #forgotPass{
+    margin-top: 10px;
+  }
+  
+  .btn{
+    width: 320px;
+    height: 40px;
+  }
+  
+  .form-group{
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .top-left{
+    margin-top: 25px;
+  }
+
+  #logo-top{
+    width: 140px;
+  }
+  
+  #card{
+    margin-top: 70px;
+    width: 400px;
+    height: 380px;
+    border-radius: 1rem;
+  }
+
+  #card-logo{
+    width: 210px;
+    margin: 20px 0 10px 0;
+  }
+
+  .form-control{
+    letter-spacing: 0px;
+    padding: 8px;
+    margin: 2px;
+  }
+
+  .form-rounded {
+    border-radius: 3rem;
+    }
+  
+  .input-group{
+    margin: 0 0 24px 0;
+    width: 320px;
+    height: 30px;
+  }
+
+  #forgotPass{
+    margin-top: 20px;
+  }
+  
+  .btn{
+    width: 320px;
+    height: 40px;
+  }
+  
+  .form-group{
+    margin-top: 10px;
+  }
+}
+
+
+@media screen and (max-width: 481px) {
+
+  .top-left{
+    margin-top: 10px;
+  }
+
+  #logo-top{
+    width: 110px;
+  }
+  
+  #card{
+    margin-top: 30px;
+    width: 300px;
+    height: 350px;
+    border-radius: 1rem;
+  }
+
+  .card-body{
+    margin-top: 15px;
+  }
+
+  #card-logo{
+    width: 180px;
+    margin: 20px 0 10px 0;
+  }
+
+  .form-control{
+    letter-spacing: 0px;
+    padding: 8px;
+    margin: 2px;
+    font-size: 13px;
+  }
+
+  .form-rounded {
+    border-radius: 3rem;
+    }
+  
+  .input-group{
+    margin: 0 0 16px 0;
+    width: 250px;
+    height: 30px;
+    
+  }
+
+  #forgotPass{
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  
+  .btn{
+    width: 250px;
+    height: 40px;
+    font-size: 13px;
+  }
+  
+  .form-group{
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  #logo-top{
+    width: 100px;
+  }
+  
+  #card{
+    margin-top: 20px;
+    width: 230px;
+    height: 290px;
+    border-radius: 1rem;
+  }
+
+  #card-logo{
+    width: 140px;
+    margin: 20px 0 10px 0;
+  }
+
+  .form-control{
+    letter-spacing: 0px;
+    padding: 8px;
+    margin: 2px;
+    font-size: 12px;
+  }
+
+  .form-rounded {
+    border-radius: 3rem;
+    }
+  
+  .input-group{
+    margin: 0 0 15px 0;
+    width: 180px;
+    height: 30px;
+   
+  }
+
+  #forgotPass{
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  
+  .btn{
+    width: 180px;
+    height: 40px;
+  }
+  
+  .form-group{
+    margin-top: 10px;
+  }
+
+  body{
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+} 

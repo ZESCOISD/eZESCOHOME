@@ -1,0 +1,23 @@
+    
+    
+    
+    
+    
+    @foreach ($groupedCategories as $categoryName => $products)
+                    <div class="dropdown-list">
+                       
+                      <div class="dropdown">
+                        {{-- <button class="btn btn-secondary" type="button" wire:click="showResult" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> --}}
+                            <button id="dropdown" class="btn btn-secondary" type="button" wire:click="showResult({{ $category_id }})">
+                            {{ $categoryName }}
+                        </button>
+ 
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @foreach ($products as $product)
+                          <a wire:click="incrementClicks({{ $product->product_id }})" class="dropdown-item" type="button" data-product-id="{{ $product->product_id }}" href="{{ $product->product_url }}">{{ $product->product_name }}</a>
+                          @endforeach
+                        </div>
+                      </div>
+                        <!-- add more dropdown buttons as needed -->
+                    </div>
+                    @endforeach

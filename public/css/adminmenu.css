@@ -1,0 +1,111 @@
+#manage-body{
+    margin: 0;
+    background-image: url('/img/zesco-bg-img.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#card{
+    height: 150px;
+    width: 300px;
+    margin: 5px;
+    border: none;
+    background-color:#F59F37;
+    /* background-color:#1bad6c; */
+    color: white;
+    font-size: 15px;
+}
+
+.card-footer {
+    /* height: 10px; */
+    height: 40px;
+    background-color: #178b57;
+}
+
+#login-nav-bar-links{
+  margin-bottom: -4px;
+  font-size: 12px;
+  margin-left: 60px;
+   padding: 6px;
+   display: inline-block;
+  }
+
+  #logout{
+  margin-left: 1300px;
+  margin-bottom: 19px;
+  padding: 2px;
+  }
+
+/* #login-nav-bar-links{
+  display: inline;
+} */
+
+#card-menus{
+  margin-top: 200px;
+}
+
+
+
+#admin-menu-text{
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+    background-color: #F59F37;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+.btn{
+    background-color: #1bad6c;
+    color:white;
+    border: none;
+}
+
+#modal-btn{
+  background-color: #F59F37;
+  color: white;
+}
+
+.btn:hover{
+    background-color:#3abe83;
+}
+
+.btn:active{
+    background-color: #F59F37;
+}
+
+
+  .modal-title{
+    color: black;
+    font-size: 18px;
+    margin-left: 2px;
+  }
+
+  #modal-close{
+    border: none;
+    background-color: #F59F37;
+    color: white;
+    border-radius: 40px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .modal-footer{
+    height: 70px;
+  }
+
+  #add-category-card{
+    margin-top: 25px;
+    width: 400px;
+    height: 200px;
+  }
+
+  .form-group{
+    margin: 0;
+  }
+
+  .dates{
+    margin-bottom: 10px;
+  }
+
