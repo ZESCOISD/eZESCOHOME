@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Notices;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
@@ -17,29 +18,25 @@ class UpcomingEvent extends Component
     public $search_event;
     public $loading = false;
     public $allData = [];
-    protected function rules(){
-        return[
-            'event_name' => 'required|min:2|max:50',
-            'event_event_description' => 'required|min:3|max:200',
-            'venue' => 'required|min:3|max:50',
-            'fee' => 'nullable|numeric',
-            'time' => 'required|date_format:H:i',
-            'date' => 'required|date',
-        ];
 
-    }
-
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
 
     public function saveEvent(){
         $this->loading = true;
         sleep(2);
 
-        $validateData = $this ->validate();
-        UpcomingEvents::create($validateData);
+        $rules = [
+        'event_name' => 'required|min:2|max:50',
+        'event_event_description' => 'required|min:3|max:200',
+        'venue' => 'required|min:3|max:50',
+        'fee' => 'nullable|numeric',
+        'time' => 'required|date_format:H:i',
+        'date' => 'required|date',
+
+    ];
+
+    $validatedData = $this->validate($rules);
+        // $validateData = $this ->validate();
+        UpcomingEvents::create($validatedData);
         $this->resetInput();
         session()->flash('savesuccessful','Your event was successfully added');
 
@@ -78,6 +75,20 @@ class UpcomingEvent extends Component
     public function updateEvent(){
         $this->loading = true;
         sleep(2);
+
+        $rules = [
+        'event_name' => 'required|min:2|max:50',
+        'event_event_description' => 'required|min:3|max:200',
+        'venue' => 'required|min:3|max:50',
+        'fee' => 'nullable|numeric',
+        'time' => 'required|date_format:H:i',
+        'date' => 'required|date',
+
+    ];
+
+        $validatedData = $this->validate($rules);
+        // $validateData = $this ->validate();
+        // UpcomingEvents::create($validatedData);
 
         $validateData = $this ->validate();
         UpcomingEvents::where('id',$this->event_id)->update([
@@ -119,8 +130,13 @@ class UpcomingEvent extends Component
         ->orderBy('id','ASC')
         ->paginate(5);
 
+         $notices = Notices::where('notice_name', 'like', '%'.$this->search.'%')
+        ->orderBy('id','ASC')
+        ->paginate(5);
+
         return view('livewire.admin.utilities',[
-            'upcoming_events' => $upcoming_events
+            'upcoming_events' => $upcoming_events,
+            'notices' => $notices
     ]);
     }
 

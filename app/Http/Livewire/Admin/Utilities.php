@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Notices;
+use App\Models\UpcomingEvents;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,11 +16,13 @@ class Utilities extends Component
      use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    // public $event_name, $event_description, $venue, $time, $date;
+    public $event_id, $event_name, $event_description, $venue, $time, $date;
 
     public $notice_id, $notice_name, $description, $staff_name, $staff_title, $department, $start_date ,$end_date;
-    public $search;
+    public $search, $search_event;
     public $loading = false;
+
+    public $activeTab = 'tab1';
     public $allData = [];
     protected function rules(){
         return[
@@ -69,20 +72,20 @@ class Utilities extends Component
         }
     }
 
-    public function closeModal(){
-        $this->resetInput();
-    }
+    // public function closeModal(){
+    //     $this->resetInput();
+    // }
 
-    public function resetInput(){
-        $this->notice_id ='';
-        $this->notice_name = '';
-        $this-> description ='';
-        $this-> staff_name ='';
-        $this-> staff_title ='';
-        $this-> department ='';
-        $this-> start_date ='';
-        $this-> end_date ='';
-    }
+    // public function resetInput(){
+    //     $this->notice_id ='';
+    //     $this->notice_name = '';
+    //     $this-> description ='';
+    //     $this-> staff_name ='';
+    //     $this-> staff_title ='';
+    //     $this-> department ='';
+    //     $this-> start_date ='';
+    //     $this-> end_date ='';
+    // }
 
     public function updateNotice(){
         $this->loading = true;
@@ -122,6 +125,125 @@ class Utilities extends Component
     }
 
 
+    // Utitlities
+
+
+     public function saveEvent(){
+        $this->loading = true;
+        sleep(2);
+
+        $rules = [
+        'event_name' => 'required|min:2|max:50',
+        'event_event_description' => 'required|min:3|max:200',
+        'venue' => 'required|min:3|max:50',
+        'fee' => 'nullable|numeric',
+        'time' => 'required|date_format:H:i',
+        'date' => 'required|date',
+    ];
+
+
+    $validateData = $this->validate($rules);
+        // $validateData = $this ->validate();
+         dd($validateData);
+        UpcomingEvents::create($validateData);
+        $this->resetInput();
+        session()->flash('savesuccessful','Your event was successfully added');
+
+        $this->loading = false;
+    }
+
+    public function editEvent(int $event_id){
+        $event = UpcomingEvents::find($event_id);
+        if($event){
+            $this->event_id = $event->id;
+            $this->event_name = $event->event_name;
+            $this->event_description = $event->event_description;
+            $this->venue = $event->venue;
+            $this->time = $event->time;
+            $this->date = $event->date;
+
+        }else{
+            return redirect()->to('/utilities.manage');
+        }
+    }
+
+    public function closeModal(){
+        $this->resetInput();
+    }
+
+    public function resetInput(){
+        $this->event_id ='';
+        $this->event_name = '';
+        $this-> event_description ='';
+        $this-> venue ='';
+        $this-> time ='';
+        $this-> date ='';
+
+        $this->notice_id ='';
+        $this->notice_name = '';
+        $this-> description ='';
+        $this-> staff_name ='';
+        $this-> staff_title ='';
+        $this-> department ='';
+        $this-> start_date ='';
+        $this-> end_date ='';
+
+    }
+
+    public function updateEvent(){
+        $this->loading = true;
+        sleep(2);
+
+        $rules = [
+        'event_name' => 'required|min:2|max:50',
+        'event_event_description' => 'required|min:3|max:200',
+        'venue' => 'required|min:3|max:50',
+        'fee' => 'nullable|numeric',
+        'time' => 'required|date_format:H:i',
+        'date' => 'required|date',
+
+    ];
+
+        $validatedData = $this->validate($rules);
+        // $validateData = $this ->validate();
+        // UpcomingEvents::create($validatedData);
+
+        $validateData = $this ->validate();
+        UpcomingEvents::where('id',$this->event_id)->update([
+            'event_name' => $validateData['event_name'],
+            'event_description' => $validateData['event_description'],
+            'venue' => $validateData['venue'],
+            'time' => $validateData['time'],
+            'date' => $validateData['date'],
+            'start_date' => $validateData['start_date'],
+            'end_date' => $validateData['end_date'],
+        ]);
+        session()->flash('updatesuccessful','Your event was updated successfully');
+        $this->resetInput();
+        $this->dispatchBrowserEvent('close-modal');
+
+        $this->loading = false;
+
+    }
+
+    public function deleteEvent(int $event_id){
+        $this->event_id = $event_id;
+    }
+
+    public function destroyEvent(){
+        $this->loading = true;
+        sleep(2);
+
+      UpcomingEvents::find($this->event_id)->delete();
+      session()->flash('deletesuccessful','Your event was deleted successfully');
+        $this->dispatchBrowserEvent('close-modal');
+
+        $this->loading = false;
+    }
+
+
+
+    // end of utilities
 
      public function logout()
     {
@@ -135,8 +257,13 @@ class Utilities extends Component
         ->orderBy('id','ASC')
         ->paginate(5);
 
+        $upcoming_events = UpcomingEvents::where('event_name', 'like', '%'.$this->search_event.'%')
+        ->orderBy('id','ASC')
+        ->paginate(5);
+
         return view('livewire.admin.utilities',[
-            'notices' => $notices
+            'notices' => $notices,
+            'upcoming_events' => $upcoming_events,
         ]);
     }
 

@@ -76,14 +76,15 @@
             <!-- start of new row -->
 
             <div class="col-xl-12 col-lg-12 col-md-12 mt-3">
-                <div class="card">
+                <div wire:ignore.self class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
+                            
                             <li class="nav-item"><a class="nav-link active" href="#notices"
                                     data-toggle="tab">Notices</a></li>
                             <li class="nav-item"><a class="nav-link" href="#events" data-toggle="tab">Events</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                            <li class="nav-item"><a class="nav-link" href="#FAQ" data-toggle="tab">FAQ</a>
                             </li>
                         </ul>
                     </div><!-- /.card-header -->
@@ -91,7 +92,7 @@
                         <div class="tab-content">
                             <div class="active tab-pane" id="notices">
                                 <!-- Post -->
-                                <div class="post">
+                                <div wire:ignore.self class="post">
 
                                     <div class="container mt-5">
                                         <div class="table-wrapper">
@@ -103,8 +104,8 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <input class="form-control border-end-0 border rounded-pill"
-                                                            wire:model="search" type="search" placeholder="Search..."
-                                                            id="search-input">
+                                                            wire:model.defer="search_event" type="search"
+                                                            placeholder="Search..." id="search-input">
                                                         {{-- <button onclick="clearInput()" type="button">click me</button> --}}
                                                         <span class="input-group-append">
                                                     </div>
@@ -368,7 +369,7 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <input class="form-control border-end-0 border rounded-pill"
-                                                            wire:model="search" type="search"
+                                                            wire:model.defer="search_event" type="search"
                                                             placeholder="Search..." id="search-input">
                                                         {{-- <button onclick="clearInput()" type="button">click me</button> --}}
                                                         <span class="input-group-append">
@@ -423,28 +424,27 @@
                                                                         <form wire:submit.prevent="saveNotice">
                                                                             @csrf
                                                                             <div class="form-group">
-                                                                                <label for="notice_name">Name of
-                                                                                    notice</label>
+                                                                                <label for="event_name">Event
+                                                                                    Name</label>
                                                                                 <input type="text"
                                                                                     class="form-control mb-1"
-                                                                                    wire:model.defer="notice_name"
-                                                                                    id="notice_name"
-                                                                                    placeholder="name of notice"
-                                                                                    required>
-                                                                                @error('notice_name')
+                                                                                    wire:model.defer="event_name"
+                                                                                    id="event_name"
+                                                                                    placeholder="Event Name" required>
+                                                                                @error('event_name')
                                                                                     <span
                                                                                         class="text-danger">{{ $message }}</span>
                                                                                 @enderror
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label
-                                                                                    for="description">Description</label>
-                                                                                <textarea name="description" wire:model.defer="description" id="description" class="form-control mb-1"
-                                                                                    cols="30" rows="10" placeholder="Notice Description" required>
+                                                                                <label for="event_description">Event
+                                                                                    Description</label>
+                                                                                <textarea name="description" wire:model.defer="event_description" id="description" class="form-control mb-1"
+                                                                                    cols="30" rows="10" placeholder="Event Description" required>
 
                                                         </textarea>
-                                                                                @error('description')
+                                                                                @error('event_description')
                                                                                     <span
                                                                                         class="text-danger">{{ $message }}</span>
                                                                                 @enderror
@@ -452,44 +452,39 @@
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label for="staff_name">Author of
-                                                                                    Notice</label>
+                                                                                <label for="venue">Venue</label>
                                                                                 <input type="text"
                                                                                     class="form-control mb-1"
-                                                                                    wire:model.defer="staff_name"
-                                                                                    id="staff_name"
-                                                                                    placeholder="Author of Notice"
+                                                                                    wire:model.defer="venue"
+                                                                                    id="venue" placeholder="Venue"
                                                                                     required>
-                                                                                @error('staff_name')
+                                                                                @error('venue')
                                                                                     <span
                                                                                         class="text-danger">{{ $message }}</span>
                                                                                 @enderror
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label for="staff_title">Staff
-                                                                                    title</label>
-                                                                                <input type="text"
+                                                                                <label for="time">Time</label>
+                                                                                <input type="Time"
                                                                                     class="form-control mb-1"
-                                                                                    wire:model.defer="staff_title"
-                                                                                    id="staff_title"
-                                                                                    placeholder="Position Of Staff"
+                                                                                    wire:model.defer="time"
+                                                                                    id="time" placeholder="Time"
                                                                                     required>
-                                                                                @error('staff_title')
+                                                                                @error('time')
                                                                                     <span
                                                                                         class="text-danger">{{ $message }}</span>
                                                                                 @enderror
                                                                             </div>
 
                                                                             <div class="form-group">
-                                                                                <label for="department">Staff
-                                                                                    title</label>
-                                                                                <input type="text"
+                                                                                <label for="department">Date</label>
+                                                                                <input type="date"
                                                                                     class="form-control mb-1"
-                                                                                    wire:model.defer="department"
-                                                                                    id="department"
-                                                                                    placeholder="Department " required>
-                                                                                @error('department')
+                                                                                    wire:model.defer="date"
+                                                                                    id="date" placeholder="Date"
+                                                                                    required>
+                                                                                @error('date')
                                                                                     <span
                                                                                         class="text-danger">{{ $message }}</span>
                                                                                 @enderror
@@ -622,14 +617,14 @@
                                 </div>
 
                                 <!-- Edit Modal HTML -->
-                                <div wire:ignore.self id="editNoticeModal" class="modal fade">
+                                <div wire:ignore.self id="editEventModal" class="modal fade">
                                     <div class="modal-dialog modal-dialog-centered" role="document">>
                                         <div class="modal-content">
 
-                                            <form wire:submit.prevent="editNotice">
+                                            <form wire:submit.prevent="editEvent">
                                                 @csrf
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Edit Notice</h4>
+                                                    <h4 class="modal-title">Edit Event</h4>
                                                     <button type="button" class="close" wire:click="closeModal"
                                                         data-dismiss="modal" aria-hidden="true">&times;</button>
                                                 </div>
@@ -647,29 +642,29 @@
                                                         </div>
                                                     @endif
                                                     <div class="form-group">
-                                                        <label>Name Of Notice</label>
+                                                        <label>Name Of Event</label>
                                                         <input type="text" class="form-control"
-                                                            wire:model.defer="notice_name" required>
+                                                            wire:model.defer="event_name" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Description</label>
+                                                        <label>Event Description</label>
                                                         <input type="text" class="form-control"
-                                                            wire:model.defer="description" required>
+                                                            wire:model.defer="event_description" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Staff Name</label>
+                                                        <label>Venue</label>
                                                         <input type="text" class="form-control"
-                                                            wire:model.defer="staff_name" required>
+                                                            wire:model.defer="venue" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Position Of Staff</label>
-                                                        <input type="text" class="form-control"
-                                                            wire:model.defer="staff_title" required>
+                                                        <label>Time</label>
+                                                        <input type="time" class="form-control"
+                                                            wire:model.defer="time" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Department Of Stuff</label>
-                                                        <input type="text" class="form-control"
-                                                            wire:model.defer="department" required>
+                                                        <label>Date</label>
+                                                        <input type="date" class="form-control"
+                                                            wire:model.defer="date" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Start Date</label>
@@ -696,19 +691,19 @@
                                 </div>
 
                                 {{-- Updates the modal --}}
-                                <div wire:ignore.self id="updateNoticeModal" class="modal fade">
+                                <div wire:ignore.self id="updateEventModal" class="modal fade">
                                     <div class="modal-dialog modal-dialog-centered" role="document">>
                                         <div class="modal-content">
-                                            <form wire:submit.prevent="updateNotice">
+                                            <form wire:submit.prevent="updateEvent">
 
                                                 @csrf
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Update Notice</h4>
+                                                    <h4 class="modal-title">Update Event</h4>
                                                     <button type="button" id="" class="close"
                                                         wire:click="closeModal" data-dismiss="modal"
                                                         aria-hidden="true">&times;</button>
                                                 </div>
-                                                <div wire:loading wire:target="updateNotice" class="loading-bar">
+                                                <div wire:loading wire:target="updateEvent" class="loading-bar">
                                                 </div>
                                                 <div class="modal-body">
                                                     @if (session()->has('updatesuccessful'))
@@ -723,29 +718,29 @@
                                                         </div>
                                                     @endif
                                                     <div class="form-group">
-                                                        <label>Name Of Notice</label>
+                                                        <label>Event Name</label>
                                                         <input type="text" class="form-control"
-                                                            wire:model.defer="notice_name" required>
+                                                            wire:model.defer="event_name" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Description</label>
+                                                        <label>Event Description</label>
                                                         <input type="text" class="form-control"
-                                                            wire:model.defer="description" required>
+                                                            wire:model.defer="event_description" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Staff Name</label>
+                                                        <label>Venue</label>
                                                         <input type="text" class="form-control"
-                                                            wire:model.defer="staff_name" required>
+                                                            wire:model.defer="venue" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Position Of Staff</label>
-                                                        <input type="text" class="form-control"
-                                                            wire:model.defer="staff_title" required>
+                                                        <label>Time</label>
+                                                        <input type="time" class="form-control"
+                                                            wire:model.defer="time" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label>Department Of Stuff</label>
-                                                        <input type="text" class="form-control"
-                                                            wire:model.defer="department" required>
+                                                        <label>Date</label>
+                                                        <input type="date" class="form-control"
+                                                            wire:model.defer="date" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Start Date</label>
@@ -773,19 +768,19 @@
                                 {{-- end of update modal --}}
 
                                 <!-- Delete Modal HTML -->
-                                <div wire:ignore.self id="deleteNoticeModal" class="modal fade">
+                                <div wire:ignore.self id="deleteEventModal" class="modal fade">
                                     <div class="modal-dialog modal-dialog-centered" role="document">">
                                         <div class="modal-content">
 
-                                            <form wire:submit.prevent="destroyNotice">
+                                            <form wire:submit.prevent="destroyEvent">
 
                                                 @csrf
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Delete Notice</h4>
+                                                    <h4 class="modal-title">Delete Event</h4>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-hidden="true">&times;</button>
                                                 </div>
-                                                <div wire:loading wire:target="destroyNotice" class="loading-bar">
+                                                <div wire:loading wire:target="destroyEvent" class="loading-bar">
                                                 </div>
                                                 <div class="modal-body">
                                                     @if (session()->has('deletesuccessful'))
@@ -824,7 +819,7 @@
                             </div>
                             <!-- /.tab-pane -->
 
-                            <div class="tab-pane" id="settings">
+                            <div class="tab-pane" id="FAQ">
 
                             </div>
                             <!-- /.tab-pane -->

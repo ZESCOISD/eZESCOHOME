@@ -159,7 +159,7 @@
                 </div>
 
                 @role('admin')
-                    <div class="col-lg-3 d-flex justify-content-start align-items-start">
+                    <div class="col-lg-3">
                         <div class="card shadow rounded" id="card">
                             <div class="card-body">
                                 <p class="card-text">Product<br>status</p>
@@ -208,7 +208,7 @@
                     </div>
 
 
-                    <div class="col-lg-3 justify-content-center">
+                    <div class="col-lg-3">
                         <div class="card shadow rounded" id="card">
                             <div class="card-body">
                                 <p class="card-text">Manage system<br>users</p>
@@ -255,7 +255,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 d-flex justify-content-start align-items-start">
+                    <div class="col-lg-3">
                         <div class="card shadow rounded" id="card">
                             <div class="card-body">
                                 <p class="card-text">Manage system<br>permissions</p>
@@ -304,7 +304,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 d-flex justify-content-start align-items-start">
+                    <div class="col-lg-3">
                         <div class="card shadow rounded" id="card">
                             <div class="card-body">
                                 <p class="card-text">Manage system<br>roles</p>
