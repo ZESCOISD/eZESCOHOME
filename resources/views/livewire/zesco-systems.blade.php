@@ -168,7 +168,7 @@
 
 
         <div id="suggestion-section" class="row text-center">
-            <div class="col-xl-6 col-lg-6">
+            <div id="suggestion-info-parent"  class="col-xl-6 col-lg-6">
                 <div id="suggestion-info">
 
                     <h1> <i id="importance" class="bi bi-ui-checks"></i>Importance Of Your Feedback</h1>
@@ -184,23 +184,23 @@
                 </div>
             </div>
             <div class="col-xl-6 col-lg-6 d-flex content-align-center align-items-center text-center">
-                <div id="suggestion-card" class="card shadow p-4 ">
-                    <h3 class="stretched-link mb-2 text-start">Product Suggestion Box</h3>
+                <div id="suggestion-card" class="card shadow p-4">
+                    <h3 class="mb-2 text-start">Product Suggestion Box</h3>
                     <p class="text-start">Suggest areas of system improvement to enhance and make Zesco system's better
                     </p>
                     <form>
                         <div class="row gy-4">
 
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Suggestion subject" required>
+                            <div class="col-md-6" class="form-control">
+                                <input type="text" class="form-control" wire:model.defer="suggestion_subject" placeholder="Suggestion subject" required>
                             </div>
 
                             <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="System name" required>
+                                <input type="text" class="form-control" wire:model.defer="system_name" placeholder="System name" required>
                             </div>
 
                             <div class="col-md-12">
-                                <textarea class="form-control" name="message" rows="6" placeholder="Suggest" required></textarea>
+                                <textarea class="form-control" name="message" wire:model.defer="suggestion" rows="6" placeholder="Suggest" required></textarea>
                             </div>
 
                             <button class="btn" type="submit">Submit Message</button>

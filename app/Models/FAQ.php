@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Slide extends Model
+class FAQ extends Model
 {
     use HasFactory;
-    protected $table = 'slides';
-    protected $fillable = ['id','name','image'];
+    protected $table = 'faq';
     protected $primaryKey = 'id';
+    protected $fillable = ['question','answer'];
     public $timestamps =true;
 }

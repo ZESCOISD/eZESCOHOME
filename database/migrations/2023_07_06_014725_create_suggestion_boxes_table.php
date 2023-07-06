@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSlidesTable extends Migration
+class CreateSuggestionBoxesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateSlidesTable extends Migration
      */
     public function up()
     {
-        Schema::create('slides', function (Blueprint $table) {
+        Schema::create('suggestion_box', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50);
-            $table->string('image')->nullable();
+            $table->string('subject');
+            $table->string('system_name')->nullable();
+            $table->string('suggestion');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateSlidesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('slides');
+        Schema::dropIfExists('suggestion_box');
     }
 }

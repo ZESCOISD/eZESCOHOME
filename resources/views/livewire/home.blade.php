@@ -789,48 +789,14 @@
                     </div>
 
                     <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-
                         <div class="faq-container">
                             <div class="faq-item faq-active">
-                                <h3><span class="num">1.</span> <span>Sample question?</span></h3>
+                                <h3><span>Sample question?</span></h3>
                                 <div class="faq-content">
                                     <p>Sample answer</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3><span class="num">2.</span> <span>Sample question?</span></h3>
-                                <div class="faq-content">
-                                    <p>Sample answer</p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3><span class="num">3.</span> <span>Sample question?</span></h3>
-                                <div class="faq-content">
-                                    <p>Sample answer</p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3><span class="num">4.</span> <span>Sample question?</span></h3>
-                                <div class="faq-content">
-                                    <p>Sample answer</p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
-                            <div class="faq-item">
-                                <h3><span class="num">5.</span> <span>Sample question?</span></h3>
-                                <div class="faq-content">
-                                    <p>Sample answer</p>
-                                </div>
-                                <i class="faq-toggle bi bi-chevron-right"></i>
-                            </div><!-- End Faq item-->
-
                         </div>
 
                     </div>

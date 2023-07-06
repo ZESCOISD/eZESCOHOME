@@ -22,7 +22,7 @@ class Utilities extends Component
     public $search, $search_event;
     public $loading = false;
 
-    public $activeTab = 'tab1';
+    
     public $allData = [];
     protected function rules(){
         return[

@@ -1269,6 +1269,7 @@ label {
 #suggestion-card{
     margin-top: 40px;
     margin-bottom: 40px;
+        margin-right: 40px;
     /* max-width: 300px; */
     /* margin-left: 600px; */
 }
@@ -1513,10 +1514,13 @@ label {
 
 #suggestion-section{
     background-color: #f1f1f1;
-    padding-top: 60px;
-    padding-bottom: 80px;
+   
 }
 
+#suggestion-info-parent{
+    /* padding-top: 10px; */
+    padding-bottom: 150px;
+}
 
 #suggestion-info i{
     font-size: 40px;
