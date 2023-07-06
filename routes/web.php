@@ -8,6 +8,8 @@ use App\Http\Livewire\Login;
 use App\Http\Livewire\ForgotPassword;
 use App\Http\Livewire\ResetPassword;
 use App\Http\Livewire\Admin\AdminHome;
+use App\Http\Livewire\Admin\UpcomingEvent;
+use App\Http\Livewire\Admin\FAQS;
 use App\Http\Livewire\Admin\ListProducts;
 use App\Http\Livewire\Admin\ListUsers;
 // use App\Http\Livewire\Register;
@@ -15,8 +17,11 @@ use App\Http\Livewire\Admin\ListCategories;
 use App\Http\Livewire\Admin\Permissions;
 use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\ListProductStatus;
+use App\Http\Livewire\Admin\Notice;
 use App\Http\Livewire\Admin\ViewReports;
-use App\Http\Livewire\Admin\Utilities;
+use App\Http\Livewire\Admin\Slides;
+use App\Http\Livewire\Admin\SuggestionBoxs;
+
 // use App\Http\Controllers\PermissionController;
 
 
@@ -56,7 +61,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/roles/manage',Roles::Class)->name('roles.manage');
     Route::get('/status/manage',ListProductStatus::Class)->name('status.manage');
     Route::get('/reports/manage',ViewReports::Class)->name('reports.manage');
-    Route::get('/utilities/manage', Utilities::class)->name('utilities.manage');
+    Route::get('/notices/manage', Notice::class)->name('notices.manage');
+    Route::get('/events/manage', UpcomingEvent::class)->name('events.manage');
+    Route::get('/faqs/manage', FAQS::class)->name('faqs.manage');
+    Route::get('/slides/manage', Slides::class)->name('slides.manage');
+    Route::get('/suggestions/manage', SuggestionBoxs::class)->name('suggestions.manage');
 });
 // Auth::routes();
 

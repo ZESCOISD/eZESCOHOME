@@ -11,7 +11,7 @@ class UpcomingEvents extends Model
 
     protected  $table = 'upcoming_events';
     protected $primaryKey = 'id';
-    protected $fillable =['event_name','event_description','venue','time','date','start_date','end_date'];
+    protected $fillable =['event_name','event_description','venue','fee','time','date','start_date','end_date'];
     public $timestamps =true;
 
 }

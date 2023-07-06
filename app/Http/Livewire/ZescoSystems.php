@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\SuggestionBox;
 use Carbon\Carbon;
 // use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,45 @@ class ZescoSystems extends Component
     public $long_description;
     public $date_launched;
     public $status_name;
+
+    public $subject, $system_name, $suggestion;
+
+    public $loading = false;
+
+     protected function rules(){
+        return[
+        'subject' => 'required|min:2|max:100',
+        'system_name' => 'required|min:3|max:200',
+        'suggestion' => 'required|min:3|max:200',
+        ];
+
+    }
+
+    public function updated($fields)
+    {
+        $this->validateOnly($fields);
+    }
+
+
+    public function saveSuggestion(){
+        $this->loading = true;
+        sleep(2);
+
+        $validateData = $this ->validate();
+        SuggestionBox::create($validateData);
+        $this->resetInput();
+        session()->flash('savesuccessful','Your suggestion was successfully sent');
+
+        $this->loading = false;
+    }
+
+     public function resetInput(){
+        $this->subject ='';
+        $this->system_name = '';
+        $this->suggestion = '';
+
+    }
+
 
      public function showMore(int $product_id){
         // dd($product_id);

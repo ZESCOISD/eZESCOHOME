@@ -3,11 +3,13 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Livewire\Admin\FAQS;
 use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\FAQ;
 use App\Models\Status;
 use App\Models\ProductClicks;
 use App\Models\Notices;
@@ -107,7 +109,7 @@ class Home extends Component
     public function mount()
     {
         $this->searchedProduct = null;
-        $this->slides = Slide::pluck('text');
+        // $this->slides = Slide::pluck('name');
     }
 
     public function shouldRender()
@@ -185,6 +187,8 @@ class Home extends Component
             ->whereDate('end_date', '>=', Carbon::today())
             ->paginate(1);
 
+        $faqs = FAQ::all();
+
 
         return view('livewire.home',[
                 'groupedCategories' => $groupedCategories,
@@ -193,6 +197,7 @@ class Home extends Component
                 'getProducts' => $getProducts,
                 'models' => $models,
                 'showCategories' => $showCategories,
+                'faqs' => $faqs,
             ]);
     }
 

@@ -18,6 +18,7 @@ class CreateUpcomingEventsTable extends Migration
             $table->string('event_name',50)->nullable();
             $table->string('event_description',100)->nullable();
             $table->string('venue',50)->nullable();
+            $table->integer('fee')->nullable();
             $table->time('time');
             $table->date('date');
             $table->date('start_date')->nullable();

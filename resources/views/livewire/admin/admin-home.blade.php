@@ -371,16 +371,64 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 justify-content-center">
+
+                <div class="col-lg-3">
                     <div class="card shadow rounded" id="card">
                         <div class="card-body">
-                            <p class="card-text">Customise landing page content</p>
+                            <p class="card-text">Customise landing page utilities and content</p>
 
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop7" data-backdrop="static"
+                                data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Utilities</h5>
+                                            <button id="modal-close" type="button" class="close"
+                                                data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            {{-- start of roles --}}
+
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                                data-dismiss="modal"
+                                                onclick=" window.location='{{ route('notices.manage') }}'">Notices</button>
+
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                                data-dismiss="modal"
+                                                onclick=" window.location='{{ route('events.manage') }}'">Events</button>
+
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                                data-dismiss="modal"
+                                                onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</button>
+
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                                data-dismiss="modal"
+                                                onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion
+                                                Box</button>
+
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                                data-dismiss="modal"
+                                                onclick=" window.location='{{ route('slides.manage') }}'">Slides</button>
+
+                                            {{-- End of roles --}}
+
+                                        </div>
+                                        <div class="modal-footer">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end of modal -->
                         </div>
                         <div class="card-footer text-center">
                             <div type="button" class="card-link">
-                                <p type="button" onclick=" window.location='{{ route('utilities.manage') }}'">
-                                    Utilities
+                                <p type="button" data-toggle="modal" data-target="#staticBackdrop7">Utilities
                                     <i class="bi bi-arrow-right-circle-fill"></i>
                                 </p>
                             </div>
@@ -388,6 +436,7 @@
                         </div>
                     </div>
                 </div>
+
 
             </div>
         </div>
