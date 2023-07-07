@@ -86,8 +86,9 @@
                                     <div class="course-item">
                                         {{-- <img src="/img/home-bg-img.jpg" class="img-fluid" alt="..."> --}}
                                         <video width="320" height="260"
-                                            poster="{{ $products->system_cover_image }}" controls>
-                                            <source src="{{ $products->video }}" type="video/mp4">
+                                            poster="{{ asset('storage') }}/{{ $products->system_cover_image }}"
+                                            controls>
+                                            <source src="/videos/default.mp4" type="video/mp4">
                                             {{-- <source src="movie.ogg" type="video/ogg"> --}}
                                             Your browser does not support the video tag.
                                         </video>

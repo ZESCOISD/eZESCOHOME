@@ -72,7 +72,7 @@ class Home extends Component
 
     public function showResult($category_id){
         // dd($category_id);
-        $loading = true;
+        $this->loading = true;
         sleep(2);
         $categoryclick = DB::table('category')
             ->join('product', 'category.category_id', '=', 'product.category_id')
@@ -85,13 +85,13 @@ class Home extends Component
             ->orderBy('category.name')
             ->get();
             $this->getSelectedProducts = $categoryclick;
-            $loading = false;
+            $this->loading = false;
 
     }
 
     public function search()
     {
-        $loading = true;
+        $this->loading = true;
         sleep(3);
 
         $this->searchedProduct = Product::join('status','product.status_id','=','status.status_id')
@@ -102,7 +102,7 @@ class Home extends Component
         ->first();
 
         $this->searchQuery ="";
-        $loading = false;
+        $this->loading = false;
         $dropdowns = true;
     }
 

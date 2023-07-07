@@ -97,7 +97,7 @@ class ZescoSystems extends Component
     {
         $getProducts = DB::table('product')
                 ->join('status','product.status_id','=','status.status_id')
-                ->select('product.name','product.number_of_clicks as clicks',
+                ->select('product.name','product.icon_link','product.number_of_clicks as clicks',
                         'product.url as product_url','product.product_id',
                         'product.system_cover_image', 'product.video',
                         'status.name as status_name','product.short_description')
