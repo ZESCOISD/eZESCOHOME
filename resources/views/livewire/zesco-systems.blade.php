@@ -85,8 +85,9 @@
                                 <div id="learn-more-system-card" class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                     <div class="course-item">
                                         {{-- <img src="/img/home-bg-img.jpg" class="img-fluid" alt="..."> --}}
-                                        <video width="320" height="260" poster="/img/home-bg-img.jpg" controls>
-                                            <source src="/videos/default.mp4" type="video/mp4">
+                                        <video width="320" height="260"
+                                            poster="{{ $products->system_cover_image }}" controls>
+                                            <source src="{{ $products->video }}" type="video/mp4">
                                             {{-- <source src="movie.ogg" type="video/ogg"> --}}
                                             Your browser does not support the video tag.
                                         </video>

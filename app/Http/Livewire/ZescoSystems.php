@@ -99,7 +99,8 @@ class ZescoSystems extends Component
                 ->join('status','product.status_id','=','status.status_id')
                 ->select('product.name','product.number_of_clicks as clicks',
                         'product.url as product_url','product.product_id',
-                            'status.name as status_name','product.short_description')
+                        'product.system_cover_image', 'product.video',
+                        'status.name as status_name','product.short_description')
                 ->where('status.name','=','active')
                 ->where('product.name', 'like', '%'.$this->searchQuery.'%')
                 ->orderBy('product.number_of_clicks', 'desc')
@@ -109,6 +110,8 @@ class ZescoSystems extends Component
                 // ->get();
 
         // $products = Product::where('name', 'like', '%'.$this->searchQuery.'%')->orderBy('product_id','ASC')->paginate(6);
+
+
 
 
         return view('livewire.zesco-systems',[

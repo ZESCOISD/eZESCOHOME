@@ -52,6 +52,8 @@ class UpcomingEvent extends Component
 
     public function editEvent(int $event_id){
         $event = UpcomingEvents::find($event_id);
+
+        // dd($event);
         if($event){
             $this->event_id = $event->id;
             $this->event_name = $event->event_name;

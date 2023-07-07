@@ -190,12 +190,14 @@ class Home extends Component
         $faqs = FAQ::all();
         $slides = Slide::all();
 
+        $ezesco_products = Product::all();
         // dd($slides);
 
         return view('livewire.home',[
                 'groupedCategories' => $groupedCategories,
                 'more_notices' => $more_notices,
                 'upcoming_events' => $upcoming_events,
+                 'ezesco_products' => $ezesco_products,
                 'getProducts' => $getProducts,
                 'system_carousel' => $system_carousel,
                 'showCategories' => $showCategories,

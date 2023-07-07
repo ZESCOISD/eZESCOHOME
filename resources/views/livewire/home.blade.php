@@ -15,7 +15,7 @@
         {{-- <div  id="splash-screen">
             <img src="/img/zesco-gif.gif" alt="splash screen">
         </div> --}}
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav wire:ignore class="navbar navbar-inverse navbar-fixed-top">
 
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -68,21 +68,23 @@
             <div class="col-lg-12">
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
-                        
-                        @foreach($slides as $index => $image)
-                        <li data-target="#carouselExampleIndicators" data-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}">
-                        </li>
+
+                        @foreach ($slides as $index => $image)
+                            <li data-target="#carouselExampleIndicators" data-slide-to="{{ $index }}"
+                                class="{{ $index === 0 ? 'active' : '' }}">
+                            </li>
                         @endforeach
                     </ol>
                     <div class="carousel-inner">
 
-                        @foreach($slides as $index => $image)
-                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                            <img src="{{asset('storage')}}/{{$image['image']}}"  class="d-block w-100" alt="carousel image">
-                        </div>
+                        @foreach ($slides as $index => $image)
+                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage') }}/{{ $image['image'] }}" class="d-block w-100"
+                                    alt="carousel image">
+                            </div>
                         @endforeach
 
-                      
+
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -139,13 +141,13 @@
             </div>
         </section><!-- End Counts Section -->
 
-        <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <div wire:ignore.self class="row">
+            <div id="notice-div" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
 
                 <!-- Card with header and footer -->
-                <div id="notice-div">
+                <div>
                     <div id="important-notice" class="card shadow mb-1 bg-body rounded">
-                        <div class="card-body p-4">
+                        <div id="notice-div" class="card-body">
                             <div class="text-center">
                                 <i id="important-notice-icon" class="bi bi-envelope-fill text-center"></i>
                             </div>
@@ -178,12 +180,7 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    <hr style="color: grey; width: auto;">
 
-                                    {{-- @if (count($more_notices) > 1)
-                                    <h4>There more notices. Click button below to View All</h4>
-                                @else
-                                @endif --}}
 
                                     {{ $more_notices->links() }}
                                 @endif
@@ -199,78 +196,111 @@
 
             <div id="category-panel" class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 text-center">
                 <div class="row">
-                    @if($showCategories->isEmpty())
-                    <h2 style="margin-top:400px; font-size:50px; color: rgb(179, 175, 175)">No System Data Available Yet.</h2>
+                    @if ($showCategories->isEmpty())
+                        <h2 style="margin-top:400px; font-size:50px; color: rgb(179, 175, 175)">No System Data
+                            Available Yet.</h2>
                     @else
-                    <div wire:ignore class="col-xl-12 col-lg-12">
-                        <h3 class="mt-2">Categories</h3>
-                        <div id="elem">
-                            <div class="dropdown text-center">
-                                @foreach ($showCategories as $showCategory)
-                                    <div class="dropdown-list">
+                        <div wire:ignore class="col-xl-12 col-lg-12">
+                            <h3 class="mt-2">Categories</h3>
+                            <div id="elem">
+                                <div class="dropdown text-center">
+                                    @foreach ($showCategories as $showCategory)
+                                        <div class="dropdown-list">
 
-                                        <div class="dropdown mt-3">
+                                            <div class="dropdown mt-3">
 
-                                            <div id="dropdown" class="card shadow p-3 mb-5" type="button"
-                                                wire:click="showResult({{ $showCategory->category_id }})">
-                                                <div class="card-body">
-                                                    {{ $showCategory->name }}
+                                                <div id="dropdown" class="card shadow p-3 mb-5" type="button"
+                                                    wire:click="showResult({{ $showCategory->category_id }})">
+                                                    <div class="card-body">
+                                                        {{ $showCategory->name }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                    </div>
-                    @endif
-                    @if($getProducts->isEmpty())
-                    @else
-                    <div wire:ignore id="text-center" class="row text-center">
-                        <h3 class="mb-3">Frequently Accessed Systems</h3>
-
-                        @foreach ($getProducts as $getProduct)
-                            <div id="frequently-accessed-system" class="col-xl-4 col-lg-4 text-center">
-
-                                <div class="card shadow p-3 text-center" type="button"
-                                    onclick=" window.location='{{ $getProduct->product_url }}'"
-                                    wire:click="incrementClicks({{ $getProduct->product_id }})">
-                                    {{ $getProduct->name }}
-                                    <div class="card-body">
-
-                                        <i id="system-icon" class="bi bi-bar-chart-fill"></i>
-                                    </div>
+                                    @endforeach
                                 </div>
-                                <p type="button" onclick=" window.location='{{ $getProduct->product_url }}'"
-                                    class="card-title mt-2 mb-4"
-                                    wire:click="incrementClicks({{ $getProduct->product_id }})">
-                                    {{ $getProduct->name }}
-                                </p>
-
                             </div>
-                        @endforeach
-                        <div wire:ignore id="clickedCategorySection"
-                            class="row d-flex justify-content-center align-items-center">
 
-                            @foreach ($getSelectedProducts as $getSelectedProduct)
-                                @if (
-                                    !empty($getSelectedProduct->product_id) ||
-                                        !empty($getSelectedProducts->number_of_clicks) ||
-                                        !empty($getSelectedProducts->product_name) ||
-                                        (!empty($getSelectedProducts->product_url) && $getSelectedProduct != null))
-                                    <div wire:ignore
-                                        class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                                        <div class="card category-card-animated flex-column" id="categoryCards">
-                                            <a class="card-link" href="{{ $getSelectedProduct->product_url }}"
-                                                wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
+                        </div>
+                    @endif
+                    @if ($getProducts->isEmpty())
+                    @else
+                        <div wire:ignore.self id="text-center" class="row text-center">
+                            <h3 class="mb-3">Frequently Accessed Systems</h3>
+
+                            @foreach ($getProducts as $getProduct)
+                                <div id="frequently-accessed-system" class="col-xl-4 col-lg-4 text-center">
+
+                                    <div class="card shadow p-3 text-center" type="button"
+                                        onclick=" window.location='{{ $getProduct->product_url }}'"
+                                        wire:click="incrementClicks({{ $getProduct->product_id }})">
+                                        {{-- {{ $getProduct->name }} --}}
+                                        <div class="card-body">
+
+                                            <i id="system-icon" class="bi bi-bar-chart-fill"></i>
+                                        </div>
+                                    </div>
+                                    <p type="button" onclick=" window.location='{{ $getProduct->product_url }}'"
+                                        class="card-title mt-2 mb-4"
+                                        wire:click="incrementClicks({{ $getProduct->product_id }})">
+                                        {{ $getProduct->name }}
+                                    </p>
+
+                                </div>
+                            @endforeach
+                            <div wire:ignore id="clickedCategorySection"
+                                class="row d-flex justify-content-center align-items-center">
+
+                                @foreach ($getSelectedProducts as $getSelectedProduct)
+                                    @if (
+                                        !empty($getSelectedProduct->product_id) ||
+                                            !empty($getSelectedProducts->number_of_clicks) ||
+                                            !empty($getSelectedProducts->product_name) ||
+                                            (!empty($getSelectedProducts->product_url) && $getSelectedProduct != null))
+                                        <div wire:ignore
+                                            class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                                            <div class="card category-card-animated flex-column" id="categoryCards">
+                                                <a class="card-link" href="{{ $getSelectedProduct->product_url }}"
+                                                    wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
+                                                    <div class="card-body" id="categoryCards-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <h4 class="card-title" id="categoryCards-title">
+                                                                    {{ $getSelectedProduct->number_of_clicks }}</h4>
+                                                                <p id="categoryCards-text" class="card-text mt-2">
+                                                                    {{ $getSelectedProduct->product_name }}</p>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <style>
+                                                        #search-cards {
+                                                            display: none;
+                                                        }
+
+                                                        #frequently-accessed-system {
+                                                            display: none;
+                                                        }
+                                                    </style>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @elseif (
+                                        !empty($getSelectedProduct->product_id) ||
+                                            !empty($getSelectedProducts->number_of_clicks) ||
+                                            !empty($getSelectedProducts->product_name) ||
+                                            (!empty($getSelectedProducts->product_url) && $getSelectedProduct == null))
+                                        <div
+                                            class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                                            <div class="card category-card-animated flex-column" id="categoryCards">
+
                                                 <div class="card-body" id="categoryCards-body">
                                                     <div class="row">
                                                         <div class="col-lg-12">
                                                             <h4 class="card-title" id="categoryCards-title">
-                                                                {{ $getSelectedProduct->number_of_clicks }}</h4>
+                                                                Results</h4>
                                                             <p id="categoryCards-text" class="card-text mt-2">
-                                                                {{ $getSelectedProduct->product_name }}</p>
+                                                                No Systems Are Available For This System Yet</p>
                                                         </div>
                                                     </div>
 
@@ -284,47 +314,15 @@
                                                         display: none;
                                                     }
                                                 </style>
-                                            </a>
-                                        </div>
-                                    </div>
-                                @elseif (
-                                    !empty($getSelectedProduct->product_id) ||
-                                        !empty($getSelectedProducts->number_of_clicks) ||
-                                        !empty($getSelectedProducts->product_name) ||
-                                        (!empty($getSelectedProducts->product_url) && $getSelectedProduct == null))
-                                    <div
-                                        class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                                        <div class="card category-card-animated flex-column" id="categoryCards">
-
-                                            <div class="card-body" id="categoryCards-body">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <h4 class="card-title" id="categoryCards-title">
-                                                            Results</h4>
-                                                        <p id="categoryCards-text" class="card-text mt-2">
-                                                            No Systems Are Available For This System Yet</p>
-                                                    </div>
-                                                </div>
-
+                                                </a>
                                             </div>
-                                            <style>
-                                                #search-cards {
-                                                    display: none;
-                                                }
-
-                                                #frequently-accessed-system {
-                                                    display: none;
-                                                }
-                                            </style>
-                                            </a>
                                         </div>
-                                    </div>
-                                @endif
-                            @endforeach
+                                    @endif
+                                @endforeach
 
 
+                            </div>
                         </div>
-                    </div>
                     @endif
                 </div>
 
@@ -734,79 +732,85 @@
         <!------ Include the above in your HEAD tag ---------->
 
 
-        @if($slides->isEmpty())
+        @if ($ezesco_products->isEmpty())
         @else
-        <div id="zesco-systems" class="container">
-            {{-- <section class="section-title"> --}}
-            <div class="section-title">
-                <h2 class="text-center">eZesco Systems</h2>
+            <div id="zesco-systems" class="container">
+                {{-- <section class="section-title"> --}}
+                <div class="section-title">
+                    <h2 class="text-center">eZesco Systems</h2>
 
 
-                {{-- <h2>Courses</h2> --}}
-                {{-- <p class="text-center">Popular Courses</p> --}}
+                    {{-- <h2>Courses</h2> --}}
+                    {{-- <p class="text-center">Popular Courses</p> --}}
+                </div>
+
+                <section class="customer-logos slider">
+
+                    @foreach ($ezesco_products as $product)
+                        @if ($product->icon_link == null)
+                            {{-- <div class="slide"><img
+                                    src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg">
+                            </div> --}}
+                        @else
+                            {{-- <div class="slide"><img src="{{ asset('storage') }}/{{ $product->icon_link }}"
+                                    style="width: 70px; height:70px;" alt="system">
+                            </div> --}}
+                            <div class="text-center"
+                                style="display: inline; margin:10px; border:solid #d3882b 1px; padding:15px;">
+                                <h6>{{ $product->name }}</h6>
+                            </div>
+                        @endif
+                    @endforeach
+                </section>
+
+
             </div>
-
-            <section class="customer-logos slider">
-
-                @foreach ($slides as $slide)
-                @if($slide->image == null)
-                <div class="slide"><img
-                        src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg">
-                </div>
-                @else
-                <div class="slide"><img src="{{asset('storage')}}/{{$slide->image}}" style="width: 70px;height:70px;" alt="system">
-                </div>
-                @endif
-                @endforeach
-            </section>
-
-            
-        </div>
         @endif
 
         <!-- Faq Section - Home Page -->
-        @if($faqs->isEmpty())
+        @if ($faqs->isEmpty())
         @else
-        <section id="faq" class="faq">
+            <section id="faq" class="faq">
 
-            <div class="container">
+                <div class="container">
 
-                <div class="row gy-4">
+                    <div class="row gy-4">
 
-                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                      
-                        <div class="content px-xl-5">
-                          
-                            <h3><span style="color: #d3882b;">Frequently Asked </span><strong style="color: #d3882b;">Questions</strong>
-                            </h3>
-                            <p>
-                                Get answers from the frequently asked question's
-                            </p>
-                           
-                        </div>
-                       
-                    </div>
+                        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
 
-                    <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-                        @foreach ($faqs as $faq)
-                            <div class="faq-container">
-                                <div class="faq-item faq-active">
-                                    <h3><span>{{ $faq->question }}</span></h3>
-                                    <div class="faq-content">
-                                        <p>{{ $faq->answer }}</p>
-                                    </div>
-                                    <i class="faq-toggle bi bi-chevron-right"></i>
-                                </div><!-- End Faq item-->
+                            <div class="content px-xl-5">
+
+                                <h3><span style="color: #d3882b;">Frequently Asked </span><strong
+                                        style="color: #d3882b;">Questions</strong>
+                                </h3>
+                                <p>
+                                    Get answers from the frequently asked question's
+                                </p>
+
                             </div>
-                        @endforeach
+
+                        </div>
+
+                        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+                            @foreach ($faqs as $faq)
+                                <div class="faq-container">
+                                    <div class="faq-item faq-active">
+                                        <h3><span>{{ $faq->question }}</span></h3>
+                                        <div class="faq-content">
+                                            <p>{{ $faq->answer }}</p>
+                                        </div>
+                                        <i class="faq-toggle bi bi-chevron-right"></i>
+                                    </div><!-- End Faq item-->
+                                </div>
+                            @endforeach
 
 
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
-
-        </section><!-- End Faq Section -->
+            </section><!-- End Faq Section -->
         @endif
 
         <!-- Footer -->
@@ -833,10 +837,10 @@
 
 @push('custom-scripts')
     <script src="{{ asset('js/main.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script> --}}
 @endpush
 
 

@@ -202,9 +202,9 @@ hr {
     height: 500px;
   }
 
-  /* #notice-div{
-    margin-top: 400px;
-  } */
+  #notice-div {
+    /* padding-bottom: 200px; */
+  }
 
     #upcoming-events-div {
         margin-bottom: 200px;
@@ -213,8 +213,9 @@ hr {
 
   #important-notice{
         margin-left: 25px;
-        margin-top: 15px;
-        height: 400px;
+        margin-top: 10px;
+        min-height: 400px;
+        /* padding-bottom: 10px; */
   }
 
   #important-notice-hr {
@@ -1514,7 +1515,7 @@ label {
 
 #suggestion-section{
     background-color: #f1f1f1;
-   
+
 }
 
 #suggestion-info-parent{

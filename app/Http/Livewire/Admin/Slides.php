@@ -22,18 +22,18 @@ class Slides extends Component
     public $search_slide;
     public $loading = false;
     public $allData = [];
-    protected function rules(){
-        return[
-            'name' => 'nullable|min:3|max:20',
-            'image' => 'nullable|image|max:5024',
-        ];
+    // protected function rules(){
+    //     return[
+    //         'name' => 'nullable|min:3|max:20',
+    //         'image' => 'nullable|image|max:5024',
+    //     ];
 
-    }
+    // }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
+    // public function updated($fields)
+    // {
+    //     $this->validateOnly($fields);
+    // }
 
     public function saveSlide(){
         $this->loading = true;
@@ -42,16 +42,16 @@ class Slides extends Component
          $images = new Slide();
         $this->validate([
             'name' => 'nullable|min:3|max:20',
-            'image' => 'nullable|image|max:5024',
+            'image' => 'nullable|image|max:10024',
         ]);
 
         $filename = "";
         if ($this->image) {
-            $filename = $this->image->store('posts', 'public');
+            $filename = $this->image->store('images', 'public');
         } else {
             $filename = Null;
         }
-        
+
          $images->name = $this->name;
         $images->image = $filename;
         $result = $images->save();
@@ -62,10 +62,6 @@ class Slides extends Component
         }else{
              session()->flash('error', 'Not Add Successfully');
         }
-
-        // $validateData = $this ->validate();
-        // Slide::create($validateData);
-
 
         $this->loading = false;
     }
@@ -102,29 +98,13 @@ class Slides extends Component
         // dd($images);
         $this->validate([
              'name' => 'nullable|min:3|max:20',
-            'edit_image' => 'nullable|image|max:5024',
+            'edit_image' => 'nullable|image|max:10024',
         ]);
 
-        // Slide::where('slide_id',$this->slide_id)->update([
-        //     'name' => $validateData['name'],
-        //     'image' => $validateData['image'],
-        // ]);
-
-
-        //  $filename = "";
-        // $destination=public_path('storage\\'.$slide->image);
-        // if ($this->edit_image != null) {
-        //     if(File::exists($destination)){
-        //         File::delete($destination);
-        //     }
-        //     $filename = $this->edit_image->store('posts', 'public');
-        // } else {
-        //     $filename = $this->edit_image;
-        // }
 
          $filename = "";
         if ($this->edit_image) {
-            $filename = $this->edit_image->store('posts', 'public');
+            $filename = $this->edit_image->store('images', 'public');
         } else {
             $filename = Null;
         }
@@ -141,7 +121,7 @@ class Slides extends Component
         } else {
             session()->flash('error', 'Not Update Successfully');
         }
-        
+
         $this->loading = false;
 
     }
