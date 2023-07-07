@@ -36,7 +36,7 @@ class Home extends Component
     public $selected_category;
     // public $categoryName;
 
-    public $slides;
+    // public $slides;
 
     public function incrementClicks($product_id)
     {
@@ -133,7 +133,7 @@ class Home extends Component
 
         // $groupedClickedCategories = $showCategories->groupBy('category_name');
 
-        $models = Product::all();
+        $system_carousel = Product::all();
         $categories = DB::table('category')
             ->join('product', 'category.category_id', '=', 'product.category_id')
             ->join('status', 'product.status_id', '=', 'status.status_id')
@@ -188,16 +188,19 @@ class Home extends Component
             ->paginate(1);
 
         $faqs = FAQ::all();
+        $slides = Slide::all();
 
+        // dd($slides);
 
         return view('livewire.home',[
                 'groupedCategories' => $groupedCategories,
                 'more_notices' => $more_notices,
                 'upcoming_events' => $upcoming_events,
                 'getProducts' => $getProducts,
-                'models' => $models,
+                'system_carousel' => $system_carousel,
                 'showCategories' => $showCategories,
                 'faqs' => $faqs,
+                'slides' => $slides,
             ]);
     }
 

@@ -5,7 +5,7 @@
 
 <div>
 
-    <body id="manage-bodyy">
+    <body id="manage-body">
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <div class="row">

@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\MediaLibrary\HasMedia;
+// use Spatie\MediaLibrary\MediaCollections\Models\Media;
+// use Spatie\MediaLibrary\HasMedia;
 // use Spatie\MediaLibrary\InteractsWithMedia;
 use Livewire\WithFileUploads;
 
@@ -56,7 +56,7 @@ class ListProducts extends Component
         ];
 
 
-        $this->preview_image = $this->image->temporaryUrl();
+        // $this->preview_image = $this->image->temporaryUrl();
 
     }
 

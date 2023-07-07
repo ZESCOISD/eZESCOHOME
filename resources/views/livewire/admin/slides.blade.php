@@ -109,7 +109,10 @@
                                                         <label for="image">Image</label>
                                                         <input type="file" class="form-control mb-1"
                                                             wire:model.defer="image" id="image"
-                                                            placeholder="image" required>
+                                                            placeholder="image">
+                                                            @if($image)
+                                                                <img src="{{$image->temporaryUrl()}}" style="width: 200px; height:200px;" alt="">
+                                                            @endif
                                                         @error('image')
                                                             <span class="text-danger">{{ $message }}</span>
                                                         @enderror
@@ -225,7 +228,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Image</label>
-                                    <input type="file" class="form-control" wire:model.defer="image" required>
+                                    <input type="file" class="form-control" wire:model.defer="edit_image" >
                                 </div>
 
                             </div>
@@ -272,8 +275,9 @@
                                     <input type="text" class="form-control" wire:model.defer="name" required>
                                 </div>
                                 <div class="form-group">
+                                    
                                     <label>Image</label>
-                                    <input type="file" class="form-control" wire:model.defer="image" required>
+                                    <input type="file" class="form-control" wire:model.defer="edit_image">
                                 </div>
                             </div>
                             <div class="modal-footer">

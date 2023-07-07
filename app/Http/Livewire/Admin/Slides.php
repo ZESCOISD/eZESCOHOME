@@ -16,13 +16,16 @@ class Slides extends Component
 
     // public $name;
     public $slide_id, $name , $image;
+    public $edit_image;
+    public $new_image;
+
     public $search_slide;
     public $loading = false;
     public $allData = [];
     protected function rules(){
         return[
             'name' => 'nullable|min:3|max:20',
-            'image' => 'required|image|max:5024',
+            'image' => 'nullable|image|max:5024',
         ];
 
     }
@@ -36,19 +39,45 @@ class Slides extends Component
         $this->loading = true;
         sleep(2);
 
-        $validateData = $this ->validate();
-        Slide::create($validateData);
-        $this->resetInput();
-        session()->flash('savesuccessful','Your slide was successfully added');
+         $images = new Slide();
+        $this->validate([
+            'name' => 'nullable|min:3|max:20',
+            'image' => 'nullable|image|max:5024',
+        ]);
+
+        $filename = "";
+        if ($this->image) {
+            $filename = $this->image->store('posts', 'public');
+        } else {
+            $filename = Null;
+        }
+        
+         $images->name = $this->name;
+        $images->image = $filename;
+        $result = $images->save();
+
+        if($result){
+             session()->flash('savesuccessful','Your slide was successfully added');
+              $this->resetInput();
+        }else{
+             session()->flash('error', 'Not Add Successfully');
+        }
+
+        // $validateData = $this ->validate();
+        // Slide::create($validateData);
+
 
         $this->loading = false;
     }
 
     public function editSlide(int $slide_id){
         $slide = Slide::find($slide_id);
+        // dd($slide);
+
         if($slide){
+            $this->slide_id = $slide->id;
             $this->name = $slide->name;
-            $this->image = $slide->image;
+            $this->edit_image = $slide->image;
         }else{
             return redirect()->to('/slides/manage');
         }
@@ -60,22 +89,59 @@ class Slides extends Component
 
     public function resetInput(){
         $this-> name ='';
-        $this-> image ='';
+        $this-> image = "";
+         $this-> edit_image = "";
     }
 
     public function updateSlide(){
         $this->loading = true;
         sleep(2);
 
-        $validateData = $this ->validate();
-        Slide::where('slide_id',$this->slide_id)->update([
-            'name' => $validateData['name'],
-            'image' => $validateData['image'],
-        ]);
-        session()->flash('updatesuccessful','Your slide was updated successfully');
-        $this->resetInput();
-        $this->dispatchBrowserEvent('close-modal');
 
+        $slide = Slide::findOrFail($this->slide_id);
+        // dd($images);
+        $this->validate([
+             'name' => 'nullable|min:3|max:20',
+            'edit_image' => 'nullable|image|max:5024',
+        ]);
+
+        // Slide::where('slide_id',$this->slide_id)->update([
+        //     'name' => $validateData['name'],
+        //     'image' => $validateData['image'],
+        // ]);
+
+
+        //  $filename = "";
+        // $destination=public_path('storage\\'.$slide->image);
+        // if ($this->edit_image != null) {
+        //     if(File::exists($destination)){
+        //         File::delete($destination);
+        //     }
+        //     $filename = $this->edit_image->store('posts', 'public');
+        // } else {
+        //     $filename = $this->edit_image;
+        // }
+
+         $filename = "";
+        if ($this->edit_image) {
+            $filename = $this->edit_image->store('posts', 'public');
+        } else {
+            $filename = Null;
+        }
+
+        $slide->name = $this->name;
+        $slide->image = $filename;
+        $result = $slide->save();
+
+
+         if ($result) {
+            session()->flash('updatesuccessful','Your slide was updated successfully');
+            $this->resetInput();
+            $this->dispatchBrowserEvent('close-modal');
+        } else {
+            session()->flash('error', 'Not Update Successfully');
+        }
+        
         $this->loading = false;
 
     }

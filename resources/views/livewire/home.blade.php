@@ -68,21 +68,21 @@
             <div class="col-lg-12">
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        
+                        @foreach($slides as $index => $image)
+                        <li data-target="#carouselExampleIndicators" data-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}">
+                        </li>
+                        @endforeach
                     </ol>
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="/img/home-bg-img.jpg" height="400" width="200"
-                                class="d-block w-100 img-responsive" src="..." alt="First slide">
+
+                        @foreach($slides as $index => $image)
+                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                            <img src="{{asset('storage')}}/{{$image['image']}}"  class="d-block w-100" alt="carousel image">
                         </div>
-                        <div class="carousel-item">
-                            <img src="/img/home-bg-img-2.jpg" class="d-block w-100" src="..." alt="Second slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="/img/home-bg-img.jpg" class="d-block w-100" src="..." alt="Third slide">
-                        </div>
+                        @endforeach
+
+                      
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -199,6 +199,9 @@
 
             <div id="category-panel" class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 text-center">
                 <div class="row">
+                    @if($showCategories->isEmpty())
+                    <h2 style="margin-top:400px; font-size:50px; color: rgb(179, 175, 175)">No System Data Available Yet.</h2>
+                    @else
                     <div wire:ignore class="col-xl-12 col-lg-12">
                         <h3 class="mt-2">Categories</h3>
                         <div id="elem">
@@ -214,9 +217,6 @@
                                                     {{ $showCategory->name }}
                                                 </div>
                                             </div>
-                                            {{-- <button id="dropdown" class="btn btn-secondary" type="button"
-                                        wire:click="showResult({{ $showCategory->category_id }})">
-                                    </button> --}}
                                         </div>
                                     </div>
                                 @endforeach
@@ -224,6 +224,9 @@
                         </div>
 
                     </div>
+                    @endif
+                    @if($getProducts->isEmpty())
+                    @else
                     <div wire:ignore id="text-center" class="row text-center">
                         <h3 class="mb-3">Frequently Accessed Systems</h3>
 
@@ -322,6 +325,7 @@
 
                         </div>
                     </div>
+                    @endif
                 </div>
 
 
@@ -730,6 +734,8 @@
         <!------ Include the above in your HEAD tag ---------->
 
 
+        @if($slides->isEmpty())
+        @else
         <div id="zesco-systems" class="container">
             {{-- <section class="section-title"> --}}
             <div class="section-title">
@@ -742,18 +748,25 @@
 
             <section class="customer-logos slider">
 
-
+                @foreach ($slides as $slide)
+                @if($slide->image == null)
                 <div class="slide"><img
                         src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg">
                 </div>
-
+                @else
+                <div class="slide"><img src="{{asset('storage')}}/{{$slide->image}}" style="width: 70px;height:70px;" alt="system">
+                </div>
+                @endif
+                @endforeach
             </section>
 
-            {{-- <h2><a href="http://www.webcoderskull.com" target="_blank">http://www.webcoderskull.com</a></h2> --}}
+            
         </div>
-
+        @endif
 
         <!-- Faq Section - Home Page -->
+        @if($faqs->isEmpty())
+        @else
         <section id="faq" class="faq">
 
             <div class="container">
@@ -761,14 +774,17 @@
                 <div class="row gy-4">
 
                     <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                      
                         <div class="content px-xl-5">
-                            <h3><span style="color: #d3882b;">Frequently Asked </span><strong
-                                    style="color: #d3882b;">Questions</strong>
+                          
+                            <h3><span style="color: #d3882b;">Frequently Asked </span><strong style="color: #d3882b;">Questions</strong>
                             </h3>
                             <p>
                                 Get answers from the frequently asked question's
                             </p>
+                           
                         </div>
+                       
                     </div>
 
                     <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
@@ -791,8 +807,7 @@
             </div>
 
         </section><!-- End Faq Section -->
-
-
+        @endif
 
         <!-- Footer -->
         <footer class="page-footer font-small blue">

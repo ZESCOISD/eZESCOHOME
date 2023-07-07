@@ -12,12 +12,17 @@ class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
     use HasFactory;
+
     protected  $table = 'product';
     protected $primaryKey = 'product_id';
     protected $fillable =
     [ 'product_id',
     'name',
     'icon_link',
+    'system_cover_image',
+    'user_manual',
+    'video',
+    'cost_saving',
     'category_id',
     'image',
     'status_id',
@@ -32,14 +37,4 @@ class Product extends Model implements HasMedia
     'date_decommissioned'];
     public $timestamps = TRUE;
 
-    public function registerMediaCollections(): void
-    {
-        // $this->addMediaCollection('images')
-        //     ->registerMediaConversions(function (Media $media) {
-        //         $this->addMediaConversion('thumb')
-        //             ->width(100)
-        //             ->height(100);
-        //     });
-        $this->addMediaCollection('images');
-    }
 }

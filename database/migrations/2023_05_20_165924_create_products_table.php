@@ -16,9 +16,12 @@ class CreateProductsTable extends Migration
         Schema::create('product', function (Blueprint $table) {
             $table->increments('product_id');
             $table->string('name',50);
-            $table->string('icon_link',512)->nullable();
             $table->integer('category_id')->nullable();
-            $table->string('image')->nullable();
+             $table->string('icon_link',512)->nullable();
+            $table->string('system_cover_image')->nullable();
+             $table->string('user_manual',512)->nullable();
+             $table->string('video',512)->nullable();
+             $table->string('cost_saving',512)->nullable();
             $table->integer('status_id')->nullable();
             $table->integer('number_of_clicks')->default('0');
             $table->string('url',512)->nullable();
