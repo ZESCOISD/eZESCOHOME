@@ -1,6 +1,6 @@
 <div>
     @push('custom-styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{ asset('css/adminmenu.css') }}">
     @endpush
 
@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">
-                        <a onclick=" window.location='{{ route('ezesco-home') }}'">
+                        <a onclick=" window.location='{{ route('zesco-home') }}'">
                             <img src="/img/Zesco.png" alt="" width="125" height="50"
                                 class="d-inline-block align-text-top"></a>
                     </a>
@@ -207,56 +207,55 @@
                             </div>
                         </div>
                     </div>
-
                 @endrole
 
-                    <div class="col-lg-3">
-                        <div class="card shadow rounded" id="card">
-                            <div class="card-body">
-                                <p class="card-text">Manage system<br>users</p>
-                                {{-- <button type="button" class="btn btn-primary" data-toggle="modal"
+                <div class="col-lg-3">
+                    <div class="card shadow rounded" id="card">
+                        <div class="card-body">
+                            <p class="card-text">Manage system<br>users</p>
+                            {{-- <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#staticBackdrop4">Manage users</button> --}}
-                                <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop4" data-backdrop="static"
-                                    data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Profile</h5>
-                                                <button id="modal-close" type="button" class="close"
-                                                    data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <button id="modal-btn" type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal"
-                                                    onclick=" window.location='{{ route('users.manage') }}'">Profile</button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop4" data-backdrop="static"
+                                data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Profile</h5>
+                                            <button id="modal-close" type="button" class="close"
+                                                data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                                data-dismiss="modal"
+                                                onclick=" window.location='{{ route('users.manage') }}'">Profile</button>
 
-                                            </div>
-                                            <div class="modal-footer">
+                                        </div>
+                                        <div class="modal-footer">
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <!-- end of modal -->
                             </div>
-                            <div class="card-footer text-center">
-                                <div type="button" class="card-link">
-                                    <p type="button" data-toggle="modal" data-target="#staticBackdrop4">Manage Profile
-                                        <i class="bi bi-arrow-right-circle-fill"></i>
-                                    </p>
-                                </div>
 
+
+                            <!-- end of modal -->
+                        </div>
+                        <div class="card-footer text-center">
+                            <div type="button" class="card-link">
+                                <p type="button" data-toggle="modal" data-target="#staticBackdrop4">Manage Profile
+                                    <i class="bi bi-arrow-right-circle-fill"></i>
+                                </p>
                             </div>
+
                         </div>
                     </div>
+                </div>
 
-                    @role('admin')
+                @role('admin')
                     <div class="col-lg-3">
                         <div class="card shadow rounded" id="card">
                             <div class="card-body">

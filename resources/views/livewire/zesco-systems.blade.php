@@ -19,7 +19,7 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">
-                        <a onclick=" window.location='{{ route('ezesco-home') }}'">
+                        <a onclick=" window.location='{{ route('zesco-home') }}'">
                             <img src="/img/Zesco.png" alt="" width="125" height="50"
                                 class="d-inline-block align-text-top"></a>
                     </a>
@@ -85,19 +85,21 @@
                             @forelse ($getProducts as $products)
                                 <div id="learn-more-system-card" class="col-lg-4 col-md-6 d-flex align-items-stretch">
                                     <div class="course-item">
-                                    
-                                        <img class="cover-image" width="100%" src="{{ asset('storage') }}/{{ $products->system_cover_image }}" alt="Cover Image">
+
+                                        <img class="cover-image" width="100%"
+                                            src="{{ asset('storage') }}/{{ $products->system_cover_image }}"
+                                            alt="Cover Image">
                                         <div class="course-content">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h4 type="button"
-                                                    wire:click="learnMore({{ $products->product_id }})">
+                                                <h4 type="button" wire:click="learnMore({{ $products->product_id }})">
                                                     Learn more</h4>
                                             </div>
                                             <h3>{{ $products->name }}</h3>
                                             <p>{{ $products->short_description }}</p>
                                             <p id="view-icon" style="display: inline;">Download User Manual</p>
                                             <br>
-                                            <i onclick="viewPDF()" type="button" style="color: black; font-size:20px; margin-top:4px;"
+                                            <i onclick="viewPDF()" type="button"
+                                                style="color: black; font-size:20px; margin-top:4px;"
                                                 class="bi bi-cloud-arrow-down-fill"></i>
                                             {{-- <p id="download-icon" style="display: inline;">Download user manual
                                             </p><i onclick="downloadPDF()" type="button"
@@ -114,7 +116,7 @@
                         </div>
                         <div id="pdfOverlay" onclick="closePDF()"></div>
                         <div id="pdfContainer">
-                            <embed src="{{asset('storage')}}/{{$products->user_manual}}" type="application/pdf">
+                            <embed src="{{ asset('storage') }}/{{ $products->user_manual }}" type="application/pdf">
                             <button onclick="closePDF()">Close</button>
                         </div>
                         <div class="clearfix">
@@ -124,39 +126,46 @@
                             </div>
                         </div>
 
-                        <div wire:ignore.self class="modal fade"  tabindex="-1" role="dialog"
+                        <div wire:ignore.self class="modal fade" tabindex="-1" role="dialog"
                             aria-labelledby="learnMoreModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" 
-                            style="max-width: 90%;"
-                                role="document">
+                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+                                style="max-width: 90%;" role="document">
                                 <div class="modal-content">
                                     <div style="background-color:white;" class="modal-header">
-                                        <h1 style="font-size: 25px; color:#1bad6c;" class="modal-title" id="learnMoreModalLabel">
-                                            <i style="font-size:35px; color:#1bad6c; " id="system-icon" class="bi bi-bar-chart-fill"></i>
-                                            {{ $name }}</h1>
+                                        <h1 style="font-size: 25px; color:#1bad6c;" class="modal-title"
+                                            id="learnMoreModalLabel">
+                                            <i style="font-size:35px; color:#1bad6c; " id="system-icon"
+                                                class="bi bi-bar-chart-fill"></i>
+                                            {{ $name }}
+                                        </h1>
                                         <button id="modal-close" type="button" class="close" data-dismiss="modal"
                                             aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
 
-                                    <div style="padding-bottom:100px; padding-left:20px" class="modal-body" id="modal-body">
+                                    <div style="padding-bottom:100px; padding-left:20px" class="modal-body"
+                                        id="modal-body">
 
                                         {{-- @if ($play === $product->product_id)
                                         <video autoplay controls>
                                             <source src="{{ $video->url }}" type="video/mp4">
-                                       
+
                                         </video>
                                         @endif --}}
 
-                                        <video wire:model.defer='name' width="100%" height="420px" poster="/img/watch.svg" controls>
-                                            <source src="{{asset('storage')}}/{{ $video }}" type="video/mp4">
-        
+                                        <video wire:model.defer='name' width="100%" height="420px"
+                                            poster="/img/watch.svg" controls>
+                                            <source src="{{ asset('storage') }}/{{ $video }}"
+                                                type="video/mp4">
+
                                             Your browser does not support the video tag.
                                         </video>
 
-                                        
-                                        <h4 class="mt-2" wire:click="learnMore({{ $product_id }})" id="visit-system" type="button" href="#learnMoreModal"> {{ $name }}</h4>
+
+                                        <h4 class="mt-2" wire:click="learnMore({{ $product_id }})"
+                                            id="visit-system" type="button" href="#learnMoreModal">
+                                            {{ $name }}</h4>
                                         <hr style="width: auto;">
                                         {{-- <div>
                                             {{$products->video}}
@@ -166,7 +175,8 @@
 
                                         <h5 style="font-size: 25px; color:#1bad6c;">Active Since</h5>
                                         <p wire:model.defer='name'>{{ $date_launched }}</p>
-                                        <h4 id="visit-system" type="button" href="#learnMoreModal">Visit {{ $name }}</h4>
+                                        <h4 id="visit-system" type="button" href="#learnMoreModal">Visit
+                                            {{ $name }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -185,22 +195,23 @@
         <div id="suggestion-section" class="row text-center">
             <div wire:loading wire:target="saveSuggestion" class="loading-bar"></div>
             @if (session()->has('saveSuggestion'))
-            <div id="dismiss" class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
-                role="alert" style="border:none; font-size: 12px;">
-                <p class="mt-3">{{ session('saveSuggestion') }}</p>
-                <button style="color:white;" type="button" class="btn-close mt-1" wire:click="closeModal" data-dismiss="alert"
-                    aria-label="Close">
-                </button>
-            </div>
+                <div id="dismiss"
+                    class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
+                    role="alert" style="border:none; font-size: 12px;">
+                    <p class="mt-3">{{ session('saveSuggestion') }}</p>
+                    <button style="color:white;" type="button" class="btn-close mt-1" wire:click="closeModal"
+                        data-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
             @endif
             <div id="suggestion-info-parent" class="col-xl-6 col-lg-6">
                 <div id="suggestion-info">
 
                     <h1> <i id="importance" class="bi bi-ui-checks"></i>Importance Of Your Feedback</h1>
                     <p class="mt-5">
-                        
+
                         We invite you to join our group of change-makers and contribute your thoughts to help shape
-                        
+
                         the company.We believe that every idea has the potential to be a game-changer. By utilizing our
                         online
                         suggestion box, you gain a platform that amplifies your voice and ensures your input reaches the

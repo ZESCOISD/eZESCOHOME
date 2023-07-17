@@ -43,6 +43,7 @@ class ZescoHome extends Component
     {
         //one - increment in system / products table
         $product = Product::find($product_id);
+        // dd($product);
         $product->number_of_clicks++;
         $product->save();
 
@@ -86,6 +87,8 @@ class ZescoHome extends Component
             ->orderBy('category.name')
             ->get();
             $this->getSelectedProducts = $categoryclick;
+
+        // dd($this->getSelectedProducts);
             $this->loading = false;
 
     }
@@ -140,10 +143,10 @@ class ZescoHome extends Component
     }
 
 
-    public function shouldRender()
-    {
-        return $this->searchedProduct !== null || $this->searchQuery !== null;
-    }
+    // public function shouldRender()
+    // {
+    //     return $this->searchedProduct !== null || $this->searchQuery !== null;
+    // }
 
     public function render()
     {
@@ -181,7 +184,7 @@ class ZescoHome extends Component
                              'status.name as status_name')
                     ->where('status.name','=','active')
                     ->orderBy('product.number_of_clicks', 'desc')
-                    ->take(18)
+                    ->take(12)
                     ->get();
 
         $frequentlyAccessedToday = DB::table('product_clicks')

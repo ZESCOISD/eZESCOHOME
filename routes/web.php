@@ -37,8 +37,8 @@ use App\Http\Livewire\Admin\SuggestionBoxs;
 
 
 // new routes
-Route::get('/',Home::class)->name('ezesco-home');
-Route::get('/home',ZescoHome::class)->name('zesco-home');
+Route::get('/home',Home::class)->name('ezesco-home');
+Route::get('/',ZescoHome::class)->name('zesco-home');
 Route::get('/zesco/how-to',ZescoSystems::class)->name('ezesco-systems');
 Route::get('/how-to/learn-more/{product_id}',LearnMore::class)->name('learn-more');
 Route::get('/login',Login::Class)->name('login');
