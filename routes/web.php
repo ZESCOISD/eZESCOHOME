@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\HomeController;
 use App\Http\Livewire\Home;
+use App\Http\Livewire\ZescoHome;
 use App\Http\Livewire\ZescoSystems;
 use App\Http\Livewire\Login;
 use App\Http\Livewire\ForgotPassword;
@@ -12,7 +12,7 @@ use App\Http\Livewire\Admin\UpcomingEvent;
 use App\Http\Livewire\Admin\FAQS;
 use App\Http\Livewire\Admin\ListProducts;
 use App\Http\Livewire\Admin\ListUsers;
-// use App\Http\Livewire\Register;
+use App\Http\Livewire\LearnMore;
 use App\Http\Livewire\Admin\ListCategories;
 use App\Http\Livewire\Admin\Permissions;
 use App\Http\Livewire\Admin\Roles;
@@ -22,7 +22,6 @@ use App\Http\Livewire\Admin\ViewReports;
 use App\Http\Livewire\Admin\Slides;
 use App\Http\Livewire\Admin\SuggestionBoxs;
 
-// use App\Http\Controllers\PermissionController;
 
 
 /*
@@ -39,7 +38,9 @@ use App\Http\Livewire\Admin\SuggestionBoxs;
 
 // new routes
 Route::get('/',Home::class)->name('ezesco-home');
+Route::get('/home',ZescoHome::class)->name('zesco-home');
 Route::get('/zesco/how-to',ZescoSystems::class)->name('ezesco-systems');
+Route::get('/how-to/learn-more/{product_id}',LearnMore::class)->name('learn-more');
 Route::get('/login',Login::Class)->name('login');
 Route::get('/forgotpassword',ForgotPassword::Class)->name('forgot-password');
 Route::get('/reset-password/{token}',ResetPassword::Class)->name('password.reset');

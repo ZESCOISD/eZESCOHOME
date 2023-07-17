@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
-// use Laravel\Fortify\Actions\AuthenticateSession;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -16,19 +16,30 @@ class Login extends Component
 
     public function login()
     {
-        $this->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
 
-        $this->loading = true;     
+        $credentials = [
+            'email' => $this->email,
+            'password' => $this->password,
+        ];
+
+         $this->loading = true;     
         sleep(5);
-        
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-            return redirect()->intended('/admin-menu');
+
+        if (is_numeric($this->email)) {
+            $field = 'staff_number';
         } else {
-            $this->addError('email', trans('auth.failed'));
+            $field = 'email';
         }
+
+        if (Auth::attempt([$field => $this->email, 'password' => $this->password])) {
+            return redirect()->intended('/admin-menu');
+             $this->password = "";
+        } else {
+           
+            $this->addError('email', trans('auth.failed'));
+            $this->password ="";
+        }
+
         $this->loading = false;  
     }
 

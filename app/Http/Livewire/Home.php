@@ -30,6 +30,10 @@ class Home extends Component
     public $searchQuery;
     public $product_id;
     public $loading = false;
+    public $cost_savings;
+    public $active_systems;
+    public $in_production;
+    public $total_categories;
     // public $dropdowns = false;
     public $searchedProduct;
     public $getSelectedProducts = [];
@@ -98,7 +102,7 @@ class Home extends Component
         ->select('product.name as product_name','status.name','product.url as product_url','product.product_id as product_id')
         ->where('status.name','=','active')
         ->where('product.name', 'like', '%' . $this->searchQuery . '%')
-        ->where('product.product_id','>=','1B')
+        // ->where('product.product_id','>=','1B')
         ->first();
 
         $this->searchQuery ="";
@@ -109,8 +113,35 @@ class Home extends Component
     public function mount()
     {
         $this->searchedProduct = null;
-        // $this->slides = Slide::pluck('name');
+        $this->cost_savings = $this->calculateTotalCostSavings();
+        $this->active_systems = $this->calculateActiveSystems();
+        $this->in_production = $this->getTotalSystemsInProduction();
+        $this->total_categories = $this->getTotalSystemCategories();
     }
+
+    public function calculateTotalCostSavings(){
+        return Product::sum('cost_saving');
+    }
+
+       public function calculateActiveSystems(){
+        return Product::join('status','product.status_id','=','status.status_id')
+        ->select('product.name as product_name','status.name','product.product_id as product_id')
+        ->where('status.name','=','active')
+        ->count('status.name');
+    }
+
+       public function getTotalSystemsInProduction(){
+        return Product::join('status','product.status_id','=','status.status_id')
+        ->select('product.name as product_name','status.name','product.product_id as product_id')
+        ->where('status.name','=','production')
+        ->orWhere('status.name','=','in production')
+        ->count('status.name');
+    }
+
+      public function getTotalSystemCategories(){
+        return Category::count();
+    }
+
 
     public function shouldRender()
     {
@@ -182,7 +213,7 @@ class Home extends Component
             ->paginate(1);
 
         $upcoming_events = DB::table('upcoming_events')
-            ->select('event_name', 'event_description', 'venue', 'time', 'date', 'start_date', 'end_date')
+            ->select('event_name', 'event_description','fee', 'venue', 'time', 'date', 'start_date', 'end_date')
             ->whereDate('start_date', '<=', Carbon::today())
             ->whereDate('end_date', '>=', Carbon::today())
             ->paginate(1);

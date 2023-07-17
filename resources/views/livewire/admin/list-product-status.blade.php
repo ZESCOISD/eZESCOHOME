@@ -1,5 +1,6 @@
 <div>
     @push('custom-styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href='/css/adminmanagement.css'>  
     @endpush
     @role('admin')
@@ -21,6 +22,17 @@
                         <div id="login-nav-bar-links" type="button"  onclick=" window.location='{{ route('permissions.manage') }}'">Permissions</div>
                         <div id="login-nav-bar-links" type="button"  onclick=" window.location='{{ route('users.manage') }}'">Users</div>
                         <div id="login-nav-bar-links" type="button"  onclick=" window.location='{{ route('reports.manage') }}'"> Reports</div>
+                        <div id="login-nav-bar-links" class="dropdown">
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true" data-toggle="dropdown"
+                                aria-expanded="false">Utilties</div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 d-flex justify-content-end align-items-end">
                         <div id="logout" type="button" wire:click="logout"> Logout</div>

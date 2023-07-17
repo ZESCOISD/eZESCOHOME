@@ -1,7 +1,9 @@
 <div>
     <div>
         @push('custom-styles')
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
+        
         @endpush
         <div class="container-fluid">
             <div class="row">
@@ -36,7 +38,7 @@
                                 
                                 <form wire:submit.prevent="login">
                                   <div class="input-group">
-                                    <input type="email" class="form-control form-rounded" wire:model.defer="email" name="email" placeholder="Email" required>
+                                    <input type="text" class="form-control form-rounded" wire:model.defer="email" name="email" placeholder="Staff No/Email" required>
                                   
                                   </div>
                                   @error('email') <span style="color:red; font-size:12px;">{{ $message }}</span> @enderror

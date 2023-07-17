@@ -1,5 +1,6 @@
 <div>
     @push('custom-styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="{{ asset('css/adminmenu.css') }}">
     @endpush
 
@@ -207,6 +208,7 @@
                         </div>
                     </div>
 
+                @endrole
 
                     <div class="col-lg-3">
                         <div class="card shadow rounded" id="card">
@@ -221,7 +223,7 @@
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Manage Users</h5>
+                                                <h5 class="modal-title" id="staticBackdropLabel">Profile</h5>
                                                 <button id="modal-close" type="button" class="close"
                                                     data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
@@ -230,8 +232,7 @@
                                             <div class="modal-body">
                                                 <button id="modal-btn" type="button" class="btn btn-secondary"
                                                     data-dismiss="modal"
-                                                    onclick=" window.location='{{ route('users.manage') }}'">Manage
-                                                    users</button>
+                                                    onclick=" window.location='{{ route('users.manage') }}'">Profile</button>
 
                                             </div>
                                             <div class="modal-footer">
@@ -246,7 +247,7 @@
                             </div>
                             <div class="card-footer text-center">
                                 <div type="button" class="card-link">
-                                    <p type="button" data-toggle="modal" data-target="#staticBackdrop4">Manage Users
+                                    <p type="button" data-toggle="modal" data-target="#staticBackdrop4">Manage Profile
                                         <i class="bi bi-arrow-right-circle-fill"></i>
                                     </p>
                                 </div>
@@ -255,6 +256,7 @@
                         </div>
                     </div>
 
+                    @role('admin')
                     <div class="col-lg-3">
                         <div class="card shadow rounded" id="card">
                             <div class="card-body">

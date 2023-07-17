@@ -143,12 +143,41 @@ $(function() {
       overlay.classList.remove("show-overlay");
       container.style.display = "none";
       document.body.style.overflow = ""; // Enable scrolling of the page
-      history.back(); // Go back to the previous page
+      // Go back to the previous page
     }
 
-    function downloadPDF() {
-      var link = document.createElement("a");
-      link.href = "how-to.pdf";
-      link.download = "document.pdf";
-      link.click();
-    }
+    // function downloadPDF() {
+    //   var link = document.createElement("a");
+    //   link.href = "{{assets('storage')}}/{{$products->user_manual}}";
+    //   link.download = "document.pdf";
+    //   link.click();
+    // }
+
+
+    const slider = document.querySelector('.items');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.classList.add('active');
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
+    slider.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5; //scroll-fast
+      slider.scrollLeft = scrollLeft - walk;
+      console.log(walk);
+    });

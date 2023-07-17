@@ -444,5 +444,16 @@ td.fit-content {
 	display: none;
   }
   
+.horizontal-list {
+	list-style: none;
+	/* Remove default bullet points */
+	padding: 0;
+	display: flex;
+	/* Display items horizontally */
+}
 
+.horizontal-list li {
+	margin-right: 0 px;
+	/* Optional: Add some spacing between the items */
+}
 

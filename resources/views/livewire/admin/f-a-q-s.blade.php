@@ -1,6 +1,7 @@
 {{-- @livewire('livewire-pagination') --}}
 
 @push('custom-styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/adminmanagement.css">
 @endpush
 
@@ -19,6 +20,8 @@
                     <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center">
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('products.manage') }}'">Products</div>
+                        <div id="login-nav-bar-links" type="button"
+                    onclick=" window.location='{{ route('categories.manage') }}'">Categories</div>
                         @role('admin')
                             <div id="login-nav-bar-links" type="button"
                                 onclick=" window.location='{{ route('status.manage') }}'">Status</div>
@@ -28,9 +31,22 @@
                                 onclick=" window.location='{{ route('permissions.manage') }}'">Permissions</div>
                             <div id="login-nav-bar-links" type="button"
                                 onclick=" window.location='{{ route('users.manage') }}'">Users</div>
+                        @else
+                        <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
                         @endrole
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('reports.manage') }}'">Reports</div>
+                        <div id="login-nav-bar-links" class="dropdown">
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true" data-toggle="dropdown"
+                                aria-expanded="false">Utilties</div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                            </div>
+                        </div>
                     </div>
                     <div id="align-right"
                         class="col-lg-2 col-md-4 col-sm-12 col-xs-12 d-flex justify-content-end align-items-end">
@@ -61,11 +77,19 @@
                             </div>
                             <div class="col-sm-4">
 
-                                @role('admin')
+                                @can('create')
                                     <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
                                         data-target="#addFaqModal"><i class="material-icons">&#xE147;</i> <span>Add New
                                             Faq</span></button>
+                                @endcan
+
+                                @role('admin')
+                                <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFaqModal"><i
+                                        class="material-icons">&#xE147;</i> <span>Add New
+                                        Faq</span></button>
                                 @endrole
+
+                                
                                 <div wire:ignore.self class="modal fade" id="addFaqModal" tabindex="-1" role="dialog"
                                     aria-labelledby="addFaqModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 80%;"
@@ -132,6 +156,7 @@
                                         </div>
                                     </div>
                                 </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -168,15 +193,30 @@
 
 
                                     <td>
-                                        @role('admin')
+                                        @can('update')
                                             <a type="button" href="#updateFaqModal" data-toggle="modal"
                                                 data-target="#updateFaqModal" wire:click="editFaq({{ $faq->id }})"
                                                 class="edit"><i class="material-icons" data-toggle="tooltip"
                                                     title="Edit">&#xE254;</i></a>
+                                        @endcan
+
+                                        @role('admin')
+                                        <a type="button" href="#updateFaqModal" data-toggle="modal" data-target="#updateFaqModal"
+                                            wire:click="editFaq({{ $faq->id }})" class="edit"><i class="material-icons" data-toggle="tooltip"
+                                                title="Edit">&#xE254;</i></a>
+                                        @endrole
+
+                                        @can('delete')
                                             <a type="button" href="#deleteFaqModal" data-toggle="modal"
                                                 data-target="#deleteFaqModal" wire:click="deleteFaq({{ $faq->id }})"
                                                 class="delete" data-toggle="modal"><i class="material-icons"
                                                     data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                        @endcan
+
+                                        @role('admin')
+                                        <a type="button" href="#deleteFaqModal" data-toggle="modal" data-target="#deleteFaqModal"
+                                            wire:click="deleteFaq({{ $faq->id }})" class="delete" data-toggle="modal"><i class="material-icons"
+                                                data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                         @endrole
                                     </td>
                                 </tr>
@@ -197,6 +237,7 @@
             </div>
 
             <!-- Edit Modal HTML -->
+            
             <div wire:ignore.self id="editFaqModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">>
                     <div class="modal-content">
@@ -241,9 +282,10 @@
                     </div>
                 </div>
             </div>
-
+            
 
             {{-- Updates the modal --}}
+            
             <div wire:ignore.self id="updateFaqModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">>
                     <div class="modal-content">
@@ -288,9 +330,11 @@
                     </div>
                 </div>
             </div>
+            
             {{-- end of update modal --}}
 
             <!-- Delete Modal HTML -->
+            
             <div wire:ignore.self id="deleteFaqModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">">
                     <div class="modal-content">
@@ -336,6 +380,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- end of row -->
 
         </div>

@@ -22,18 +22,6 @@ class Slides extends Component
     public $search_slide;
     public $loading = false;
     public $allData = [];
-    // protected function rules(){
-    //     return[
-    //         'name' => 'nullable|min:3|max:20',
-    //         'image' => 'nullable|image|max:5024',
-    //     ];
-
-    // }
-
-    // public function updated($fields)
-    // {
-    //     $this->validateOnly($fields);
-    // }
 
     public function saveSlide(){
         $this->loading = true;

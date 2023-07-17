@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-// use Laravel\Fortify\Actions\CreateNewUser;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Role;
@@ -18,7 +18,10 @@ class ListUsers extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+     public $activeTab = 'tab1';
     public $user_id, $fname, $sname, $email, $staff_number, $role_name, $password, $password_confirmation;
+    public $update_staff_number, $update_password, $update_password_confirmation;
+
     public $search;
     public $loading = false;
     public $allData = [];
@@ -51,7 +54,7 @@ class ListUsers extends Component
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
             $loading = false;
-        }else{
+        }elseif($this->role_name == "admin"){
 
             $hashpassword = Hash::make($this->password);
             $user = User::create([
@@ -62,14 +65,51 @@ class ListUsers extends Component
                         'name' => $this->role_name,
                         'password' => $hashpassword,
                         'password_confirmation' => $hashpassword
-            ]);
-          
+            ])->assignRole('admin');
+            
                 session()->flash('registeredsuccessful','A new user was successfully added');
             $this->resetInput();
             $this->dispatchBrowserEvent('close-modal');
             $this->resetPage();
             $loading = false;
            
+        } elseif($this->role_name == "management"){
+
+            $hashpassword = Hash::make($this->password);
+            $user = User::create([
+                        'fname' => $this->fname,
+                        'sname' => $this->sname,
+                       'email' => $this->email,
+                        'staff_number' => $this->staff_number,
+                        'name' => $this->role_name,
+                        'password' => $hashpassword,
+                        'password_confirmation' => $hashpassword
+            ])->assignRole('management');
+            
+                session()->flash('registeredsuccessful','A new user was successfully added');
+            $this->resetInput();
+            $this->dispatchBrowserEvent('close-modal');
+            $this->resetPage();
+            $loading = false;
+           
+            
+        }else{
+              $hashpassword = Hash::make($this->password);
+            $user = User::create([
+                        'fname' => $this->fname,
+                        'sname' => $this->sname,
+                       'email' => $this->email,
+                        'staff_number' => $this->staff_number,
+                        'name' => $this->role_name,
+                        'password' => $hashpassword,
+                        'password_confirmation' => $hashpassword
+            ]);
+            
+                session()->flash('registeredsuccessful','A new user was successfully added');
+            $this->resetInput();
+            $this->dispatchBrowserEvent('close-modal');
+            $this->resetPage();
+            $loading = false;
         }
        
     }
@@ -124,7 +164,80 @@ class ListUsers extends Component
         $this->dispatchBrowserEvent('close-modal');
 
         $loading = false;
+        
     }
+
+     public function updatePassword(){
+
+        $this->activeTab = 'tab2';
+        $loading = true;
+        sleep(2);
+
+       $getID = Auth::user();
+
+       $ifAdmin = User::where('name', '=', 'admin')
+                 ->first();
+
+       if($ifAdmin){
+        $updatepassword = User::where('staff_number', '=',$this->update_staff_number)->first();
+
+       $this->validate([
+            'update_password' => 'required|min:8|same:update_password_confirmation',
+            'update_password_confirmation' => 'required',
+        ]);
+
+        $hashpassword = Hash::make($this->update_password);
+          $updatepassword->password = $hashpassword;
+        $updatepassword->password_confirmation = $hashpassword;
+        $result = $updatepassword->update();
+
+          if ($result) {
+             session()->flash('passwordupdatesuccessful','User Password Was successfully updated');
+            $this->update_staff_number ="";
+            $this->update_password ="";
+            $this->update_password_confirmation ="";
+            $this->dispatchBrowserEvent('close-modal');
+        } else {
+            session()->flash('error', 'Failed To Updated Password');
+        }
+
+       }else{
+         $user = Auth::user();
+         $userId = $user->user_id;
+        //  dd($userId);
+           $updatepassword = User::where('staff_number', '=',$userId)->first();
+       $this->validate([
+            'update_password' => 'required|min:8|same:update_password_confirmation',
+            'update_password_confirmation' => 'required',
+        ]);
+
+        // dd($this->update_password_confirmation);
+
+        $hashpassword = Hash::make($this->update_password);
+
+        // dd($user);
+
+          $user->password = $hashpassword;
+        $user->password_confirmation = $hashpassword;
+        $result = $user->update();
+
+          if ($result) {
+             session()->flash('passwordupdatesuccessful','Your Password Was successfully updated');
+            $this->update_password ="";
+            $this->update_password_confirmation ="";
+            $this->dispatchBrowserEvent('close-modal');
+        } else {
+            session()->flash('error', 'Failed To Updated Password');
+        }
+       }
+   
+        $this->loading = false;
+        
+    }
+
+  
+
+   
 
     public function deleteUser(int $user_id){
         $this->user_id = $user_id;

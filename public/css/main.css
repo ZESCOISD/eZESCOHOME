@@ -20,6 +20,7 @@
 
 #category-cards{
     width: 100px;
+    /* color:#d3882b; */
 }
 
 #category-card-item{
@@ -89,6 +90,10 @@
     margin-top: 25px;
     margin-left: 20px;
 }
+
+
+
+
 
 /* Home page Search bar */
 #search-bar{
@@ -202,9 +207,6 @@ hr {
     height: 500px;
   }
 
-  #notice-div {
-    /* padding-bottom: 200px; */
-  }
 
     #upcoming-events-div {
         margin-bottom: 200px;
@@ -226,6 +228,21 @@ hr {
       padding: 0 10px 0 30px;
   }
 
+        #important-notice-icon {
+            /* margin-top: 15px; */
+            font-size: 40px;
+            text-align: center;
+            /* margin-top: 10px; */
+            color: #d3882b;
+        }
+
+
+        /*  */
+
+        
+
+        /*  */
+
   #upcoming-events-head{
     font-size: 25px;
   }
@@ -237,13 +254,7 @@ hr {
     color: #d3882b;
   }
 
-   #important-notice-icon {
-       /* margin-top: 15px; */
-       font-size: 40px;
-       text-align: center;
-       /* margin-top: 10px; */
-       color: #d3882b;
-   }
+ 
 
   #systems{
     display: inline-block;
@@ -601,6 +612,15 @@ a span{
     margin: 0;
 }
 
+#visit-system {
+    font-size: 14px;
+    background: #5fcf80;
+    padding: 7px 14px;
+    color: #fff;
+    width: fit-content;
+    margin: 0;
+}
+
 hr{
     background-color: #d3882b;
     width: 200px;
@@ -929,13 +949,32 @@ height: 40px;
 
 /* Horizontal scrollview */
 #outer {
+    /* margin-left: 60px; */
   float: left;
-  max-width: 1080px;
+max-width: 900px;
   /* width: auto; */
   overflow: hidden;
   white-space: nowrap;
   display: inline-block;
 }
+
+@media (min-width: 1080px) {
+    #outer {
+        max-width: 1230px; 
+    }
+}
+
+    @media (min-width: 992px) {
+        #outer {
+            max-width: 928px;
+        }
+
+        #frequently-accessed-system {
+            width: 200px;
+            /* height: 100px; */
+            /* margin: 20px; */
+        }
+    }
 
 #left-button {
   float: left;
@@ -990,8 +1029,11 @@ label {
 .page-footer{
   background-color: #3aad7a;
   color: white;
+  height: 100px;
   font-weight: bold;
 }
+
+
 
 #about-section i{
     color: #fff;
@@ -1173,7 +1215,10 @@ label {
 .faq .content p {
     font-size: 15px;
     color: rgba(var(--color-default-rgb), 0.7);
+    
 }
+
+
 
 .faq .faq-container .faq-item {
     position: relative;
@@ -1684,4 +1729,7 @@ label {
         #pdfContainer embed {
             width: 100%;
             height: 100%;
+        }
+
+        .modal-dialog{
         }

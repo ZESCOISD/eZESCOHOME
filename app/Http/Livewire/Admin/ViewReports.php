@@ -10,6 +10,7 @@ use Livewire\Component;
 use App\Models\Product;
 use App\Models\Status;
 use App\Models\Category;
+use App\Models\SuggestionBox;
 
 use Illuminate\Support\Facades\Schema;
 use Livewire\WithPagination;
@@ -19,8 +20,7 @@ class ViewReports extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $perPage = 10;
-    public $currentPage = 1;
+   public $suggest;
 
     public $selectedReportType;
     public $search;
@@ -29,8 +29,11 @@ class ViewReports extends Component
 
     public $viewProduct;
     public $products;
+    public $suggestions;
     public $overallCategories;
     public $totalActiveSystems;
+
+    public $suggestion_id, $subject, $system_name, $suggestion;
 
     public $name, $product_id, $icon_link, $category_id, $category_name,
     $status_id, $status_name,  $number_of_clicks, $url, $test_url,
@@ -41,6 +44,8 @@ class ViewReports extends Component
     public function mount(){
         $this->selectedReportType = [];
         $this->products = [];
+        $this->suggestions;
+        $this->suggest;
 
 
         $this->totalActiveSystems = DB::table('product')
@@ -662,12 +667,68 @@ class ViewReports extends Component
                 }
                 $this->selectedReportType = $reportType;
                 $this->products = $product->get();
+                // dd($product);
+            }
+
+            if( $reportType === "9" && !empty($this->search)){
+                $suggestions = SuggestionBox::all();
+
+                    // if date is inputed
+                    if(!empty($this->from) && !empty($this->to)){
+                        $suggestion = $suggestion->whereDate('created_at', '>=', $this->from)
+                        ->whereDate('created_at', '<=', $this->to);
+
+                    }elseif(!empty($this->from)){
+                        $suggestion = $suggestion->whereDate('created_at','>=',$this->from);
+
+                    }elseif(!empty($this->to)){
+                        $suggestion = $suggestion->whereDate('product.created_at','<=',$this->to);
+
+                    }
+
+                    $this->selectedReportType = $reportType;
+                    $this->suggestion = $suggestion->get();
+
+            }elseif ( $reportType === "9") {
+
+                $paginate = SuggestionBox::all();
+
+                // dd($suggestion);
+
+                $suggestion = SuggestionBox::where('system_name','like','%'. $this->search.'%');
+
+                // dd($suggestion);
+
+                 // if date is inputed
+                 if(!empty($this->from) && !empty($this->to)){
+                    $suggestion = $suggestion->whereDate('created_at', '>=', $this->from)
+                    ->whereDate('created_at', '<=', $this->to);
+
+                }elseif(!empty($this->from)){
+                    $suggestion = $suggestion->whereDate('created_at','>=',$this->from);
+
+                }elseif(!empty($this->to)){
+                    $suggestion = $suggestion->whereDate('created_at','<=',$this->to);
+
+                }
+                $this->selectedReportType = $reportType;
+
+                // dd($this->selectedReportType);
+
+                $suggest = $suggestion->paginate(5);
+                // $this->suggestions = collect($suggest->items());
+
+                // dd($this->suggestions);
+
+    //              $users = $usersQuery->paginate(10);
+    // $usersCollection = collect($users->items());
             }
         }
     }
 
     public function viewRow(int $product_id){
         $product = Product::find($product_id);
+        
         if($product){
             // $product = Product::find($product_id);
             $this->name = $product->product_id;
@@ -684,6 +745,22 @@ class ViewReports extends Component
             $this->tutorial_url = $product->tutorial_url;
             $this->date_launched = $product->date_launched;
             $this->date_decommissioned = $product->date_decommissioned;
+        }else{
+            return redirect()->to('/reports.manage');
+        }
+    }
+
+
+    public function viewSuggestion(int $suggestion_id){
+        $suggestions= SuggestionBox::find($suggestion_id);
+        
+        if($suggestions){
+            
+            $this->suggestion_id = $suggestions->suggestion_id;
+            $this->subject = $suggestions->subject;
+            $this->system_name = $suggestions->system_name;
+            $this->suggestion = $suggestions->suggestion;
+        
         }else{
             return redirect()->to('/reports.manage');
         }

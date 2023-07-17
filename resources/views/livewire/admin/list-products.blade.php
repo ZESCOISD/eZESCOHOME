@@ -1,7 +1,7 @@
 @push('custom-styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/adminmanagement.css">
 @endpush
-
 
 <div>
 
@@ -26,9 +26,22 @@
                                 onclick=" window.location='{{ route('permissions.manage') }}'">Permissions</div>
                             <div id="login-nav-bar-links" type="button"
                                 onclick=" window.location='{{ route('users.manage') }}'">Users</div>
+                        @else
+                        <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
                         @endrole
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('reports.manage') }}'"> Reports</div>
+                        <div id="login-nav-bar-links" class="dropdown">
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true" data-toggle="dropdown"
+                                aria-expanded="false">Utilties</div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 d-flex justify-content-end align-items-end">
                         <div id="logout" type="button" wire:click="logout"> Logout</div>
@@ -54,10 +67,16 @@
                             <span class="input-group-append">
                         </div>
                         <div class="col-sm-4">
-                            @role('admin')
+                            @can('create')
                                 <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#addProductModal"><i class="material-icons">&#xE147;</i> <span>Add new
                                         product</span></button>
+                            @endcan
+
+                            @role('admin')
+                            <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal"><i
+                                    class="material-icons">&#xE147;</i> <span>Add new
+                                    product</span></button>
                             @endrole
                         </div>
                     </div>
@@ -115,16 +134,31 @@
                                 <td>{{ $product->date_decommissioned }}</td>
 
                                 <td>
-                                    @role('admin')
+                                    @can('update')
                                         <a type="button" href="#editProductModal" data-toggle="modal"
                                             data-target="#updateProductModal"
                                             wire:click="editProduct({{ $product->product_id }})" class="edit"><i
                                                 class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    @endcan
+
+                                    @role('admin')
+                                    <a type="button" href="#editProductModal" data-toggle="modal" data-target="#updateProductModal"
+                                        wire:click="editProduct({{ $product->product_id }})" class="edit"><i class="material-icons" data-toggle="tooltip"
+                                            title="Edit">&#xE254;</i></a>
+                                    @endrole
+
+                                    @can('delete')
                                         <a type="button" href="#deleteProductModal" data-toggle="modal"
                                             data-target="#deleteProductModal"
                                             wire:click="deleteProduct({{ $product->product_id }})" class="delete"
                                             data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                                                 title="Delete">&#xE872;</i></a>
+                                    @endcan
+
+                                    @role('admin')
+                                    <a type="button" href="#deleteProductModal" data-toggle="modal" data-target="#deleteProductModal"
+                                        wire:click="deleteProduct({{ $product->product_id }})" class="delete" data-toggle="modal"><i class="material-icons"
+                                            data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                     @endrole
                                 </td>
                             </tr>
@@ -140,17 +174,7 @@
                 </div>
             </div>
 
-            {{-- @foreach ($productsMediaa as $product)
-                <div>
-
-                    <img src="{{ $product->image }}" alt="">
-                    @foreach ($product->getMedia('images') as $image)
-                        <img src="{{ $image->getUrl() }}" alt="{{ $product->name }}" width="100">
-
-                    @endforeach
-                </div>
-            @endforeach --}}
-            {{-- Add Modal --}}
+        
 
 
             <div wire:ignore.self class="modal fade" id="addProductModal" tabindex="-1" role="dialog"
@@ -183,93 +207,85 @@
 
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-md-12 mt-2">
+                                        <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="name">Name</label>
-                                                <input type="text" class="form-control" wire:model.defer="name"
-                                                    name="name" placeholder="name">
+                                                <input type="text" class="form-control" wire:model.defer="name" name="name" placeholder="name">
                                                 @error('name')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <div class="form-group ">
+                                                <label for="category_id">Category</label>
+                                                <select class="form-control" id="category_id" wire:model.defer="category_id">
+                                                    <option value="0">Select an Option</option>
+                                                    @foreach ($categoriesfields as
+                                                    $category)
+                                                    <option value="{{ $category->category_id }}">
+                                                        {{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category_id')
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
                                     </div>
-
+                                    
                                     <div class="row">
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="icon_Link">Product Icon</label>
-                                                <input type="file" class="form-control" name="icon_link"
-                                                    wire:model.defer="icon_link" placeholder="Product Icon">
+                                                <input type="file" class="form-control" name="icon_link" wire:model.defer="icon_link"
+                                                    placeholder="Product Icon">
                                                 @error('icon_link')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
-
-                                        {{-- @if ($preview_image)
-                                            Photo Preview:
-                                            <img src="{{ $preview_image }}">
-                                        @endif --}}
-
+                                    
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
-                                                <label for="category_id">Category</label>
-                                                <select class="form-control" id="category_id"
-                                                    wire:model.defer="category_id">
-                                                    <option value="0">Select an Option</option>
-                                                    @foreach ($categoriesfields as $category)
-                                                        <option value="{{ $category->category_id }}">
-                                                            {{ $category->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('category_id')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <label for="system_cover_image">Cover Photo</label>
+                                                <input type="file" class="form-control" name="system_cover_image" wire:model.defer="system_cover_image"
+                                                    placeholder="system cover image">
+                                                @error('system_cover_image')
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
+                                    
+                                        {{-- @if ($preview_image)
+                                        Photo Preview:
+                                        <img src="{{ $preview_image }}">
+                                        @endif --}}
                                     </div>
-
+                                    
                                     <div class="row">
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="video">Tutorial Video</label>
-                                                <input type="file" class="form-control" name="video"
-                                                    wire:model.defer="video" placeholder="Tutorial Video">
+                                                <input type="file" class="form-control" name="video" wire:model.defer="video" placeholder="Tutorial Video">
                                                 @error('video')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
-
+                                    
                                         {{-- @if ($preview_image)
-                                            Photo Preview:
-                                            <img src="{{ $preview_image }}">
+                                        Photo Preview:
+                                        <img src="{{ $preview_image }}">
                                         @endif --}}
-
+                                    
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="user_manual">User guide</label>
-                                                <input class="form-control" type="file" name="user_manual"
-                                                    accept=".pdf" wire:model.defer="user_manual"
+                                                <input class="form-control" type="file" name="user_manual" accept=".pdf" wire:model.defer="user_manual"
                                                     placeholder="User guide">
                                                 @error('user_manual')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row">
-                                        <div class="col-md-12 mt-2">
-                                            <div class="form-group ">
-                                                <label for="system_cover_image">Cover Photo</label>
-                                                <input type="file" class="form-control" name="system_cover_image"
-                                                    wire:model.defer="system_cover_image"
-                                                    placeholder="system cover image">
-                                                @error('system_cover_image')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -404,10 +420,10 @@
                                             <div class="form-group dates ">
                                                 <label for="date_decommissioned">Date Decommissioned</label>
                                                 <input type="date" class="form-control"
-                                                    wire:model.defer="date_decommissioned" " placeholder="Date Decommissioned">
+                                                    wire:model.defer="date_decommissioned" placeholder="Date Decommissioned">
                                                 @error('date_decommissioned')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -440,53 +456,70 @@
                             @csrf
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-md-12 mt-2">
+                                    <div class="col-md-6 mt-2">
                                         <div class="form-group ">
                                             <label for="name">Name</label>
                                             <input type="text" class="form-control" wire:model.defer="name"
                                                 name="name" placeholder="name">
                                             @error('name')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <div class="form-group ">
+                                            <label for="category_id">Category</label>
+                                            <select class="form-control" id="category_id" wire:model.defer="category_id">
+                                                <option value="0">Select an Option</option>
+                                                @foreach ($categoriesfields as
+                                                $category)
+                                                <option value="{{ $category->category_id }}">
+                                                    {{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('category_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
+
+{{-- 
+                                @foreach($product as $type => $files)
+                                <label>{{ ucfirst($type) }}:</label>
+                                <select wire:model="product.{{ $type }}">
+                                    <option value="">Select a file</option>
+                                    @foreach($files as $file)
+                                    <option value="{{ $file }}">{{ $file }}</option>
+                                    @endforeach
+                                </select>
+                                @endforeach --}}
 
                                 <div class="row">
                                     <div class="col-md-6 mt-2">
                                         <div class="form-group ">
                                             <label for="icon_Link">Product Icon</label>
                                             <input type="file" class="form-control" name="icon_link"
-                                                wire:model.defer="icon_link" placeholder="Product Icon">
+                                                wire:model.defer="icon_link" placeholder="Product Icon" accept="image/png, image/jpeg">
                                             @error('icon_link')
-    <span class="text-danger">{{ $message }}</span>
-@enderror
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                         </div>
                                     </div>
 
-                                    {{-- @if ($preview_image)
-                                            Photo Preview:
-                                            <img src="{{ $preview_image }}">
-                                        @endif --}}
-
-                                    <div class="col-md-6 mt-2">
-                                        <div class="form-group ">
-                                            <label for="category_id">Category</label>
-                                            <select class="form-control" id="category_id"
-                                                wire:model.defer="category_id">
-                                                <option value="0">Select an Option</option>
-                                                       @foreach ($categoriesfields as
-                                                    $category)
-                                                <option value="{{ $category->category_id }}">
-                                                    {{ $category->name }}</option>
-                                                @endforeach
-                                                </select>
-                                                @error('category_id')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                        <div class="col-md-6 mt-2">
+                                            <div class="form-group ">
+                                                <label for="system_cover_image">Cover Photo</label>
+                                                <input type="file" class="form-control" name="system_cover_image" wire:model.defer="system_cover_image"
+                                                    placeholder="system cover image">
+                                                @error('system_cover_image')
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
-                                    </div>
+                                   
+                                 
+                                </div>
 
                                     <div class="row">
                                         <div class="col-md-6 mt-2">
@@ -500,10 +533,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- @if ($preview_image)
-                                            Photo Preview:
-                                            <img src="{{ $preview_image }}">
-                                        @endif --}}
+                                      
 
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
@@ -512,21 +542,6 @@
                                                     accept=".pdf" wire:model.defer="user_manual"
                                                     placeholder="User guide">
                                                 @error('user_manual')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row">
-                                        <div class="col-md-12 mt-2">
-                                            <div class="form-group ">
-                                                <label for="system_cover_image">Cover Photo</label>
-                                                <input type="file" class="form-control" name="system_cover_image"
-                                                    wire:model.defer="system_cover_image"
-                                                    placeholder="system cover image">
-                                                @error('system_cover_image')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -685,7 +700,7 @@
 
                 {{-- Updates the modal --}}
                 <div wire:ignore.self id="updateProductModal" class="modal fade " tabindex="-1" role="dialog"
-                    aria-labelledby="editProductModalLabel" aria-hidden="true">
+                    aria-labelledby="updateProductModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" style="max-width: 80%;" role="document">
                         <div class="modal-content">
                             <div style="background-color:cadetblue;" class="modal-header">
@@ -696,6 +711,7 @@
                                 @csrf
                                 <div wire:loading wire:target="updateProduct" class="loading-bar"></div>
                                 @if (session()->has('updatesuccessful'))
+                               
                                     <div id="dismiss"
                                         class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
                                         role="alert" style="border:none; font-size: 12px;">
@@ -707,93 +723,85 @@
                                 @endif
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-md-12 mt-2">
+                                        <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="name">Name</label>
-                                                <input type="text" class="form-control" wire:model.defer="name"
-                                                    name="name" placeholder="name">
+                                                <input type="text" class="form-control" wire:model.defer="name" name="name" placeholder="name">
                                                 @error('name')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <div class="form-group ">
+                                                <label for="category_id">Category</label>
+                                                <select class="form-control" id="category_id" wire:model.defer="category_id">
+                                                    <option value="0">Select an Option</option>
+                                                    @foreach ($categoriesfields as
+                                                    $category)
+                                                    <option value="{{ $category->category_id }}">
+                                                        {{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('category_id')
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
                                     </div>
-
+                                    
                                     <div class="row">
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="icon_Link">Product Icon</label>
-                                                <input type="file" class="form-control" name="icon_link"
-                                                    wire:model.defer="icon_link" placeholder="Product Icon">
+                                                <input type="file" class="form-control" name="icon_link" wire:model.defer="icon_link"
+                                                    placeholder="Product Icon">
                                                 @error('icon_link')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
-
-                                        {{-- @if ($preview_image)
-                                            Photo Preview:
-                                            <img src="{{ $preview_image }}">
-                                        @endif --}}
-
+                                    
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
-                                                <label for="category_id">Category</label>
-                                                <select class="form-control" id="category_id"
-                                                    wire:model.defer="category_id">
-                                                    <option value="0">Select an Option</option>
-                                                    @foreach ($categoriesfields as $category)
-                                                        <option value="{{ $category->category_id }}">
-                                                            {{ $category->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('category_id')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <label for="system_cover_image">Cover Photo</label>
+                                                <input type="file" class="form-control" name="system_cover_image" wire:model.defer="system_cover_image"
+                                                    placeholder="system cover image">
+                                                @error('system_cover_image')
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
+                                    
+                                        {{-- @if ($preview_image)
+                                        Photo Preview:
+                                        <img src="{{ $preview_image }}">
+                                        @endif --}}
                                     </div>
-
+                                    
                                     <div class="row">
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="video">Tutorial Video</label>
-                                                <input type="file" class="form-control" name="video"
-                                                    wire:model.defer="video" placeholder="Tutorial Video">
+                                                <input type="file" class="form-control" name="video" wire:model.defer="video" placeholder="Tutorial Video">
                                                 @error('video')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
-
+                                    
                                         {{-- @if ($preview_image)
-                                            Photo Preview:
-                                            <img src="{{ $preview_image }}">
+                                        Photo Preview:
+                                        <img src="{{ $preview_image }}">
                                         @endif --}}
-
+                                    
                                         <div class="col-md-6 mt-2">
                                             <div class="form-group ">
                                                 <label for="user_manual">User guide</label>
-                                                <input class="form-control" type="file" name="user_manual"
-                                                    accept=".pdf" wire:model.defer="user_manual"
+                                                <input class="form-control" type="file" name="user_manual" accept=".pdf" wire:model.defer="user_manual"
                                                     placeholder="User guide">
                                                 @error('user_manual')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row">
-                                        <div class="col-md-12 mt-2">
-                                            <div class="form-group ">
-                                                <label for="system_cover_image">Cover Photo</label>
-                                                <input type="file" class="form-control" name="system_cover_image"
-                                                    wire:model.defer="system_cover_image"
-                                                    placeholder="system cover image">
-                                                @error('system_cover_image')
-                                                    <span class="text-danger">{{ $message }}</span>
+                                                <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -994,8 +1002,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- end of row -->
-                <!-- end of row -->
+               
             </div>
 
     </body>

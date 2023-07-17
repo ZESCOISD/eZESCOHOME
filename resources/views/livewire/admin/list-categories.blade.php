@@ -1,6 +1,7 @@
 {{-- @livewire('livewire-pagination') --}}
 
 @push('custom-styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/adminmanagement.css">
 @endpush
 
@@ -26,11 +27,23 @@
                                 onclick=" window.location='{{ route('roles.manage') }}'">Roles</div>
                             <div id="login-nav-bar-links" type="button"
                                 onclick=" window.location='{{ route('permissions.manage') }}'">Permissions</div>
-                            <div id="login-nav-bar-links" type="button"
-                                onclick=" window.location='{{ route('users.manage') }}'">Users</div>
+                            <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Users</div>
+                        @else
+                            <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
                         @endrole
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('reports.manage') }}'">Reports</div>
+                        <div id="login-nav-bar-links" class="dropdown">
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true" data-toggle="dropdown"
+                                aria-expanded="false">Utilties</div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                            </div>
+                        </div>
                     </div>
                     <div id="align-right"
                         class="col-lg-2 col-md-4 col-sm-12 col-xs-12 d-flex justify-content-end align-items-end">
@@ -61,10 +74,16 @@
                             </div>
                             <div class="col-sm-4">
                                 {{-- <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Category</span></a> --}}
-                                @role('admin')
+                                @can('create')
                                     <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
                                         data-target="#addCategoryModal"><i class="material-icons">&#xE147;</i> <span>Add New
                                             Category</span></button>
+                                @endcan
+
+                                @role('admin')
+                                <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategoryModal"><i
+                                        class="material-icons">&#xE147;</i> <span>Add New
+                                        Category</span></button>
                                 @endrole
                                 <div wire:ignore.self class="modal fade" id="addCategoryModal" tabindex="-1"
                                     role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
@@ -151,17 +170,32 @@
                                     <td>{{ $category->updated_at }}</td>
 
                                     <td>
-                                        @role('admin')
+                                        @can('update')
                                             <a type="button" href="#updateCategoryModal" data-toggle="modal"
                                                 data-target="#updateCategoryModal"
                                                 wire:click="editCategory({{ $category->category_id }})" class="edit"><i
                                                     class="material-icons" data-toggle="tooltip"
                                                     title="Edit">&#xE254;</i></a>
+                                        @endcan
+
+                                        @role('admin')
+                                        <a type="button" href="#updateCategoryModal" data-toggle="modal" data-target="#updateCategoryModal"
+                                            wire:click="editCategory({{ $category->category_id }})" class="edit"><i class="material-icons" data-toggle="tooltip"
+                                                title="Edit">&#xE254;</i></a>
+                                        @endrole
+
+                                        @can('delete')
                                             <a type="button" href="#deleteCategoryModal" data-toggle="modal"
                                                 data-target="#deleteCategoryModal"
                                                 wire:click="deleteCategory({{ $category->category_id }})" class="delete"
                                                 data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                                                     title="Delete">&#xE872;</i></a>
+                                        @endcan
+
+                                        @role('admin')
+                                        <a type="button" href="#deleteCategoryModal" data-toggle="modal" data-target="#deleteCategoryModal"
+                                            wire:click="deleteCategory({{ $category->category_id }})" class="delete" data-toggle="modal"><i
+                                                class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                         @endrole
                                     </td>
                                 </tr>

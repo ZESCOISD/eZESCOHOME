@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
-// use App\Models\Roles;
+// use App\Models\Role;
 // use App\Models\Permissions;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -17,9 +17,13 @@ class Roles extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+
     public $role_id, $name, $guard_name = "web";
     public $permission_name;
+    public $permission_id;
     public $search;
+    public $current_role;
+    public $sync_role;
     public $loading = false;
     public $allData = [];
     protected function rules(){
@@ -55,7 +59,7 @@ class Roles extends Component
             $this->name = $role->name;
             $this->guard_name = $role->guard_name;
         }else{
-            return redirect()->to('/roles.manage');
+            return redirect()->to('/roles/manage');
         }
     }
 
@@ -66,6 +70,7 @@ class Roles extends Component
     public function resetInput(){
         $this-> name ='';
         $this-> permission_name ='';
+        $this-> permission_id ='';
     }
 
     public function updateRole(){
@@ -96,46 +101,175 @@ class Roles extends Component
         $this->loading = false;  
     }
 
+    // 
+
+     public function deletePermission($permission_id){
+        $this->permission_id = $permission_id;
+    }
+
+
+     public function revokePermission( Role $role, Permission $permission){
+        $this->loading = true; 
+        sleep(2);
+
+        $permission_id = $this->permission_id; 
+
+        $role = Role::findById($this->role_id);
+        $permission = Permission::findById($this->permission_id);
+
+        if($role->hasPermissionTo($permission)){
+            $role->revokePermissionTo($permission);
+             session()->flash('revoked','Permission Has Been Revoked.');
+            // $this->resetInput();
+            // $this->dispatchBrowserEvent('close-modal');
+            $this->loading = false; 
+            $this->current_role;
+            
+        }
+        return back()->with('nopermission','This Role has no "'.$permission->name.'" Permission.');
+    }
+
+    // 
+
+
     public function viewRole(int $role_id){
         $role = Role::find($role_id);
+
+
+        $this->current_role = Role::join('role_has_permissions', 'roles.id', '=', 'role_has_permissions.role_id')
+            ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
+            ->select('Permissions.name','permissions.id')
+            ->where('role_has_permissions.role_id','=',$role_id)
+            ->get();
+        // dd($this->current_role);
+            
+        if($this->current_role == []){
+            $this->current_role = 'No permissions attached to this Role';
+        }
+
         if($role){
             $this->role_id = $role->id;
             $this->name = $role->name;
             $this->guard_name = $role->guard_name;
         }else{
-            return redirect()->to('/roles.manage');
+            return redirect()->to('/roles/manage');
         }
     }
 
+     protected $listeners = [
+        'viewUpdated' => 'viewRole',
+    ];
+
+    public function mount(){
+        $this->current_role;
+    }
+
     public function givePermission( Role $role){
-        $this->loading = true; 
-        sleep(2);
+       
 
-        // $role_id = Role::where('id',$this->role_id);
-        $permission_name = $this->permission_name; 
+         $this->validate([
+            'permission_id' => 'required',
+        ]);
 
-        // $role = Role::findByName();
-        $permission = Permission::findByName($permission_name);
+        if($this->permission_id === '0'){
+            session()->flash('empty','Selection Type Is Empty');
+            // $this->resetInput();
+                 $this-> name ='';
+                $this-> permission_name ='';
+                // $this-> permission_id ='';
+            $this->dispatchBrowserEvent('close-modal');
+        }else{
+           
 
-        if($role->hasPermissionTo($permission_name)){
-            return back()->with('message','Permission Already Exists.');
+              $role = Role::findById($this->role_id);
+            //   dd($this->role_id);
+        $permission = Permission::findById($this->permission_id);
+
+       if($role->hasPermissionTo($permission)){
+          $this->loading = true; 
+             sleep(2);
+             session()->flash('message','Permission Already Exists.');
+              $this-> name ='';
+                $this-> permission_name ='';    
             $this->loading = false; 
         }else{
-            $role->givePermissionTo($permission_name);
-            session()->flash('givepermissionsuccessful','Permission was successfully Added');
-            $this->resetInput();
-            $this->dispatchBrowserEvent('close-modal');
+            $role->givePermissionTo($permission);
+              $this->loading = true; 
+             
+            session()->flash('givepermissionsuccessful','Permission was successfully Added Wait For Page To Reload');
+            sleep(4);
+            // $this->
+            //  $this->current_role;
+             dd($this->viewRole());
+            //  dd($this->current_role);
             $this->loading = false;   
         }
+        }
+
+        // $permission_id = $this->permission_id; 
+
+    }
+
+    public function sync_Permission(){
+
+        
+
+        // dd($current_role);
+         $this->validate([
+            'permission_id' => 'required',
+        ]);
+
+        if($this->permission_id === '0'){
+              
+            session()->flash('empty','Field is required');
+
+          
+            // $this->resetInput();
+                 $this-> name ='';
+                $this-> permission_name ='';
+                // $this-> permission_id ='';
+            $this->dispatchBrowserEvent('close-modal');
+        }else{
+
+             $this->loading = true; 
+            sleep(2);
+
+             $role = Role::find($this->role_id);
+             $permission = Permission::whereIn('id',$this->permission_id)->get();
+
+             dd($permission);
+
+        // if($role->hasPermissionTo($permission)){
+
+        // }
+        if($role->syncPermissions($permission)){
+             session()->flash('syncsuccess','Permission(s) Synced Successfully');
+              $this-> name ='';
+            $this-> permission_name ='';    
            
-        // dd($this->permission_name);
+            $this->loading = false; 
+        }else{
+           
+            session()->flash('syncerror','Role might have no Permission(s). Refresh and try again.');
+           
+             $this->current_role;
+            $this->loading = false;   
+        }
+        }
+         
+    }
+
+    public function close()
+    {
+        // $this->showModal = false;
+
+        return redirect()->to('/roles/manage');
     }
 
 
     public function logout()
     {
    
-
         Auth::logout();
         return redirect('login');
        
@@ -148,22 +282,17 @@ class Roles extends Component
         $roles = Role::whereNotIn('name', ['admin'])
              ->where('name', 'like', '%'.$this->search.'%')->orderBy('id','ASC')->paginate(5);
 
-        // $roles = Roles::
+        $current_role = Role::join('role_has_permissions', 'roles.id', '=', 'role_has_permissions.role_id')
+            ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
+            ->select('Permissions.name','permissions.id')
+            ->where('role_has_permissions.role_id','=',$this->role_id)
+            ->get();
+
         return view('livewire.admin.list-roles',[
+            'current_role' => $current_role,
             'roles' => $roles,
             'permissions' => $permissions
         ]);
     }
 
-        public function permissions() {
-
-            return $this->belongsToMany(Permission::class,'roles_permissions');
-                
-        }
-        
-        public function users() {
-        
-            return $this->belongsToMany(User::class,'users_roles');
-                
-        }
 }

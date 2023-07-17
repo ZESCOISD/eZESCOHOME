@@ -1,5 +1,6 @@
 <div>
     @push('custom-styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/adminmanagement.css">  
     @endpush
 
@@ -20,7 +21,20 @@
                         <div id="login-nav-bar-links" type="button"  onclick=" window.location='{{ route('roles.manage') }}'">Roles</div>
                         <div id="login-nav-bar-links" type="button"  onclick=" window.location='{{ route('permissions.manage') }}'">Permissions</div>
                         <div id="login-nav-bar-links" type="button"  onclick=" window.location='{{ route('users.manage') }}'">Users</div>
+                        @else
+                        <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
                         @endrole
+                        <div id="login-nav-bar-links" class="dropdown">
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true" data-toggle="dropdown"
+                                aria-expanded="false">Utilties</div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 d-flex justify-content-end align-items-end">
                         <div id="logout" type="button" wire:click="logout"> Logout</div>
@@ -174,6 +188,7 @@
                             <option value="6">System's in Development</option>
                             <option value="7">Decommissioned System's</option>
                             <option value="8">System Developer</option>
+                            <option value="9">Suggestions</option>
                           </select>
                 </div>
                 <div class="col-lg-2 mt-3">
@@ -205,24 +220,39 @@
                 <div class="col-lg-12">
                     <table id="dtBasicExample" class="table table-striped table-bordered table-sm responsive" cellspacing="0" width="100%">
                         <thead>
+                            @if($selectedReportType === "0")
+
                             <tr id="table-header">
-                               
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+
+                            @elseif($selectedReportType === "9")
+                            <tr id="table-header">
+                                <th>Suggestion id</th>
+                                <th>Subject</th>
+                                <th>System Name</th>
+                                <th>Suggestion</th>
+                                <th>View suggestion</th>
+                            </tr>
+                            @else
+                            <tr id="table-header">
                                 <th>product id</th>
                                 <th>name</th>
-                                {{-- <th>icon link</th> --}}
-                                {{-- <th>category</th>
-                                <th>status</th> --}}
                                 <th>number of clicks</th>
                                 <th>url</th>
-                                {{-- <th>test url</th> --}}
                                 <th>lead developer</th>
                                 <th>short description</th>
-                                {{-- <th>long description</th> --}}
-                                {{-- <th>tutorial url</th> --}}
                                 <th>date launched</th>
-                                {{-- <th>date_decommissioned</th> --}}
                                 <th>View</th>
                             </tr>
+                            @endif
                         </thead>
                         <tbody >
                                                             
@@ -230,25 +260,36 @@
                             <tr>
                                 <td class="text-center" colspan="16">No records found</td>
                             </tr>
+                            @elseif($selectedReportType === "9")
+                                   @if(count($suggestions) > 0)
+                                        @foreach ($suggestions as $suggestion)
+                                        <tr>
+                                            <td>{{$suggestion->id}}</td>
+                                            <td>{{$suggestion->subject}}</td>
+                                            <td>{{$suggestion->system_name}}</td>
+                                            <td class="text-truncate" style="max-width: 80px;">{{$suggestion->suggestion}}</td>
+                                            <td>
+                                                <a type="button" href="#viewSuggestionModal" data-toggle="modal" data-target="#viewSuggestionModal"
+                                                    wire:click.prevent="viewSuggestion({{$suggestion->id}})"><i class="bi bi-eye-fill"></i></a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @else
+                                    <tr>
+                                        <td class="text-center" colspan="16">No records found</td>
+                                    </tr>
+                                    @endif
                             @else
-                                    @if(count($products) > 0)
+                             @if(count($products) > 0)
                                             @foreach ($products as $product)
                                             <tr>
                                                 <td>{{$product['product_id']}}</td>
                                                 <td>{{$product['name']}}</td>
-                                                {{-- <td>{{$product['icon_link']}}</td> --}}
-                                                {{-- <td>{{$product['category_name']}}</td>
-                                                <td>{{$product['status_name']}}</td> --}}
                                                 <td>{{$product['number_of_clicks']}}</td>
                                                 <td>{{$product['url']}}</td>
-                                                {{-- <td >{{$product['test_url']}}</td> --}}
                                                 <td>{{$product['lead_developer']}}</td>
                                                 <td class="text-truncate" style="max-width: 80px;">{{$product['short_description']}}</td>
-                                                {{-- <td class="text-truncate" style="max-width: 80px;">{{$product['long_description']}}</td> --}}
-                                                {{-- <td>{{$product['tutorial_url']}}</td> --}}
                                                 <td>{{$product['date_launched']}}</td>
-                                                {{-- <td>{{$product['date_decommissioned']}}</td> --}}
-
                                                 <td>
                                                     <a type="button" href="#viewModal" data-toggle="modal" data-target="#viewModal" wire:click.prevent="viewItem({{$product['product_id']}})"><i class="bi bi-eye-fill"></i></a>
                                                 </td>
@@ -264,7 +305,9 @@
                         </tbody>
                       </table>
                       <div class="clearfix">
-                        {{-- {{ $products->links() }} --}}
+                        {{-- @if($suggested)
+                            {{$suggested->link()}}
+                        @endif --}}
                     </div>
                 </div>
               </div>

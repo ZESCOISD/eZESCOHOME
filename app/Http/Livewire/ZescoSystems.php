@@ -25,7 +25,10 @@ class ZescoSystems extends Component
 
     public $product_id;
     public $name;
+    public $video;
+    
     public $icon_link;
+    public $user_manual;
     public $short_description;
     public $long_description;
     public $date_launched;
@@ -57,7 +60,7 @@ class ZescoSystems extends Component
         $validateData = $this ->validate();
         SuggestionBox::create($validateData);
         $this->resetInput();
-        session()->flash('savesuccessful','Your suggestion was successfully sent');
+        session()->flash('saveSuggestion','Your suggestion was successfully sent');
 
         $this->loading = false;
     }
@@ -69,35 +72,21 @@ class ZescoSystems extends Component
 
     }
 
-
-     public function showMore(int $product_id){
-        // dd($product_id);
-        $product = Product::find($product_id);
-                // ->join('status','product.status_id','=','status.status_id')
-                // ->select('product.name as product_name','product.product_id as product_id','status.name as status_name')
-                // ->where('product.product_id','=','active');
-
-        // dd($product);
-
-
-        if($product){
-            $this->product_id = $product->product_id;
-            $this->name = $product->name;
-            $this->icon_link = $product->icon_link;
-            $this->short_description = $product->short_description;
-            $this->long_description = $product->long_description;
-            $this->date_launched = $product->date_launched;
-            // $this->status_name = $product->status_name;
-        }else{
-            return redirect()->to('/ezesco-systems');
-        }
+    public function closeModal(){
+        $this->resetInput();
     }
+
+    public function learnMore(int $product_id){
+       return redirect()->to('/how-to/learn-more/' . $product_id);
+    }
+
+   
 
     public function render()
     {
         $getProducts = DB::table('product')
                 ->join('status','product.status_id','=','status.status_id')
-                ->select('product.name','product.icon_link','product.number_of_clicks as clicks',
+                ->select('product.name','product.icon_link','product.user_manual','product.number_of_clicks as clicks',
                         'product.url as product_url','product.product_id',
                         'product.system_cover_image', 'product.video',
                         'status.name as status_name','product.short_description')
@@ -107,15 +96,8 @@ class ZescoSystems extends Component
                 ->paginate(6);
 
 
-                // ->get();
-
-        // $products = Product::where('name', 'like', '%'.$this->searchQuery.'%')->orderBy('product_id','ASC')->paginate(6);
-
-
-
-
         return view('livewire.zesco-systems',[
-                // 'products' =>  $products,
+     
                 'getProducts' => $getProducts,
             ]);
     }

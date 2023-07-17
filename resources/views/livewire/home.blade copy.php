@@ -281,19 +281,19 @@
 
         </footer>
         <!-- Footer -->
-    </div>
+   
 
 
-    @livewireScripts
-    @yield('scripts')
+        @livewireScripts
+        @yield('scripts')
 
 
-    @push('custom-scripts')
-        <script src="{{ asset('js/main.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    @endpush
+        @push('custom-scripts')
+            <script src="{{ asset('js/main.js') }}"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+            <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+        @endpush
 
 
 

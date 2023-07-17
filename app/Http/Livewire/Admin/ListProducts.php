@@ -8,6 +8,7 @@ namespace App\Http\Livewire\Admin;
 use Livewire\WithFileUploads;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use App\Models\Product;
 use App\Models\Status;
@@ -25,6 +26,7 @@ class ListProducts extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $categories;
+    public $product = [];
     public $loading = false;
 
     public $name, $product_id, $icon_link, $category_id,
@@ -79,17 +81,17 @@ class ListProducts extends Component
         $this->validate([
             'name' => 'required|min:3|max:200',
             'icon_link' => 'nullable|image|max:5024',
-            'category_id' => '',
-            'status_id' => '',
+            'category_id' => 'required',
+            'status_id' => 'required',
             'user_manual' => 'nullable|mimes:pdf|max:10240',
-             'video' => 'nullable|mimes:mp4|max:16240',
+             'video' => 'nullable|mimes:mp4|max:50000',
              'cost_saving' => 'required|numeric',
             'system_cover_image'=> 'nullable|image|max:5024',
             'url' => 'required|url',
             'test_url' => 'required|url',
-            'lead_developer' => '',
-            'short_description' => 'required|min:3|max:200',
-            'long_description' => 'required|min:3|max:300',
+            'lead_developer' => 'required',
+            'short_description' => 'required|min:3|max:1000',
+            'long_description' => 'required|min:3|max:20000',
             'tutorial_url' => 'required|url',
             'date_launched' => 'nullable|date_format:Y-m-d',
             'date_decommissioned' => 'nullable|date_format:Y-m-d',
@@ -108,21 +110,34 @@ class ListProducts extends Component
             return;
             $loading = false;
 
-           }elseif ($this->icon_link && $this->user_manual && $this->video && $this->system_cover_image) {
-            $filename1 = $this->icon_link->store('images', 'public');
-            $filename2 = $this->user_manual->store('pdfs', 'public');
-            $filename3 = $this->video->store('videos', 'public');
-            $filename4 = $this->system_cover_image->store('images', 'public');
+           }else {
 
-        } else {
-            $filename1 = Null;
-            $filename2 = Null;
-            $filename3 = Null;
-            $filename4 = Null;
-        }
+            if($this->icon_link){
+              $filename1 =  $this->icon_link->storeAs('images', $this->icon_link->getClientOriginalName(),'public');
+            }else{
+                $filename1 = null;
+            }
 
+             if($this->user_manual){
+              $filename2 =  $this->user_manual->storeAs('pdfs', $this->user_manual->getClientOriginalName(),'public');
+               
+            }else{
+                $filename2 = null;
+            }
 
-        $files->name = $this->name;
+             if($this->video){
+                 $filename3 = $this->video->storeAs('videos',$this->video->getClientOriginalName() ,'public');
+            }else{
+                $filename3 = null;
+            }
+
+             if($this->video){
+                 $filename4 = $this->system_cover_image->storeAs('images', $this->system_cover_image->getClientOriginalName(),'public');
+            }else{
+                $filename4 = null;
+            }
+
+            $files->name = $this->name;
         $files->category_id = $this->category_id;
         $files->status_id = $this->status_id;
         $files->number_of_clicks = $this->number_of_clicks;
@@ -133,22 +148,16 @@ class ListProducts extends Component
         $files->short_description = $this->short_description;
         $files->long_description = $this->long_description;
         $files->tutorial_url = $this->tutorial_url;
-        if( $files->date_launched ||  $files->date_decommissioned){
-
-        }
         $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
         $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
-
-
-
         $files->icon_link = $filename1;
+        // dd($files->icon_link);
         $files->user_manual = $filename2;
         $files->video = $filename3;
         $files->system_cover_image = $filename4;
         $result = $files->save();
 
-
-        if($result){
+         if($result){
              session()->flash('savesuccessful','Your Product was successfully added');
             $this->resetInput();
             $this->dispatchBrowserEvent('close-modal');
@@ -158,41 +167,71 @@ class ListProducts extends Component
              session()->flash('error', 'Product Not Added Successfully');
         }
 
+        } 
+    
+
          $loading = false;
 
     }
 
     public function editProduct(int $product_id){
-        $product = Product::find($product_id);
-        if($product){
+        $this->product = Product::find($product_id);
+
+        // dd($product);
+        if($this->product){
             if ($this->category_id == "0" || $this->status_id == "0"
             || $this->lead_developer == "0") {
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
         }else{
-            $this->product_id = $product->product_id;
-            $this->name = $product->name;
-            $this->icon_link = $product->icon_link;
-            $this->category_id = $product->category_id;
-            $this->status_id = $product->status_id;
-            $this->cost_saving = $product->cost_saving;
-            $this->system_cover_image = $product->system_cover_image;
-            $this->video = $product->video;
-            $this->user_manual = $product->user_manual;
+            
+            // $this->searchResults = [];
+            // if ($this->icon_link) {
+            //     $this->product['icon_link'] = Storage::files('images');
+            // }
+
+            $this->icon_link = $this->product->icon_link;
+
+            // dd($this->icon_link);
+
+            if ($this->system_cover_image) {
+                $this->product['system_cover_image'] = Storage::files('images');
+            }
+
+            if ($this->video) {
+                $this->product['video'] = Storage::files('videos');
+            }
+
+            if ($this->user_manual) {
+                $this->product['user_manual'] = Storage::files('pdfs');
+            }
+
+            $this->product_id = $this->product->product_id;
+            $this->name = $this->product->name;
+            // $this->icon_link = $product->icon_link;
+            $this->category_id = $this->product->category_id;
+            $this->status_id = $this->product->status_id;
+            $this->cost_saving = $this->product->cost_saving;
+            // $this->system_cover_image = $product->system_cover_image;
+            // $this->video = $product->video;
+            // $this->user_manual = $product->user_manual;
             // $this->number_of_clicks = $product->number_of_clicks;
-            $this->url = $product->url;
-            $this->test_url = $product->test_url;
-            $this->lead_developer = $product->lead_developer;
-            $this->short_description = $product->short_description;
-            $this->long_description = $product->long_description;
-            $this->tutorial_url = $product->tutorial_url;
-            $this->date_launched = $product->date_launched;
-            $this->date_decommissioned = $product->date_decommissioned;
+            $this->url = $this->product->url;
+            $this->test_url = $this->product->test_url;
+            $this->lead_developer = $this->product->lead_developer;
+            $this->short_description = $this->product->short_description;
+            $this->long_description = $this->product->long_description;
+            $this->tutorial_url = $this->product->tutorial_url;
+            $this->date_launched = $this->product->date_launched;
+            $this->date_decommissioned = $this->product->date_decommissioned;
           }
 
+        //   dd($this->icon_link->getClientOriginalName());
         }else{
             return redirect()->to('/product.manage');
         }
+
+       
     }
 
     public function closeModal(){
@@ -224,7 +263,9 @@ class ListProducts extends Component
         $loading = true;
         sleep(2);
 
-        $product = Product::findOrFail($this->product_id);
+        $files = Product::where('product_id','like', '%' . $this->product_id . '%')->first();
+
+        // dd($files);
 
         $this->validate([
             'name' => 'required|min:3|max:200',
@@ -232,7 +273,7 @@ class ListProducts extends Component
             'category_id' => '',
             'status_id' => '',
             'user_manual' => 'nullable|mimes:pdf|max:10240',
-             'video' => 'nullable|mimes:mp4|max:16240',
+             'video' => 'nullable|mimes:mp4|max:50000',
              'cost_saving' => 'required|numeric',
             'system_cover_image'=> 'nullable|image|max:5024',
             'url' => 'required|url',
@@ -245,7 +286,7 @@ class ListProducts extends Component
             'date_decommissioned' => 'nullable|date_format:Y-m-d',
         ]);
 
-         $files = new Product();
+        //  $files = new Product();
 
            $filename1 = "";
            $filename2 = "";
@@ -259,48 +300,53 @@ class ListProducts extends Component
             return;
             $loading = false;
 
-           }elseif ($this->icon_link && $this->user_manual && $this->video && $this->system_cover_image) {
-            $filename1 = $this->icon_link->store('images', 'public');
-            $filename2 = $this->user_manual->store('pdfs', 'public');
-            $filename3 = $this->video->store('videos', 'public');
-            $filename4 = $this->system_cover_image->store('images', 'public');
+           }else{
 
-        } else {
-            $filename1 = Null;
-            $filename2 = Null;
-            $filename3 = Null;
-            $filename4 = Null;
-        }
+            if($this->icon_link){
+                 $filename1 = $this->icon_link->store('images', 'public');
+            }else{
+                $filename1 = null;
+            }
 
+             if($this->user_manual){
+                $filename2 = $this->user_manual->store('pdfs', 'public');
+            }else{
+                $filename2 = null;
+            }
 
-        $files->name = $this->name;
-        $files->category_id = $this->category_id;
-        $files->status_id = $this->status_id;
-        $files->number_of_clicks = $this->number_of_clicks;
-        $files->url = $this->url;
-        $files->test_url = $this->test_url;
-        $files->cost_saving = $this->cost_saving;
-        $files->lead_developer = $this->lead_developer;
-        $files->short_description = $this->short_description;
-        $files->long_description = $this->long_description;
-        $files->tutorial_url = $this->tutorial_url;
-        if( $files->date_launched ||  $files->date_decommissioned){
+             if($this->video){
+                 $filename3 = $this->video->store('videos', 'public');
+            }else{
+                $filename3 = null;
+            }
 
-        }
-        $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
-        $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
+             if($this->video){
+                 $filename4 = $this->system_cover_image->store('images', 'public');
+            }else{
+                $filename4 = null;
+            }
+                  
+              $files->name = $this->name;
+            $files->category_id = $this->category_id;
+            $files->status_id = $this->status_id;
+            $files->number_of_clicks = $this->number_of_clicks;
+            $files->url = $this->url;
+            $files->test_url = $this->test_url;
+            $files->cost_saving = $this->cost_saving;
+            $files->lead_developer = $this->lead_developer;
+            $files->short_description = $this->short_description;
+            $files->long_description = $this->long_description;
+            $files->tutorial_url = $this->tutorial_url;
+            $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
+            $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
+            $files->icon_link = $filename1;
+            $files->user_manual = $filename2;
+            $files->video = $filename3;
+            $files->system_cover_image = $filename4;
+            $result = $files->update();
 
-
-
-        $files->icon_link = $filename1;
-        $files->user_manual = $filename2;
-        $files->video = $filename3;
-        $files->system_cover_image = $filename4;
-        $result = $files->save();
-
-
-        if($result){
-             session()->flash('savesuccessful','Your Product was successfully added');
+            if($result){
+             session()->flash('updatesuccessful','Your Product was successfully added');
             $this->resetInput();
             $this->dispatchBrowserEvent('close-modal');
             $this->resetPage();
@@ -308,9 +354,10 @@ class ListProducts extends Component
         }else{
              session()->flash('error', 'Product Not Added Successfully');
         }
-
+       
+        }
+        
          $loading = false;
-
     }
 
     public function deleteProduct(int $product_id){
