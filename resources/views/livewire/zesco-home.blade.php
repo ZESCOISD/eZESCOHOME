@@ -95,10 +95,11 @@
                                  Welcome to eZESCO Dashboard
                              </div>
 
-                             <div id="search-bar" class="row">
+                             {{-- @if ($searchedProduct)
+                             <div  class="row">
 
                                  <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
-                                     @if ($searchedProduct)
+                                    
                                          <div>
                                              <div class="card card-animated" id="search-cards">
                                                  <a id="searchedcard-link" class="card-link"
@@ -135,11 +136,11 @@
                                              </div>
 
                                          </div>
-                                     @endif
+                                     
                                  </div>
 
                              </div>
-
+                             @endif --}}
                          </div>
 
                          <!-- /top nav -->
@@ -643,7 +644,7 @@
                                              <h2 class="text-center">eZESCO Applications</h2>
                                          </div>
 
-                                         <section class="customer-logos slider">
+                                         <section wire:ignore class="customer-logos slider">
 
                                              @foreach ($ezesco_products as $product)
                                                  @if ($product->icon_link == null)
