@@ -18,6 +18,7 @@ use App\Http\Livewire\Admin\Permissions;
 use App\Http\Livewire\Admin\Roles;
 use App\Http\Livewire\Admin\ListProductStatus;
 use App\Http\Livewire\Admin\Notice;
+use App\Http\Livewire\Admin\Quotes;
 use App\Http\Livewire\Admin\ViewReports;
 use App\Http\Livewire\Admin\Slides;
 use App\Http\Livewire\Admin\SuggestionBoxs;
@@ -66,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/events/manage', UpcomingEvent::class)->name('events.manage');
     Route::get('/faqs/manage', FAQS::class)->name('faqs.manage');
     Route::get('/slides/manage', Slides::class)->name('slides.manage');
+    Route::get('/quotes/manage', Quotes::class)->name('quotes.manage');
     Route::get('/suggestions/manage', SuggestionBoxs::class)->name('suggestions.manage');
 });
 // Auth::routes();

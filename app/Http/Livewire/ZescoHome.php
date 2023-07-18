@@ -12,6 +12,7 @@ use App\Models\FAQ;
 use App\Models\Status;
 use App\Models\ProductClicks;
 use App\Models\Notices;
+use App\Models\Quote;
 use App\Models\Slide;
 use Livewire\WithPagination;
 use PHPUnit\Framework\Error\Notice;
@@ -22,6 +23,7 @@ class ZescoHome extends Component
      use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+     public $notice_id, $notice_name, $description, $staff_name, $staff_title, $department, $start_date, $end_date;
     public $no_notices;
 
     public $searchQuery;
@@ -33,7 +35,11 @@ class ZescoHome extends Component
     public $total_categories;
     // public $dropdowns = false;
     public $searchedProduct;
+
+    // public $showModal = false;
+
     public $getSelectedProducts = [];
+    public $getSelectedCategory = [];
     public $selected_category;
     // public $categoryName;
 
@@ -86,9 +92,19 @@ class ZescoHome extends Component
             ->where('category.category_id','=',$category_id)
             ->orderBy('category.name')
             ->get();
-            $this->getSelectedProducts = $categoryclick;
+
+            if($categoryclick->isEmpty()){
+                // $this->getSelectedProducts = $categoryclick->push;
+                  $this->getSelectedCategory = "No Applications are available for this Category";
+            // dd(1);
+            }else{
+                 $this->getSelectedProducts = $categoryclick;
+            }
+
 
         // dd($this->getSelectedProducts);
+        // $this->getSelectedCategory = $categoryclick->category_name;
+
             $this->loading = false;
 
     }
@@ -105,9 +121,13 @@ class ZescoHome extends Component
         // ->where('product.product_id','>=','1B')
         ->first();
 
+        // dd($this->searchedProduct);
+
         $this->searchQuery ="";
         $this->loading = false;
         $dropdowns = true;
+        // $this->showModal = true;
+
     }
 
     public function mount()
@@ -117,7 +137,32 @@ class ZescoHome extends Component
         $this->active_systems = $this->calculateActiveSystems();
         $this->in_production = $this->getTotalSystemsInProduction();
         $this->total_categories = $this->getTotalSystemCategories();
+        $this->getSelectedCategory;
     }
+
+//     public function closeModal()
+// {
+//     $this->showModal = false;
+// }
+
+  public function readMore(int $notice_id){
+        $notice = Notices::find($notice_id);
+        // dd($notice_id);
+        if($notice){
+            $this->notice_id = $notice->id;
+            $this->notice_name = $notice->notice_name;
+            $this->description = $notice->description;
+            $this->staff_name = $notice->staff_name;
+            $this->staff_title = $notice->staff_title;
+            $this->department = $notice->department;
+            $this->start_date = $notice->start_date;
+            $this->end_date = $notice->end_date;
+            // dd(1);
+        }else{
+            return redirect()->to('/notices.manage');
+        }
+    }
+
 
     public function calculateTotalCostSavings(){
         return Product::sum('cost_saving');
@@ -205,7 +250,7 @@ class ZescoHome extends Component
         //     ->get();
 
         $more_notices = DB::table('notices')
-            ->select('notice_name', 'description', 'staff_name', 'staff_title', 'department', 'start_date', 'end_date')
+            ->select('id','notice_name', 'description', 'staff_name', 'staff_title', 'department', 'start_date', 'end_date')
             ->whereDate('start_date', '<=', Carbon::today())
             ->whereDate('end_date', '>=', Carbon::today())
             ->paginate(1);
@@ -218,6 +263,7 @@ class ZescoHome extends Component
 
         $faqs = FAQ::all();
         $slides = Slide::all();
+        $quotes = Quote::all();
 
         $ezesco_products = Product::all();
         // dd($slides);
@@ -232,6 +278,7 @@ class ZescoHome extends Component
                 'showCategories' => $showCategories,
                 'faqs' => $faqs,
                 'slides' => $slides,
+                'quotes' => $quotes,
             ]);
     }
 }

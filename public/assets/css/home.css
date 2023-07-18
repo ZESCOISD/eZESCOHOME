@@ -1,7 +1,7 @@
 
 #search-bar {
   margin-top: 40px;
-  margin-left: 450px;
+  margin-left: 500px;
   border: none;
 }
 
@@ -282,10 +282,20 @@ h1,h2,h3 {
    color: #d3882b;
  }
 
+ #notice-dept{
+    margin-right: 400px;
+ }
+
  #bi-quote{
   font-size: 30px;
     text-align: left;
     color: #d3882b;
+ }
+
+ #read-more{
+    background-color: #d3882b;
+    border: none;
+    color: white;
  }
 
     #quote-icon {
@@ -479,9 +489,9 @@ small.text-muted {
 
 
   .main {
-
     grid-area: main;
     padding: 0;
+    height: fit-content;
     overflow-x: hidden;
     overflow-y: hidden;
   }
@@ -507,19 +517,23 @@ small.text-muted {
     /* transform: scale(1); */
   }
 
-  #categories-panel{
+  /* #categories-panel{
 
     box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.1);
-  }
+  } */
 
   .item {
     display: inline-block;
-    color:#d3882b;
+    color:#ffffff;
+    background-color: #d3882b;
+    padding: 10px;
     /* background: rgb(199, 199, 199); */
-    min-height: 100px;
+    min-height: 30px;
     min-width: fit-content;
-
+    box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.1);
     margin: 2em 1em;
+    border-radius: 3px;
+    font-weight: lighter;
 
 
     @media screen and (max-width: 500px) {
@@ -701,6 +715,14 @@ i {
 .about .icon-box:hover i {
   /* background-color: var(--color-primary); */
   /* color: var(--color-inverse); */
+}
+
+#search-cards{
+    margin-bottom: 20px;
+}
+
+#searchedcard-card-text{
+    text-decoration: none;
 }
 
 a span {

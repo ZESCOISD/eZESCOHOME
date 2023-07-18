@@ -1,7 +1,7 @@
 {{-- @livewire('livewire-pagination') --}}
 
 @push('custom-styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/adminmanagement.css">
 @endpush
 
@@ -30,19 +30,27 @@
                             <div id="login-nav-bar-links" type="button"
                                 onclick=" window.location='{{ route('users.manage') }}'">Users</div>
                         @else
-                            <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
+                            <div id="login-nav-bar-links" type="button"
+                                onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
                         @endrole
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('reports.manage') }}'">Reports</div>
                         <div id="login-nav-bar-links" class="dropdown">
-                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true" data-toggle="dropdown"
-                                aria-expanded="false">Utilties</div>
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true"
+                                data-toggle="dropdown" aria-expanded="false">Utilties</div>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('quotes.manage') }}'">Quote Of the Day</a>
                             </div>
                         </div>
                     </div>
@@ -124,9 +132,11 @@
                                         @endcan
 
                                         @role('admin')
-                                        <a type="button" href="#deleteSuggestionModal" data-toggle="modal" data-target="#deleteSuggestionModal"
-                                            wire:click="deleteSuggestion({{ $suggestion->id }})" class="delete" data-toggle="modal"><i class="material-icons"
-                                                data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <a type="button" href="#deleteSuggestionModal" data-toggle="modal"
+                                                data-target="#deleteSuggestionModal"
+                                                wire:click="deleteSuggestion({{ $suggestion->id }})" class="delete"
+                                                data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                                    title="Delete">&#xE872;</i></a>
                                         @endrole
                                     </td>
                                 </tr>
@@ -147,8 +157,8 @@
             </div>
 
             <div wire:ignore.self id="viewModal" class="modal fade">
-                <div style="max-width: 80%;" id="viewModal-dialog" class="modal-dialog modal-dialog-centered modal-lg"
-                    role="document">
+                <div style="max-width: 80%;" id="viewModal-dialog"
+                    class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content" id="viewModal-content">
                         <form wire:submit.prevent="viewItem">
                             @csrf

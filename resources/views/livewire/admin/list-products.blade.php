@@ -46,6 +46,8 @@
                                     onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
                                 <a class="dropdown-item"
                                     onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('quotes.manage') }}'">Quote Of the Day</a>
                             </div>
                         </div>
                     </div>

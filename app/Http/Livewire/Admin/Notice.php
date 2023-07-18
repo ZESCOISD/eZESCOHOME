@@ -24,8 +24,8 @@ class Notice extends Component
 
      protected function rules(){
         return[
-        'notice_name' => 'required|min:2|max:50',
-        'description' => 'required|min:3|max:200',
+        'notice_name' => 'required|min:2|max:100',
+        'description' => 'required|min:3|max:5000',
         'staff_name' => 'required|min:3|max:50',
         'staff_title' => 'required|min:3|max:50',
         'department' => 'required|min:3|max:50',

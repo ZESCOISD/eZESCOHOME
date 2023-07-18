@@ -1,7 +1,7 @@
 {{-- @livewire('livewire-pagination') --}}
 
 @push('custom-styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/adminmanagement.css">
 @endpush
 
@@ -21,7 +21,7 @@
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('products.manage') }}'">Products</div>
 
-                            <div id="login-nav-bar-links" type="button"
+                        <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('categories.manage') }}'">Categories</div>
                         @role('admin')
                             <div id="login-nav-bar-links" type="button"
@@ -33,19 +33,27 @@
                             <div id="login-nav-bar-links" type="button"
                                 onclick=" window.location='{{ route('users.manage') }}'">Users</div>
                         @else
-                            <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
+                            <div id="login-nav-bar-links" type="button"
+                                onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
                         @endrole
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('reports.manage') }}'">Reports</div>
                         <div id="login-nav-bar-links" class="dropdown">
-                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true" data-toggle="dropdown"
-                                aria-expanded="false">Utilties</div>
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true"
+                                data-toggle="dropdown" aria-expanded="false">Utilties</div>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('quotes.manage') }}'">Quote Of the Day</a>
                             </div>
                         </div>
                     </div>
@@ -87,16 +95,18 @@
                                 @endcan
 
                                 @role('admin')
-                                <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNoticeModal"><i
-                                        class="material-icons">&#xE147;</i> <span>Add New
-                                        Notice</span></button>
+                                    <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#addNoticeModal"><i class="material-icons">&#xE147;</i> <span>Add New
+                                            Notice</span></button>
                                 @endrole
                                 <div wire:ignore.self class="modal fade" id="addNoticeModal" tabindex="-1"
                                     role="dialog" aria-labelledby="addNoticeModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg" style="max-width: 80%;" role="document">
                                         <div class="modal-content">
-                                            <div style="background-color:cadetblue; color:white;" class="modal-header">
-                                                <h5 class="modal-title text-white" id="addNoticeModalLabel">Enter notice
+                                            <div style="background-color:cadetblue; color:white;"
+                                                class="modal-header">
+                                                <h5 class="modal-title text-white" id="addNoticeModalLabel">Enter
+                                                    notice
                                                     details</h5>
                                                 <button id="modal-close" wire:click="closeModal" type="button"
                                                     class="close" data-dismiss="modal" aria-label="Close">
@@ -245,7 +255,9 @@
                                     </td>
                                     <td>{{ $notice->id }}</td>
                                     <td>{{ $notice->notice_name }}</td>
-                                    <td>{{ $notice->description }}</td>
+                                    <td class="text-truncate" style="max-width: 80px;">
+                                        {{ $notice->description }}</td>
+                                    {{-- <td>{{ $notice->description }}</td> --}}
                                     <td>{{ $notice->staff_name }}</td>
                                     <td>{{ $notice->staff_title }}</td>
                                     <td>{{ $notice->department }}</td>
@@ -261,9 +273,11 @@
                                         @endcan
 
                                         @role('admin')
-                                        <a type="button" href="#updateNoticeModal" data-toggle="modal" data-target="#updateNoticeModal"
-                                            wire:click="editNotice({{ $notice->id }})" class="edit"><i class="material-icons" data-toggle="tooltip"
-                                                title="Edit">&#xE254;</i></a>
+                                            <a type="button" href="#updateNoticeModal" data-toggle="modal"
+                                                data-target="#updateNoticeModal"
+                                                wire:click="editNotice({{ $notice->id }})" class="edit"><i
+                                                    class="material-icons" data-toggle="tooltip"
+                                                    title="Edit">&#xE254;</i></a>
                                         @endrole
 
                                         @can('delete')
@@ -275,9 +289,11 @@
                                         @endcan
 
                                         @role('admin')
-                                        <a type="button" href="#deleteNoticeModal" data-toggle="modal" data-target="#deleteNoticeModal"
-                                            wire:click="deleteNotice({{ $notice->id }})" class="delete" data-toggle="modal"><i class="material-icons"
-                                                data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <a type="button" href="#deleteNoticeModal" data-toggle="modal"
+                                                data-target="#deleteNoticeModal"
+                                                wire:click="deleteNotice({{ $notice->id }})" class="delete"
+                                                data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                                    title="Delete">&#xE872;</i></a>
                                         @endrole
                                     </td>
                                 </tr>
@@ -297,16 +313,18 @@
                 </div>
             </div>
             <!-- Edit Modal HTML -->
-            <div wire:ignore.self id="editNoticeModal" class="modal fade">
-                <div class="modal-dialog modal-dialog-centered" role="document">>
+            <div wire:ignore.self id="editNoticeModal" class="modal fade" tabindex="-1" role="dialog"
+                aria-labelledby="editNoticeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" style="max-width: 100%;" role="document">>
                     <div class="modal-content">
 
                         <form wire:submit.prevent="editNotice">
                             @csrf
-                            <div class="modal-header">
+                            <div class="modal-header" style="background-color:cadetblue; color:white;">
                                 <h4 class="modal-title">Edit Notice</h4>
-                                <button type="button" class="close" wire:click="closeModal" data-dismiss="modal"
-                                    aria-hidden="true">&times;</button>
+                                <button id="modal-close" wire:click="closeModal" type="button" class="close"
+                                    data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
                             </div>
 
                             <div class="modal-body">
@@ -328,8 +346,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <input type="text" class="form-control" wire:model.defer="description"
-                                        required>
+                                    <textarea name="description" wire:model.defer="description" id="description" class="form-control mb-1"
+                                        cols="30" rows="10" placeholder="Notice Description" required>
+                                    </textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Staff Name</label>
@@ -371,15 +390,16 @@
 
             {{-- Updates the modal --}}
             <div wire:ignore.self id="updateNoticeModal" class="modal fade">
-                <div class="modal-dialog modal-dialog-centered" role="document">>
+                <div class="modal-dialog modal-lg" style="max-width: 80%;" role="document">>
                     <div class="modal-content">
                         <form wire:submit.prevent="updateNotice">
 
                             @csrf
-                            <div class="modal-header">
-                                <h4 class="modal-title">Update Notice</h4>
-                                <button type="button" id="" class="close" wire:click="closeModal"
-                                    data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <div class="modal-header" style="background-color:cadetblue; color:white;">
+                                <h4 class="modal-title text-white">Update Notice</h4>
+                                <button id="modal-close" wire:click="closeModal" type="button" class="close"
+                                    data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
                             </div>
                             <div wire:loading wire:target="updateNotice" class="loading-bar">
                             </div>
@@ -402,8 +422,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <input type="text" class="form-control" wire:model.defer="description"
-                                        required>
+                                    <textarea name="description" wire:model.defer="description" id="description" class="form-control mb-1"
+                                        cols="30" rows="10" placeholder="Notice Description" required>
+                                    </textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Staff Name</label>

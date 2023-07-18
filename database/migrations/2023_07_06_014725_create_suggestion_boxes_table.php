@@ -15,9 +15,9 @@ class CreateSuggestionBoxesTable extends Migration
     {
         Schema::create('suggestion_box', function (Blueprint $table) {
             $table->id();
-            $table->string('subject');
-            $table->string('system_name')->nullable();
-            $table->string('suggestion');
+            $table->string('subject',500);
+            $table->string('system_name',500)->nullable();
+            $table->string('suggestion',10000);
             $table->timestamps();
         });
     }

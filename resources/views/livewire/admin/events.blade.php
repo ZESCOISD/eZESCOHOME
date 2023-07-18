@@ -1,7 +1,7 @@
 {{-- @livewire('livewire-pagination') --}}
 
 @push('custom-styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/adminmanagement.css">
 @endpush
 
@@ -21,7 +21,8 @@
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('products.manage') }}'">Products</div>
 
-                            <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('categories.manage') }}'">Categories</div>
+                        <div id="login-nav-bar-links" type="button"
+                            onclick=" window.location='{{ route('categories.manage') }}'">Categories</div>
                         @role('admin')
                             <div id="login-nav-bar-links" type="button"
                                 onclick=" window.location='{{ route('status.manage') }}'">Status</div>
@@ -32,22 +33,30 @@
                         @endrole
 
                         @role('admin')
-                        <div id="login-nav-bar-links" type="button"
-                            onclick=" window.location='{{ route('users.manage') }}'">Users</div>
+                            <div id="login-nav-bar-links" type="button"
+                                onclick=" window.location='{{ route('users.manage') }}'">Users</div>
                         @else
-                        <div id="login-nav-bar-links" type="button" onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
+                            <div id="login-nav-bar-links" type="button"
+                                onclick=" window.location='{{ route('users.manage') }}'">Profile</div>
                         @endrole
                         <div id="login-nav-bar-links" type="button"
                             onclick=" window.location='{{ route('reports.manage') }}'">Reports</div>
                         <div id="login-nav-bar-links" class="dropdown">
-                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button"
-                            aria-haspopup="true" data-toggle="dropdown" aria-expanded="false">Utilties</div>
+                            <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true"
+                                data-toggle="dropdown" aria-expanded="false">Utilties</div>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('events.manage') }}'">Events</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
-                                <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('events.manage') }}'">Events</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('quotes.manage') }}'">Quote Of the Day</a>
                             </div>
                         </div>
                     </div>
@@ -87,16 +96,17 @@
                                 @endcan
 
                                 @role('admin')
-                                <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEventModal"><i
-                                        class="material-icons">&#xE147;</i> <span>Add New
-                                        Event</span></button>
+                                    <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#addEventModal"><i class="material-icons">&#xE147;</i> <span>Add New
+                                            Event</span></button>
                                 @endrole
-                                
+
                                 <div wire:ignore.self class="modal fade" id="addEventModal" tabindex="-1"
                                     role="dialog" aria-labelledby="addEventModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg" style="max-width: 80%;" role="document">
                                         <div class="modal-content">
-                                            <div style="background-color:cadetblue; color:white;" class="modal-header">
+                                            <div style="background-color:cadetblue; color:white;"
+                                                class="modal-header">
                                                 <h5 class="modal-title text-white" id="addEventModalLabel">Enter event
                                                     details</h5>
                                                 <button id="modal-close" wire:click="closeModal" type="button"
@@ -220,7 +230,7 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -275,9 +285,11 @@
                                         @endcan
 
                                         @role('admin')
-                                        <a type="button" href="#updateEventModal" data-toggle="modal" data-target="#updateEventModal"
-                                            wire:click="editEvent({{ $upcoming_event->id }})" class="edit"><i class="material-icons" data-toggle="tooltip"
-                                                title="Edit">&#xE254;</i></a>
+                                            <a type="button" href="#updateEventModal" data-toggle="modal"
+                                                data-target="#updateEventModal"
+                                                wire:click="editEvent({{ $upcoming_event->id }})" class="edit"><i
+                                                    class="material-icons" data-toggle="tooltip"
+                                                    title="Edit">&#xE254;</i></a>
                                         @endrole
 
                                         @can('delete')
@@ -289,11 +301,13 @@
                                         @endcan
 
                                         @role('admin')
-                                        <a type="button" href="#deleteEventModal" data-toggle="modal" data-target="#deleteEventModal"
-                                            wire:click="deleteEvent({{ $upcoming_event->id }})" class="delete" data-toggle="modal"><i class="material-icons"
-                                                data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <a type="button" href="#deleteEventModal" data-toggle="modal"
+                                                data-target="#deleteEventModal"
+                                                wire:click="deleteEvent({{ $upcoming_event->id }})" class="delete"
+                                                data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                                    title="Delete">&#xE872;</i></a>
                                         @endrole
-                                        
+
                                     </td>
                                 </tr>
                             @empty
@@ -312,7 +326,7 @@
                 </div>
             </div>
 
-         
+
             <div wire:ignore.self id="editEventModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">>
                     <div class="modal-content">
@@ -384,9 +398,9 @@
                     </div>
                 </div>
             </div>
-            
-         
-            
+
+
+
             <div wire:ignore.self id="updateEventModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">>
                     <div class="modal-content">
@@ -459,10 +473,10 @@
                     </div>
                 </div>
             </div>
-            
+
 
             <!-- Delete Modal HTML -->
-           
+
             <div wire:ignore.self id="deleteEventModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">">
                     <div class="modal-content">
@@ -510,7 +524,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- end of row -->
         </div>
 

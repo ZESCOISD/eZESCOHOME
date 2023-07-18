@@ -62,7 +62,7 @@
             </div>
         </nav>
         <div class="text-center" id="admin-menu-text">
-            Home Carousel
+            Quote of the Day
         </div>
         <div class="container-fluid">
 
@@ -72,11 +72,11 @@
                         <div class="row">
 
                             <div class="col-sm-4">
-                                <h2>Manage <b>Home Carousel</b></h2>
+                                <h2>Manage <b>Quote's</b></h2>
                             </div>
                             <div class="col-sm-4">
                                 <input class="form-control border-end-0 border rounded-pill"
-                                    wire:model.defer="search_slide" type="search" placeholder="Search..."
+                                    wire:model.defer="search_quote" type="search" placeholder="Search..."
                                     id="search-input">
 
                                 <span class="input-group-append">
@@ -85,30 +85,30 @@
 
                                 @can('create')
                                     <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#addSlideModal"><i class="material-icons">&#xE147;</i> <span>Add New
-                                            Slide</span></button>
+                                        data-target="#addQuoteModal"><i class="material-icons">&#xE147;</i> <span>Add New
+                                            Quote</span></button>
                                 @endcan
 
                                 @role('admin')
                                     <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#addSlideModal"><i class="material-icons">&#xE147;</i> <span>Add New
-                                            Slide</span></button>
+                                        data-target="#addQuoteModal"><i class="material-icons">&#xE147;</i> <span>Add New
+                                            Quote</span></button>
                                 @endrole
-                                <div wire:ignore.self class="modal fade" id="addSlideModal" tabindex="-1"
-                                    role="dialog" aria-labelledby="addSlideModalLabel" aria-hidden="true">
+                                <div wire:ignore.self class="modal fade" id="addQuoteModal" tabindex="-1"
+                                    role="dialog" aria-labelledby="addQuoteModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 80%;"
                                         role="document">
                                         <div class="modal-content">
                                             <div style="background-color:cadetblue; color:white;"
                                                 class="modal-header">
-                                                <h5 class="modal-title text-white" id="addSlideModalLabel">Enter slide
+                                                <h5 class="modal-title text-white" id="addQuoteModalLabel">Enter quote
                                                     details</h5>
                                                 <button id="modal-close" wire:click="closeModal" type="button"
                                                     class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <div wire:loading wire:target="saveSlide" class="loading-bar"></div>
+                                            <div wire:loading wire:target="saveQuote" class="loading-bar"></div>
                                             <div class="modal-body ">
                                                 @if (session()->has('savesuccessful'))
                                                     <div id="dismiss"
@@ -122,27 +122,24 @@
                                                         </button>
                                                     </div>
                                                 @endif
-                                                <form wire:submit.prevent="saveSlide">
+                                                <form wire:submit.prevent="saveQuote">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <label for="slide_name">Slide Name</label>
-                                                        <input type="text" class="form-control mb-1"
-                                                            wire:model.defer="name" id="name"
-                                                            placeholder="Name of Slide" required>
-                                                        @error('slide_name')
+                                                        <label for="quote">Quote</label>
+                                                        <textarea class="form-control" placeholder="Quote of the Day" name="quote" id="quote" cols="30"
+                                                            rows="10" wire:model.defer="quote">
+                                                            Quote
+                                                        </textarea>
+                                                        @error('quote')
                                                             <span class="text-danger">{{ $message }}</span>
                                                         @enderror
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label for="image">Image</label>
-                                                        <input type="file" class="form-control mb-1"
-                                                            wire:model.defer="image" placeholder="image">
-                                                        @if ($image)
-                                                            <img src="{{ $image->temporaryUrl() }}"
-                                                                style="width:50%; " alt="">
-                                                        @endif
-                                                        @error('image')
+                                                        <label for="Author">Author</label>
+                                                        <input type="text" class="form-control mb-1"
+                                                            wire:model.defer="author" placeholder="Author">
+                                                        @error('author')
                                                             <span class="text-danger">{{ $message }}</span>
                                                         @enderror
                                                     </div>
@@ -175,15 +172,15 @@
                                     </span>
                                 </th>
                                 <th>ID</th>
-                                <th>Name Of Slide</th>
-                                <th>image</th>
+                                <th>Quote</th>
+                                <th>Author</th>
                                 <th>Date Created</th>
 
                             </tr>
                         </thead>
                         <tbody>
 
-                            @forelse($slides as $slide)
+                            @forelse($quotes as $quote)
                                 <tr>
                                     <td>
                                         <span class="custom-checkbox">
@@ -191,40 +188,41 @@
                                             <label for="checkbox1"></label>
                                         </span>
                                     </td>
-                                    <td>{{ $slide->id }}</td>
-                                    <td>{{ $slide->name }}</td>
-                                    <td>{{ $slide->image }}</td>
-                                    <td>{{ $slide->created_at }}</td>
+                                    <td>{{ $quote->id }}</td>
+                                    <td class="text-truncate" style="max-width: 80px;">
+                                        {{ $quote->quote }}</td>
+                                    <td>{{ $quote->author }}</td>
+                                    <td>{{ $quote->created_at }}</td>
 
                                     <td>
                                         @can('update')
-                                            <a type="button" href="#updateSlideModal" data-toggle="modal"
-                                                data-target="#updateSlideModal"
-                                                wire:click="editSlide({{ $slide->id }})" class="edit"><i
+                                            <a type="button" href="#updateQuoteModal" data-toggle="modal"
+                                                data-target="#updateQuoteModal"
+                                                wire:click="editQuote({{ $quote->id }})" class="edit"><i
                                                     class="material-icons" data-toggle="tooltip"
                                                     title="Edit">&#xE254;</i></a>
                                         @endcan
 
                                         @role('admin')
-                                            <a type="button" href="#updateSlideModal" data-toggle="modal"
-                                                data-target="#updateSlideModal"
-                                                wire:click="editSlide({{ $slide->id }})" class="edit"><i
+                                            <a type="button" href="#updateQuoteModal" data-toggle="modal"
+                                                data-target="#updateQuoteModal"
+                                                wire:click="editQuote({{ $quote->id }})" class="edit"><i
                                                     class="material-icons" data-toggle="tooltip"
                                                     title="Edit">&#xE254;</i></a>
                                         @endrole
 
                                         @can('delete')
-                                            <a type="button" href="#deleteSlideModal" data-toggle="modal"
-                                                data-target="#deleteSlideModal"
-                                                wire:click="deleteSlide({{ $slide->id }})" class="delete"
+                                            <a type="button" href="#deleteQuoteModal" data-toggle="modal"
+                                                data-target="#deleteQuoteModal"
+                                                wire:click="deleteQuote({{ $quote->id }})" class="delete"
                                                 data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                                                     title="Delete">&#xE872;</i></a>
                                         @endcan
 
                                         @role('admin')
-                                            <a type="button" href="#deleteSlideModal" data-toggle="modal"
-                                                data-target="#deleteSlideModal"
-                                                wire:click="deleteSlide({{ $slide->id }})" class="delete"
+                                            <a type="button" href="#deleteQuoteModal" data-toggle="modal"
+                                                data-target="#deleteQuoteModal"
+                                                wire:click="deleteQuote({{ $quote->id }})" class="delete"
                                                 data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                                                     title="Delete">&#xE872;</i></a>
                                         @endrole
@@ -240,21 +238,21 @@
                     </table>
                     <div class="clearfix">
 
-                        {{ $slides->links() }}
+                        {{ $quotes->links() }}
 
                     </div>
                 </div>
             </div>
 
             <!-- Edit Modal HTML -->
-            <div wire:ignore.self id="editSlideModal" class="modal fade">
+            <div wire:ignore.self id="editQuoteModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">>
                     <div class="modal-content">
 
-                        <form wire:submit.prevent="editSlide">
+                        <form wire:submit.prevent="editQuote">
                             @csrf
                             <div class="modal-header">
-                                <h4 class="modal-title">Edit Slide</h4>
+                                <h4 class="modal-title">Edit Quote</h4>
                                 <button type="button" class="close" wire:click="closeModal" data-dismiss="modal"
                                     aria-hidden="true">&times;</button>
                             </div>
@@ -271,12 +269,15 @@
                                     </div>
                                 @endif
                                 <div class="form-group">
-                                    <label>Name Of Slide</label>
-                                    <input type="text" class="form-control" wire:model.defer="name" required>
+                                    <label>Quote</label>
+                                    <textarea class="form-control" name="" id="" cols="30" rows="10"
+                                        wire:model.defer="quote">
+                                        Quote
+                                    </textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Image</label>
-                                    <input type="file" class="form-control" wire:model.defer="edit_image">
+                                    <label>Author</label>
+                                    <input type="text" class="form-control" wire:model.defer="author">
                                 </div>
 
                             </div>
@@ -294,18 +295,18 @@
             </div>
 
             {{-- Updates the modal --}}
-            <div wire:ignore.self id="updateSlideModal" class="modal fade">
+            <div wire:ignore.self id="updateQuoteModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">>
                     <div class="modal-content">
-                        <form wire:submit.prevent="updateSlide">
+                        <form wire:submit.prevent="updateQuote">
 
                             @csrf
                             <div class="modal-header">
-                                <h4 class="modal-title">Update Slide</h4>
+                                <h4 class="modal-title">Update Quote</h4>
                                 <button type="button" id="" class="close" wire:click="closeModal"
                                     data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
-                            <div wire:loading wire:target="updateSlide" class="loading-bar">
+                            <div wire:loading wire:target="updateQuote" class="loading-bar">
                             </div>
                             <div class="modal-body">
                                 @if (session()->has('updatesuccessful'))
@@ -319,13 +320,17 @@
                                     </div>
                                 @endif
                                 <div class="form-group">
-                                    <label>Name Of Slide</label>
-                                    <input type="text" class="form-control" wire:model.defer="name" required>
+                                    <label>Quote</label>
+                                    <textarea class="form-control" name="" id="" cols="30" rows="10"
+                                        wire:model.defer="quote">
+                                        Quote
+                                    </textarea>
+
                                 </div>
                                 <div class="form-group">
 
-                                    <label>Image</label>
-                                    <input type="file" class="form-control" wire:model.defer="edit_image">
+                                    <label>Author</label>
+                                    <input type="text" class="form-control" wire:model.defer="author">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -343,19 +348,19 @@
             {{-- end of update modal --}}
 
             <!-- Delete Modal HTML -->
-            <div wire:ignore.self id="deleteSlideModal" class="modal fade">
+            <div wire:ignore.self id="deleteQuoteModal" class="modal fade">
                 <div class="modal-dialog modal-dialog-centered" role="document">">
                     <div class="modal-content">
 
-                        <form wire:submit.prevent="destroySlide">
+                        <form wire:submit.prevent="destroyQuote">
 
                             @csrf
                             <div class="modal-header">
-                                <h4 class="modal-title">Delete Slide</h4>
+                                <h4 class="modal-title">Delete Quote</h4>
                                 <button type="button" class="close" data-dismiss="modal"
                                     aria-hidden="true">&times;</button>
                             </div>
-                            <div wire:loading wire:target="destroySlide" class="loading-bar">
+                            <div wire:loading wire:target="destroyQuote" class="loading-bar">
                             </div>
                             <div class="modal-body">
                                 @if (session()->has('deletesuccessful'))
@@ -374,7 +379,7 @@
                                         </style>
                                     </div>
                                 @endif
-                                <p id="del-status">Are you sure you want to delete this Record?
+                                <p id="del-status">Are you sure you want to delete this Quote?
                                 </p>
                                 <p class="text-warning"><small>This action cannot be
                                         undone.</small></p>

@@ -120,7 +120,7 @@ class ListProducts extends Component
 
              if($this->user_manual){
               $filename2 =  $this->user_manual->storeAs('pdfs', $this->user_manual->getClientOriginalName(),'public');
-               
+
             }else{
                 $filename2 = null;
             }
@@ -129,7 +129,7 @@ class ListProducts extends Component
                  $filename3 = $this->video->storeAs('videos',$this->video->getClientOriginalName() ,'public');
             }else{
                 $filename3 = null;
-            }
+        }
 
              if($this->video){
                  $filename4 = $this->system_cover_image->storeAs('images', $this->system_cover_image->getClientOriginalName(),'public');
@@ -137,7 +137,7 @@ class ListProducts extends Component
                 $filename4 = null;
             }
 
-            $files->name = $this->name;
+        $files->name = $this->name;
         $files->category_id = $this->category_id;
         $files->status_id = $this->status_id;
         $files->number_of_clicks = $this->number_of_clicks;
@@ -157,7 +157,7 @@ class ListProducts extends Component
         $files->system_cover_image = $filename4;
         $result = $files->save();
 
-         if($result){
+        if($result){
              session()->flash('savesuccessful','Your Product was successfully added');
             $this->resetInput();
             $this->dispatchBrowserEvent('close-modal');
@@ -167,8 +167,8 @@ class ListProducts extends Component
              session()->flash('error', 'Product Not Added Successfully');
         }
 
-        } 
-    
+        }
+
 
          $loading = false;
 
@@ -184,7 +184,7 @@ class ListProducts extends Component
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
         }else{
-            
+
             // $this->searchResults = [];
             // if ($this->icon_link) {
             //     $this->product['icon_link'] = Storage::files('images');
@@ -231,7 +231,7 @@ class ListProducts extends Component
             return redirect()->to('/product.manage');
         }
 
-       
+
     }
 
     public function closeModal(){
@@ -303,49 +303,49 @@ class ListProducts extends Component
            }else{
 
             if($this->icon_link){
-                 $filename1 = $this->icon_link->store('images', 'public');
+            $filename1 = $this->icon_link->store('images', 'public');
             }else{
                 $filename1 = null;
             }
 
              if($this->user_manual){
-                $filename2 = $this->user_manual->store('pdfs', 'public');
+            $filename2 = $this->user_manual->store('pdfs', 'public');
             }else{
                 $filename2 = null;
             }
 
              if($this->video){
-                 $filename3 = $this->video->store('videos', 'public');
+            $filename3 = $this->video->store('videos', 'public');
             }else{
                 $filename3 = null;
             }
 
              if($this->video){
-                 $filename4 = $this->system_cover_image->store('images', 'public');
+            $filename4 = $this->system_cover_image->store('images', 'public');
             }else{
                 $filename4 = null;
-            }
-                  
-              $files->name = $this->name;
-            $files->category_id = $this->category_id;
-            $files->status_id = $this->status_id;
-            $files->number_of_clicks = $this->number_of_clicks;
-            $files->url = $this->url;
-            $files->test_url = $this->test_url;
-            $files->cost_saving = $this->cost_saving;
-            $files->lead_developer = $this->lead_developer;
-            $files->short_description = $this->short_description;
-            $files->long_description = $this->long_description;
-            $files->tutorial_url = $this->tutorial_url;
-            $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
-            $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
-            $files->icon_link = $filename1;
-            $files->user_manual = $filename2;
-            $files->video = $filename3;
-            $files->system_cover_image = $filename4;
+        }
+
+        $files->name = $this->name;
+        $files->category_id = $this->category_id;
+        $files->status_id = $this->status_id;
+        $files->number_of_clicks = $this->number_of_clicks;
+        $files->url = $this->url;
+        $files->test_url = $this->test_url;
+        $files->cost_saving = $this->cost_saving;
+        $files->lead_developer = $this->lead_developer;
+        $files->short_description = $this->short_description;
+        $files->long_description = $this->long_description;
+        $files->tutorial_url = $this->tutorial_url;
+        $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
+        $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
+        $files->icon_link = $filename1;
+        $files->user_manual = $filename2;
+        $files->video = $filename3;
+        $files->system_cover_image = $filename4;
             $result = $files->update();
 
-            if($result){
+        if($result){
              session()->flash('updatesuccessful','Your Product was successfully added');
             $this->resetInput();
             $this->dispatchBrowserEvent('close-modal');
@@ -354,9 +354,9 @@ class ListProducts extends Component
         }else{
              session()->flash('error', 'Product Not Added Successfully');
         }
-       
+
         }
-        
+
          $loading = false;
     }
 

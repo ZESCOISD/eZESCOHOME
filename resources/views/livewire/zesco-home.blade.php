@@ -1,9 +1,10 @@
  @push('custom-styles')
      <link href="assets/css/bootstrap.css" rel="stylesheet">
+     <link href="assets/js/bootstrap.js" rel="stylesheet">
      {{-- <link rel="stylesheet" href="assets/bootstrap/bootstrap.css"> --}}
      <link href="assets/css/home.css" rel="stylesheet">
 
-     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">  --}}
+     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> --}}
  @endpush
 
 
@@ -20,10 +21,11 @@
 
                      <!-- main right col -->
                      <div class="column col-lg-12 col-md-12 col-sm-12 col-xs-11" id="main">
-                         <div wire:loading wire:target="search" class="loading-bar" style="margin: 0;"></div>
+
 
                          <!-- top nav -->
                          <div class="navbar navbar-blue navbar-static-top" style="margin-left: -15px;">
+                             <div wire:loading wire:target="search" class="loading-bar" style="margin: 0;"></div>
                              <div class="navbar-header">
                                  <button class="navbar-toggle" type="button" data-toggle="collapse"
                                      data-target=".navbar-collapse">
@@ -36,16 +38,6 @@
                                      <img src="/img/Zesco.png" alt="" width="125" height="50"
                                          class="d-inline-block align-text-top"></a>
                              </div>
-
-                             {{-- <div>
-                                    <form wire:submit.prevent="search">
-
-                                        @csrf
-                                        <input type="text" wire:model.defer="searchQuery" placeholder="Search for system..." id="search" required>
-                                        <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
-                                    </form>
-
-                                </div> --}}
                              <nav class="collapse navbar-collapse" role="navigation">
 
                                  <ul id="search-bar" class="nav navbar-nav navbar-center text-center">
@@ -59,7 +51,48 @@
                                                  <button type="submit" class="btn btn-primary"
                                                      id="search-btn">Search</button>
                                              </form>
+                                             @if ($searchedProduct)
+                                                 {{-- @foreach ($searchedProduct as $products) --}}
+                                                 <div id="search-cards">
+                                                     <a id="searchedcard-link" class="card-link"
+                                                         href="{{ $searchedProduct->product_url }}"
+                                                         wire:click="incrementClicks({{ $searchedProduct->product_id }})"
+                                                         data-product-id="{{ $searchedProduct->product_id }}">
+                                                         <div class="card-body text-center" id="searched-card-body">
+                                                             <i id="system-icon" class="bi bi-bar-chart-fill"></i>
+                                                             <p style="font-size: 18px; text-decoration:none;"
+                                                                 id="searchedcard-card-text" class="text-center mt-4">
+                                                                 {{ $searchedProduct->product_name }}</p>
+                                                         </div>
+                                                     </a>
+                                                     <style>
+                                                         .counts {
+                                                             margin-top: 60px;
+                                                         }
+                                                     </style>
+                                                 </div>
+                                             @elseif($searchQuery !== null && $searchedProduct === null)
+                                                 <div class="text-center" id="search-cards">
+                                                     <a class="text-center">
+                                                         <div class="text-center" id="index-card-body">
 
+                                                             <p style="font-size: 18px;" id="index-card-text"
+                                                                 class="text-center mt-4">No
+                                                                 results
+                                                                 found</p>
+                                                         </div>
+                                                     </a>
+
+                                                 </div>
+                                             @else
+                                                 <div>
+                                                     <style>
+                                                         #search-cards {
+                                                             display: none;
+                                                         }
+                                                     </style>
+                                                 </div>
+                                             @endif
                                          </div>
                                      </li>
 
@@ -69,7 +102,8 @@
                                      <li>
 
                                          <a href="{{ route('ezesco-systems') }}"><i
-                                                 class="bi bi-pass-fill text-center"></i><br> How to?</a>
+                                                 class="bi bi-pass-fill text-center"></i><br> How
+                                             to?</a>
                                      </li>
 
                                      <li>
@@ -85,7 +119,8 @@
                                      <li>
 
                                          <a href="{{ route('login') }}"><i id="i-login"
-                                                 class="bi bi-box-arrow-in-right"></i><br> Login</a>
+                                                 class="bi bi-box-arrow-in-right"></i><br>
+                                             Login</a>
                                      </li>
                                  </ul>
                              </nav>
@@ -95,11 +130,13 @@
                                  Welcome to eZESCO Dashboard
                              </div>
 
+
+
                              {{-- @if ($searchedProduct)
                              <div  class="row">
 
                                  <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
-                                    
+
                                          <div>
                                              <div class="card card-animated" id="search-cards">
                                                  <a id="searchedcard-link" class="card-link"
@@ -136,7 +173,7 @@
                                              </div>
 
                                          </div>
-                                     
+
                                  </div>
 
                              </div>
@@ -228,7 +265,6 @@
 
                              </div>
                          </section>
-                         <div wire:loading wire:target="showResult" class="loading-bar"></div>
 
 
                          <div class="padding">
@@ -242,37 +278,181 @@
 
                                          <div class="panel panel-default">
                                              <div class="panel-heading text-center"><a href="#"
-                                                     class="pull-right">View all</a>
-                                                 <h4 style="margin-left: 15px; "><i style="margin-left: 15px;"
-                                                         id="important-notice-icon"
+                                                     class="pull-right">
+                                                     @if (count($more_notices) > 1)
+                                                         View
+                                                         all
+                                                     @endif
+
+                                                 </a>
+
+                                                 {{-- <div> --}}
+                                                 <h4 id="notice-header" style="margin-left: 15px; "><i
+                                                         style="margin-left: 15px;" id="important-notice-icon"
                                                          class="bi bi-envelope-fill text-center"></i><br>
                                                      Important Notice
                                                  </h4>
+                                                 {{-- </div> --}}
                                              </div>
                                              <div class="panel-body">
                                                  @if ($more_notices->isEmpty())
                                                      <div id="notice-data" class="text-center">
-                                                         <h5 style="color: grey;" class="mt-5">No Notices Found.
+                                                         <h5 id="no-notice" style="color: grey;" class="mt-5">No
+                                                             Notices Found.
                                                          </h5>
 
                                                      </div>
                                                  @elseif ($more_notices->isNotEmpty())
                                                      @foreach ($more_notices as $notice)
                                                          <div id="notice-data" class="text-left">
-                                                             <h4>{{ $notice->notice_name }}</h4>
-                                                             <p>{{ $notice->description }}</p>
+                                                             <h4 style="font-weight: bold">{{ $notice->notice_name }}
+                                                             </h4>
+                                                             <p style=" text-indent: 0px;" id="description">
+                                                                 {{ \Illuminate\Support\Str::limit($notice->description, 190) }}
+                                                                 @if (strlen($notice->description) > 190)
+                                                                     <a wire:ignore href="#editRoleModal"
+                                                                         class="edit" data-toggle="modal"
+                                                                         data-target="#updateRoleModal"
+                                                                         wire:click="editRole({{ $notice->id }})"></a>
+
+                                                                     <button type="button" href="#readMoreModal"
+                                                                         data-toggle="modal" id="read-more"
+                                                                         wire:click="readMore({{ $notice->id }})">
+                                                                         Read more</button>
+                                                                     <div wire:ignore.self id="readMoreModal"
+                                                                         class="modal fade" tabindex="-1"
+                                                                         role="dialog"
+                                                                         aria-labelledby="readMoreModalLabel"
+                                                                         aria-hidden="true">
+                                                                         <div class="modal-dialog modal-dialog-centered"
+                                                                             style="max-width: 100%;" role="document">
+                                                                             >
+                                                                             <div class="modal-content">
+
+                                                                                 {{-- <form wire:submit.prevent="readmore">
+                                                                         @csrf --}}
+                                                                                 <div class="modal-header"
+                                                                                     style="background-color:cadetblue; color:white;">
+                                                                                     <h4 class="modal-title">Edit
+                                                                                         Notice</h4>
+                                                                                     <button id="modal-close"
+                                                                                         wire:click="closeModal"
+                                                                                         type="button" class="close"
+                                                                                         data-dismiss="modal"
+                                                                                         aria-label="Close">
+                                                                                         <span
+                                                                                             aria-hidden="true">&times;</span></button>
+                                                                                 </div>
+
+                                                                                 <div class="modal-body">
+                                                                                     @if (session()->has('updatesuccessful'))
+                                                                                         <div id="dismiss"
+                                                                                             class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
+                                                                                             role="alert"
+                                                                                             style="border:none; font-size: 12px;">
+                                                                                             <p class="mt-3">
+                                                                                                 {{ session('updatesuccessful') }}
+                                                                                             </p>
+                                                                                             <button
+                                                                                                 style="color:white;"
+                                                                                                 type="button"
+                                                                                                 class="btn-close mt-1"
+                                                                                                 data-dismiss="alert"
+                                                                                                 wire:click="closeModal"
+                                                                                                 aria-label="Close">
+                                                                                             </button>
+                                                                                         </div>
+                                                                                     @endif
+                                                                                     <div class="form-group">
+                                                                                         <label>Name Of Notice</label>
+                                                                                         <input type="text"
+                                                                                             class="form-control"
+                                                                                             wire:model.defer="notice_name"
+                                                                                             required>
+                                                                                     </div>
+                                                                                     <div class="form-group">
+                                                                                         <label>Description</label>
+                                                                                         <textarea name="description" wire:model.defer="description" id="description" class="form-control mb-1"
+                                                                                             cols="30" rows="10" placeholder="Notice Description" required>
+                                                                               </textarea>
+                                                                                     </div>
+                                                                                     <div class="form-group">
+                                                                                         <label>Staff Name</label>
+                                                                                         <input type="text"
+                                                                                             class="form-control"
+                                                                                             wire:model.defer="staff_name"
+                                                                                             required>
+                                                                                     </div>
+                                                                                     <div class="form-group">
+                                                                                         <label>Position Of
+                                                                                             Staff</label>
+                                                                                         <input type="text"
+                                                                                             class="form-control"
+                                                                                             wire:model.defer="staff_title"
+                                                                                             required>
+                                                                                     </div>
+                                                                                     <div class="form-group">
+                                                                                         <label>Department Of
+                                                                                             Stuff</label>
+                                                                                         <input type="text"
+                                                                                             class="form-control"
+                                                                                             wire:model.defer="department"
+                                                                                             required>
+                                                                                     </div>
+                                                                                     <div class="form-group">
+                                                                                         <label>Start Date</label>
+                                                                                         <input type="text"
+                                                                                             class="form-control"
+                                                                                             wire:model.defer="start_date"
+                                                                                             required>
+                                                                                     </div>
+                                                                                     <div class="form-group">
+                                                                                         <label>End Date</label>
+                                                                                         <input type="text"
+                                                                                             class="form-control"
+                                                                                             wire:model.defer="end_date"
+                                                                                             required>
+                                                                                     </div>
+                                                                                 </div>
+                                                                                 <div class="modal-footer">
+                                                                                     <input
+                                                                                         style="background-color: #1bad6c"
+                                                                                         type="submit"
+                                                                                         class="btn btn-info"
+                                                                                         value="Save">
+                                                                                     <input
+                                                                                         style="background-color: rgb(153, 150, 150)"
+                                                                                         type="button"
+                                                                                         class="btn btn-default"
+                                                                                         wire:click="closeModal"
+                                                                                         data-dismiss="modal"
+                                                                                         value="Cancel">
+
+                                                                                 </div>
+                                                                                 {{-- </form> --}}
+                                                                             </div>
+                                                                         </div>
+                                                                     </div>
+                                                                 @endif
+
+                                                             </p>
                                                          </div>
-                                                         <div class="row mt-5">
+
+                                                         <div style="display: flex;" class="row mt-5">
                                                              <div class="col-xl-6">
                                                                  <div id="notice-data" class="text-start">
-                                                                     <h5>From {{ $notice->staff_title }}</h5>
-                                                                     <p> {{ $notice->staff_name }}</p>
+                                                                     <h5 style="font-weight: bold">From
+                                                                         {{ $notice->staff_title }}</h5>
+                                                                     <p style=" text-indent: 0px;">
+                                                                         {{ $notice->staff_name }}</p>
                                                                  </div>
                                                              </div>
                                                              <div class="col-xl-6">
-                                                                 <div class="text-center">
-                                                                     <h5>Department</h5>
-                                                                     <p> {{ $notice->department }}</p>
+                                                                 <div style="margin-right: -550px;"
+                                                                     class="text-right">
+                                                                     <h5 style="font-weight: bold">Department</h5>
+                                                                     <p style="text-align: right;">
+                                                                         {{ $notice->department }}</p>
                                                                  </div>
                                                              </div>
                                                          </div>
@@ -285,7 +465,12 @@
 
                                          <div class="panel panel-default">
                                              <div class="panel-heading text-center"><a href="#"
-                                                     class="pull-right">View all</a>
+                                                     class="pull-right">
+                                                     @if (count($upcoming_events) > 1)
+                                                         View
+                                                         all
+                                                     @endif
+                                                 </a>
                                                  <h4 style="margin-left: 15px;"><i style="margin-left: 15px;"
                                                          id="upcoming-events-icon"
                                                          class="bi bi-calendar-event-fill text-center">
@@ -294,27 +479,36 @@
                                              <div class="panel-body">
                                                  @if ($upcoming_events->isEmpty())
                                                      <div id="notice-data" class="text-center">
-                                                         <h5 style="color: grey;" class="mt-5">No Upcoming
+                                                         <h5 id="no-event" style="color: grey;" class="mt-5">No
+                                                             Upcoming
                                                              Events
                                                              Found.</h5>
                                                      </div>
                                                  @elseif ($upcoming_events->isNotEmpty())
                                                      @foreach ($upcoming_events as $event)
                                                          <div class="text-start">
-                                                             <h4 class="mt-4">{{ $event->event_name }}</h4>
-                                                             <p>{{ $event->event_description }}</p>
+                                                             <h4 style="font-weight: bold" class="mt-4">
+                                                                 {{ $event->event_name }}</h4>
+                                                             <p style=" text-indent: 0px;">
+                                                                 {{ $event->event_description }}</p>
                                                          </div>
-                                                         <div class="row mt-5">
+                                                         <div class="row mt-5" style="display: flex;">
                                                              <div class="col-xl-6">
                                                                  <div class="text-start">
-                                                                     <h5>From {{ $event->venue }}</h5>
-                                                                     <p>Fee K{{ $event->fee }}</p>
+                                                                     <h5 style="font-weight: bold">From
+                                                                         {{ $event->venue }}</h5>
+                                                                     <p style=" text-indent: 0px;">Fee
+                                                                         K{{ $event->fee }}</p>
                                                                  </div>
                                                              </div>
                                                              <div class="col-xl-6">
-                                                                 <div class="text-end">
-                                                                     <h5>Date and Time</h5>
-                                                                     <p> {{ $event->date }} {{ $event->time }}
+                                                                 <div class="text-right"
+                                                                     style="margin-right: -500px;">
+                                                                     <h5 class="text-right" style="font-weight: bold">
+                                                                         Date and Time</h5>
+                                                                     <p style="text-align: right;">
+                                                                         {{ $event->date }}
+                                                                         {{ \Carbon\Carbon::parse($event->time)->format('H:i') }}
                                                                      </p>
                                                                      <p> </p>
 
@@ -335,23 +529,42 @@
                                              </div>
                                              <div class="panel-body">
                                                  <div class="flex-grow-1 ms-4 ps-3">
-                                                     <figure>
-                                                         <blockquote class="blockquote mb-4">
-                                                             <p>
-                                                                 <i id="bi-quote" class="bi bi-quote"></i>
-                                                                 <span class="font-italic">Success is the result of
-                                                                     hard work,
-                                                                     determination, and a relentless pursuit of
-                                                                     excellence. Embrace challenges, stay
-                                                                     focused, and let your unwavering commitment be
-                                                                     the driving force behind your journey to
-                                                                     greatness.</span>
-                                                             </p>
-                                                         </blockquote>
-                                                         <figcaption class="blockquote-footer text-right">
-                                                             - Colin Powell
-                                                         </figcaption>
-                                                     </figure>
+                                                     @if ($quotes->isEmpty())
+                                                         <figure>
+                                                             <blockquote class="blockquote mb-4">
+                                                                 <p>
+                                                                     <i id="bi-quote" class="bi bi-quote"></i>
+                                                                     <span class="font-italic">Success is the result of
+                                                                         hard work,
+                                                                         determination, and a relentless pursuit of
+                                                                         excellence. Embrace challenges, stay
+                                                                         focused, and let your unwavering commitment be
+                                                                         the driving force behind your journey to
+                                                                         greatness.</span>
+                                                                 </p>
+                                                             </blockquote>
+                                                             <figcaption class="blockquote-footer text-right">
+                                                                 - Colin Powell
+                                                             </figcaption>
+                                                         </figure>
+                                                     @else
+                                                         @foreach ($quotes as $quote)
+                                                             <figure>
+                                                                 <blockquote class="blockquote mb-4">
+                                                                     <p>
+                                                                         <i id="bi-quote" class="bi bi-quote"></i>
+                                                                         <span
+                                                                             class="font-italic">{{ $quote->quote }}</span>
+                                                                     </p>
+                                                                 </blockquote>
+                                                                 <figcaption class="blockquote-footer text-right">
+                                                                     - {{ $quote->author }}
+                                                                 </figcaption>
+                                                             </figure>
+                                                         @endforeach
+
+                                                     @endif
+
                                                  </div>
                                              </div>
                                          </div>
@@ -363,29 +576,17 @@
                                      <!-- main col right -->
                                      <div class="col-sm-7">
 
+
                                          <div class="panel panel-default shadow">
+
                                              <div class="panel-heading text-center">
-                                                 <h4>eZESCO Categories</h4>
+
+                                                 <h4 style="color:#e09334;">eZESCO Categories</h4>
                                              </div>
+                                             <div wire:loading wire:target="showResult" class="loading-bar"></div>
+
                                              <div class="panel-body">
                                                  <div class="grid-container">
-
-                                                     {{-- @foreach ($showCategories as $showCategory)
-                                                            <div class="dropdown-list">
-
-                                                                <div class="dropdown mt-3">
-
-                                                                    <div id="dropdown" class="card shadow p-3 mb-5"
-                                                                        type="button"
-                                                                        wire:click="showResult({{ $showCategory->category_id }})">
-                                                                        <div class="card-body">
-                                                                            {{ $showCategory->name }}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach --}}
-
                                                      <main class="grid-item main">
                                                          <div class="items text-center">
                                                              @foreach ($showCategories as $showCategory)
@@ -394,6 +595,8 @@
                                                                          class="card shadow p-3 mb-5" type="button"
                                                                          wire:click="showResult({{ $showCategory->category_id }})">
                                                                          <div class="card-body">
+                                                                             <i style="color: white; margin-right:5px;"
+                                                                                 class="bi bi-circle"></i>
                                                                              {{ $showCategory->name }}
                                                                          </div>
                                                                      </div>
@@ -413,8 +616,15 @@
 
 
                                          <div class="panel panel-default">
-                                             <div class="panel-heading text-center">
-                                                 <h4>Frequently Accessed eZESCO Applications</h4>
+                                             <div id="category-panel-heading" class="panel-heading text-center">
+                                                 <h4 style="color:#e09334;" id="frequently-accessed-header">
+                                                     @if ($getProducts)
+                                                         Frequently Accessed eZESCO
+                                                         Applications
+                                                     @elseif($getSelectedProducts)
+                                                         {{ $getSelectedProducts }}
+                                                     @endif
+                                                 </h4>
                                              </div>
                                              <div class="panel-body">
                                                  @if ($getProducts->isEmpty())
@@ -451,52 +661,23 @@
                                                                  <div
                                                                      class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
                                                                      <div class="" id="categoryCards">
-                                                                         {{-- <a class="card-link"
-                                                                             href="{{ $getSelectedProduct->product_url }}"
+
+                                                                         {{-- <div class="panel-heading text-center"> --}}
+
+                                                                         <div class="text-center" type="button"
+                                                                             onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
                                                                              wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
-                                                                             <div class="card-body"
-                                                                                 id="categoryCards-body">
-                                                                                 <div class="row">
-                                                                                     <div class="col-lg-12">
-                                                                                         <h4 class="card-title"
-                                                                                             id="categoryCards-title">
-                                                                                             {{ $getSelectedProduct->number_of_clicks }}
-                                                                                         </h4>
-                                                                                         <p id="categoryCards-text"
-                                                                                             class="card-text mt-2">
-                                                                                             {{ $getSelectedProduct->product_name }}
-                                                                                         </p>
-                                                                                     </div>
-                                                                                 </div>
-
-                                                                             </div>
-                                                                             <style>
-                                                                                 #search-cards {
-                                                                                     display: none;
-                                                                                 }
-
-                                                                                 #frequently-accessed-system {
-                                                                                     display: none;
-                                                                                 }
-                                                                             </style>
-                                                                         </a> --}}
-                                                                         <div id=""
-                                                                             class="col-lg-2 col-md-2 text-center">
-
-                                                                             <div class="text-center" type="button"
-                                                                                 onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
-                                                                                 wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
-                                                                                 <i id="system-icon"
-                                                                                     class="bi bi-bar-chart-fill"></i>
-                                                                             </div>
-                                                                             <p id="system-name" type="button"
-                                                                                 onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
-                                                                                 class="text-center"
-                                                                                 wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
-                                                                                 {{ $getSelectedProduct->name }}
-                                                                             </p>
-
+                                                                             <i id="system-icon"
+                                                                                 class="bi bi-bar-chart-fill"></i>
                                                                          </div>
+                                                                         <p id="system-name" type="button"
+                                                                             onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
+                                                                             class="text-center"
+                                                                             wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
+                                                                             {{ $getSelectedProduct->product_name }}
+                                                                         </p>
+
+                                                                         {{-- </div> --}}
                                                                      </div>
                                                                      <style>
                                                                          #search-cards {
@@ -506,13 +687,13 @@
                                                                          #frequently-accessed-system {
                                                                              display: none;
                                                                          }
+
+                                                                         #frequently-accessed-header {
+                                                                             display: none;
+                                                                         }
                                                                      </style>
                                                                  </div>
-                                                             @elseif (
-                                                                 !empty($getSelectedProduct->product_id) ||
-                                                                     !empty($getSelectedProducts->number_of_clicks) ||
-                                                                     !empty($getSelectedProducts->product_name) ||
-                                                                     (!empty($getSelectedProducts->product_url) && $getSelectedProduct == null))
+                                                             @else
                                                                  <div
                                                                      class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
                                                                      <div class="card category-card-animated flex-column"
@@ -578,8 +759,8 @@
                                                              to get started.
                                                          </p>
                                                          <a href="{{ route('ezesco-systems') }}"
-                                                             class="read-more"><span>Learn More</span><i
-                                                                 class="bi bi-arrow-right"
+                                                             class="read-more"><span>Learn
+                                                                 More</span><i class="bi bi-arrow-right"
                                                                  style="color: #d3882b"></i></a>
                                                      </div>
 

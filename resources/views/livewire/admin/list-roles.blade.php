@@ -2,7 +2,7 @@
     <div>
         @push('custom-styles')
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href='/css/adminmanagement.css'>  
+        <link rel="stylesheet" href='/css/adminmanagement.css'>
         @endpush
         @role('admin')
         <body id="manage-body">
@@ -29,6 +29,8 @@
                                     <a class="dropdown-item" onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
                                     <a class="dropdown-item" onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
                                     <a class="dropdown-item" onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
+                                    <a class="dropdown-item"
+                                    onclick=" window.location='{{ route('quotes.manage') }}'">Quote Of the Day</a>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +56,7 @@
                             </div>
                             <div class="col-sm-4">
                                  <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal"><i class="material-icons">&#xE147;</i> <span>Add New Role</span></button>
-        
+
                                 <div wire:ignore.self  class="modal fade"  id="addRoleModal"  tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
                                 <div  class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
@@ -65,7 +67,7 @@
                                         </button>
                                     </div>
                                   <div wire:loading wire:target="saveRole" class="loading-bar"></div>
-                                                
+
                                     <div  class="modal-body">
 
                                         @if (session()->has('savesuccessful'))
@@ -85,12 +87,12 @@
                                                 <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>
-                                    
-                                        
+
+
                                         <div class="modal-footer mt-3" id="modal-footer">
                                             <button style="background-color: #1bad6c" type="submit" class="btn btn-danger" >submit</button>
                                             <button style="background-color: rgb(153, 150, 150)" type="button" wire:click="closeModal"  class="btn btn-secondary" data-dismiss="modal">Close</button>
-        
+
                                         </div>
                                         </form>
                                     </div>
@@ -146,7 +148,7 @@
                     <div class="clearfix">
                         {{ $roles->links() }}
                     </div>
-        
+
                     <!-- Edit Modal HTML -->
         <!-- Edit Modal HTML -->
             <div wire:ignore.self  class="modal fade"  id="editRoleModal"  tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
@@ -158,7 +160,7 @@
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    
+
                     <div  class="modal-body">
                         @if (session()->has('updatesuccessful'))
                         <div id="dismiss" class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show" role="alert" style="border:none; font-size: 12px;">
@@ -176,7 +178,7 @@
                                 <span class="text-danger">{{$message}}</span>
                             @enderror
                         </div>
-                        
+
                         <div class="modal-footer mt-3" id="modal-footer">
                             <button style="background-color: #1bad6c" type="submit" class="btn btn-danger" >update</button>
                             <button style="background-color: rgb(153, 150, 150)" type="button" wire:click="closeModal"  class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -197,7 +199,7 @@
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    
+
                     <div  class="modal-body">
                         @if (session()->has('givepermissionsuccessful'))
                         <div id="dismiss" class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show" role="alert" style="border:none; font-size: 12px;">
@@ -222,7 +224,7 @@
                             @csrf
 
                             <div><h5>Assign Permission to Role</h5></div>
-    
+
                             <div class="form-group m-2">
                                 <select style="width:250px; height:40px;" name="permission_name" id="permissions" wire:model.defer="permission_id">
                                     <option value="0">-- Select Permission --</option>
@@ -244,16 +246,16 @@
                 </div>
                     </div>
                 </div>
-        
+
 
                         <!-- Add Permission -->
             <div wire:ignore.self  class="modal fade"  id="assignRoleModal"  tabindex="-1" role="dialog" aria-labelledby="assignRoleModalLabel" aria-hidden="true">
                 <div  class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        
+
                         <h5 class="modal-title" id="assignRoleModalLabel">Manage Permissions To Role</h5>
-                        
+
                         <button id="modal-close" type="button" class="close"  data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -263,7 +265,7 @@
                     {{-- <div wire:loading wire:target="revokePermission" class="loading-bar"></div> --}}
 
                     <div  class="modal-body">
-                        
+
 
                         @if (session()->has('givepermissionsuccessful'))
                         <div id="dismiss" class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show" role="alert" style="border:none; font-size: 12px;">
@@ -310,14 +312,14 @@
                         </div>
                         @endif
 
-                            @if ($role->permissions)
+                            {{-- @if ($role->permissions)
                             @foreach ($role->permissions as $role_permission => )
                             <p>{{$role_permission->name}}</p>
                             @endforeach
                             @else
                             <p style="font-size: 12px;">No permissions attached to this Role</p>
-                            @endif
-                        
+                            @endif --}}
+
                         {{-- <div>
                             <h5>Current Permissions for Role</h5>
                             @if ($current_role == [])
@@ -326,23 +328,23 @@
                                     @foreach($current_role as $role_permission)
 
                                     <div>
-                                    
+
                                         <ul class="horizontal-list">
-                                            
+
                                             <li><span style="font-size: 20px; color:rgb(255, 166, 0);">{{$role_permission->name}}</span></li>
                                             <a wire:ignore href="#deletePermissionModal" class="delete text-center" data-toggle="modal"
                                                 data-target="#deletePermissionModal"  wire:click="deletePermission({{$role_permission->id}})"><i
                                                     class="material-icons" data-toggle="tooltip" wire:click="closeModal" style="color: red;
                                                     margin-left:10px;" wire:change="$emit('viewUpdated', $event.target.role_id)"
                                                     title="Delete">&#xE872;</i></a>
-                                            
-                                           
+
+
                                         </ul>
                                     </div>
 
-                              
+
                                     @endforeach
-                               
+
                             @endif
                         </div> --}}
 
@@ -357,19 +359,19 @@
                                             <button type="button" class="close" wire:click="close"  data-dismiss="modal" aria-label="Close">&times;</button>
                                         </div>
                                         <div wire:loading wire:target="revokePermission" class="loading-bar"></div>
-                        
+
                                         <div class="modal-body">
                                             @if (session()->has('revoked'))
                                             <div id="dismiss" class="alert alert-info mt-3 text-bg-success  text-center " role="alert"
                                                 style="border:none; font-size: 12px;">
                                                 <p class="mt-3">{{ session('revoked') }}</p>
-                        
+
                                             </div>
                                             <style>
                                                 #del {
                                                     display: none;
                                                 }
-                        
+
                                                 #del-status {
                                                     display: none;
                                                 }
@@ -394,27 +396,27 @@
                             @csrf
 
                             <div><h5>Assign Permission to Role</h5></div>
-    
+
                             <div class="form-group m-2">
                                 <select style="width:250px; height:40px;" name="permission_name" id="permissions" wire:model.defer="permission_id" required>
                                     <option value="0" required>-- Select Permission --</option>
                                     @foreach ($permissions as $permission)
                                     <option value="{{$permission->id}}">{{$permission->name}}</option>
-                                    @endforeach 
+                                    @endforeach
                                 </select><br>
                                     @error('permission_id')
                                     <span class="text-danger">Field is required</span>
                                     @enderror
                                 <br>
                                 <div style="display: flex; flex-direction:row;">
-                                <p style="font-size: 20px; margin-right:10px; margin-top:7px;">Sync Permissions  
+                                <p style="font-size: 20px; margin-right:10px; margin-top:7px;">Sync Permissions
                                     </p>
                                         {{-- <p style="font-size: 20px;">Sync</p> --}}
                                         <i type="button" wire:click="sync_Permission"  style="color: #1bad6c; font-weight:bold; font-size: 30px; "
                                             class="bi bi-arrow-repeat"></i>
                                     </div>
-                                    
-                               
+
+
                                 @error('message')
                                     <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -429,7 +431,7 @@
                 </div>
                     </div>
                 </div>
-        
+
                 {{-- Updates the modal --}}
                 <div wire:ignore.self  class="modal fade"  id="updateRoleModal"  tabindex="-1" role="dialog" aria-labelledby="updateRoleModalLabel" aria-hidden="true">
                     <div  class="modal-dialog modal-dialog-centered" role="document">
@@ -459,8 +461,8 @@
                                     <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </div>
-                            
-                            
+
+
                             <div class="modal-footer mt-3" id="modal-footer">
                                 <button style="background-color: #1bad6c" type="submit" class="btn btn-danger" >update</button>
                                 <button style="background-color: rgb(153, 150, 150)" type="button" wire:click="closeModal"  class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -471,14 +473,14 @@
                         </div>
                     </div>
                 {{-- end of update modal --}}
-        
+
                 <!-- Delete Modal HTML -->
                 <div wire:ignore.self id="deleteRoleModal" class="modal fade">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <form wire:submit.prevent="destroyRole">
                                 @csrf
-                                <div class="modal-header">						
+                                <div class="modal-header">
                                     <h4 class="modal-title">Delete Role</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
@@ -488,10 +490,10 @@
                                     @if (session()->has('deletesuccessful'))
                                     <div id="dismiss" class="alert alert-info mt-3 text-bg-success  text-center " role="alert" style="border:none; font-size: 12px;">
                                         <p class="mt-3">{{ session('deletesuccessful') }}</p>
-                                        
+
                                     </div>
                                         <style> #del{ display: none; } #del-status{ display: none; }</style>
-                                @endif				
+                                @endif
                                     <p id="del-status">Are you sure you want to delete this Record?</p>
                                     <p class="text-warning"><small>This action cannot be undone.</small></p>
                                 </div>
@@ -504,12 +506,12 @@
                     </div>
                 </div>
                  <!-- end of row -->
-        
+
                 </div>
             </div>
-    
+
         </body>
-        
+
     @else
     <div class="row d-flex justify-content-sm-center">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center text-center">
@@ -525,7 +527,7 @@
                             </h2>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -533,10 +535,10 @@
         @endrole
 
         @push('custom-scripts')
-        
-        <script src="{{asset('/js/adminmanagement.js')}}"></script> 
-        
+
+        <script src="{{asset('/js/adminmanagement.js')}}"></script>
+
         @endpush
     </div>
-    
+
 </div>
