@@ -285,7 +285,7 @@
                                         @endcan
 
                                         @role('admin')
-                                            <a type="button" href="#editEventModal" data-toggle="modal"
+                                            <a type="button" href="#updateEventModal" data-toggle="modal"
                                                 data-target="#updateEventModal"
                                                 wire:click="editEvent({{ $upcoming_event->id }})" class="edit"><i
                                                     class="material-icons" data-toggle="tooltip"
@@ -339,6 +339,11 @@
                                     aria-hidden="true">&times;</button>
                             </div>
 
+                            <style>
+                                input {
+                                    margin-bottom: 9px;
+                                }
+                            </style>
                             <div class="modal-body">
                                 @if (session()->has('updatesuccessful'))
                                     <div id="dismiss"
@@ -369,21 +374,23 @@
                                     <input type="number" class="form-control" wire:model.defer="fee" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Time</label>
+                                    <label>Time Of Event</label>
                                     <input type="time" class="form-control" wire:model.defer="time" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="date" required>
+                                    <label>Actual Date Of Event</label>
+                                    <input type="date" class="form-control" wire:model.defer="date" required
+                                        placeholder="Actual Date Of Event">
                                 </div>
                                 <div class="form-group">
-                                    <label>Start Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="start_date"
-                                        required>
+                                    <label>Advertisement Start Date</label>
+                                    <input type="date" class="form-control" wire:model.defer="start_date" required
+                                        placeholder="Advertisement Start Date">
                                 </div>
                                 <div class="form-group">
-                                    <label>End Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="end_date" required>
+                                    <label>Advertisement End Date</label>
+                                    <input type="date" class="form-control" wire:model.defer="end_date" required
+                                        placeholder="Advertisement End Date">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -448,17 +455,19 @@
                                     <input type="time" class="form-control" wire:model.defer="time" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="date" required>
+                                    <label>Actual Date Of Event</label>
+                                    <input type="date" class="form-control" wire:model.defer="date" required
+                                        placeholder="Actual Date Of Event">
                                 </div>
                                 <div class="form-group">
-                                    <label>Start Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="start_date"
-                                        required>
+                                    <label>Advertisement Start Date</label>
+                                    <input type="date" class="form-control" wire:model.defer="start_date" required
+                                        placeholder="Advertisement Start Date">
                                 </div>
                                 <div class="form-group">
-                                    <label>End Date</label>
-                                    <input type="date" class="form-control" wire:model.defer="end_date" required>
+                                    <label>Advertisement End Date</label>
+                                    <input type="date" class="form-control" wire:model.defer="end_date" required
+                                        placeholder="Advertisement End Date">
                                 </div>
                             </div>
                             <div class="modal-footer">

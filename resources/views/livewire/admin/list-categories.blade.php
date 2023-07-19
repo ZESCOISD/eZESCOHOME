@@ -83,9 +83,9 @@
                             </div>
                             <div class="col-sm-4">
 
-                                @php
+                                {{-- @php
                                     echo 'Evaluation' . app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create');
-                                @endphp
+                                @endphp --}}
 
                                 @can('create')
                                     <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"

@@ -221,26 +221,7 @@
                                                                                             class="text-danger">{{ $message }}</span>
                                                                                     @enderror
                                                                                 </div>
-                                                                                <div class="form-group ">
-                                                                                    <label for="name">Role Type</label>
-                                                                                    <select class="form-control"
-                                                                                        id="role_name" name="role_name"
-                                                                                        wire:model.defer="role_name">
-                                                                                        <option name="role_name"
-                                                                                            value="0">Select a role
-                                                                                        </option>
-                                                                                        @foreach ($roles as $role)
-                                                                                            <option name="role_name"
-                                                                                                value="{{ $role->name }}">
-                                                                                                {{ $role->name }}
-                                                                                            </option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                    @error('role_name')
-                                                                                        <span
-                                                                                            class="text-danger">{{ $message }}</span>
-                                                                                    @enderror
-                                                                                </div>
+
                                                                                 <div class="form-group">
                                                                                     <label for="name">Password</label>
                                                                                     <input type="password"
@@ -333,12 +314,18 @@
                                                                             class="material-icons" data-toggle="tooltip"
                                                                             title="Edit">&#xE254;</i></a>
 
-
                                                                     <a href="#deleteUserModal" class="delete"
                                                                         data-toggle="modal" data-target="#deleteUserModal"
                                                                         wire:click="deleteUser({{ $user->user_id }})"><i
                                                                             class="material-icons" data-toggle="tooltip"
                                                                             title="Delete">&#xE872;</i></a>
+
+                                                                    <a href="#showRoleModal"
+                                                                        data-target="#assignRoleUserModal"
+                                                                        wire:click="showRole({{ $user->user_id }})"
+                                                                        class="role" data-toggle="modal"><i
+                                                                            style="font-size: 25px; color:green;"
+                                                                            class="bi bi-shield"></i></a>
 
                                                                 </td>
                                                             </tr>
@@ -473,19 +460,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group ">
-                                    <label for="name">Role ID</label>
-                                    <select class="form-control" id="role_name" name="role_name"
-                                        wire:model.defer="role_name">
-                                        @foreach ($roles as $role)
-                                            <option name="role_name" value="{{ $role->name }}">{{ $role->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('role_name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
+
 
                                 <div class="modal-footer mt-3" id="modal-footer">
                                     <button style="background-color: #1bad6c" type="submit"
@@ -563,6 +538,56 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
+
+                            <div class="modal-footer mt-3" id="modal-footer">
+                                <button style="background-color: #1bad6c" type="submit"
+                                    class="btn btn-danger">update</button>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show Role Modal HTML -->
+        <div wire:ignore.self class="modal fade" id="showRoleModal" tabindex="-1" role="dialog"
+            aria-labelledby="showRoleModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 80%;" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="showRoleModal">Assign Role to User</h5>
+                        <button id="modal-close" type="button" wire:click="closeModal" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div wire:loading wire:target="assignUserRole" class="loading-bar"></div>
+
+                    <div class="modal-body">
+
+                        {{--  --}}
+                        @if (session()->has('updatesuccessful'))
+                            <div id="dismiss"
+                                class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
+                                role="alert" style="border:none; font-size: 12px;">
+                                <p class="mt-3">{{ session('updatesuccessful') }}</p>
+                                <button style="color:white;" type="button" class="btn-close mt-1"
+                                    data-dismiss="alert" aria-label="Close">
+                                </button>
+                            </div>
+                        @endif
+
+                        <form wire:submit.prevent="assignUserRole">
+                            @csrf
+
+                            <div>
+                                <h4>Current User Role</h4>
+                                <p wire:model.defer="role_name"></p>
+                            </div>
                             <div class="form-group ">
                                 <label for="name">Role ID</label>
                                 <select class="form-control" id="role_name" name="role_name"
@@ -580,7 +605,7 @@
 
                             <div class="modal-footer mt-3" id="modal-footer">
                                 <button style="background-color: #1bad6c" type="submit"
-                                    class="btn btn-danger">update</button>
+                                    class="btn btn-danger">Assign Role</button>
 
 
 
@@ -591,6 +616,77 @@
             </div>
         </div>
 
+        <!-- Assign User Modal HTML -->
+        <div wire:ignore.self class="modal fade" id="assignRoleUserModal" tabindex="-1" role="dialog"
+            aria-labelledby="assignRoleUserModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 80%;" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="assignRoleUserModal">Assign Role to User</h5>
+                        <button id="modal-close" type="button" wire:click="closeModal" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div wire:loading wire:target="assignUserRole" class="loading-bar"></div>
+
+                    <div class="modal-body">
+
+                        {{--  --}}
+                        @if (session()->has('updatesuccessful'))
+                            <div id="dismiss"
+                                class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
+                                role="alert" style="border:none; font-size: 12px;">
+                                <p class="mt-3">{{ session('updatesuccessful') }}</p>
+                                <button style="color:white;" type="button" class="btn-close mt-1"
+                                    data-dismiss="alert" aria-label="Close">
+                                </button>
+                            </div>
+                        @endif
+
+                        <form wire:submit.prevent="assignUserRole">
+                            @csrf
+
+                            <div>
+                                <h4>Current User Role</h4>
+                                @if ($role_name)
+                                    <p style="color:#e09334;" wire:model.defer="role_name">{{ $role_name }}</p>
+                                @elseif (session()->has('updatesuccessful'))
+                                    <p style="color:#11be45;"> REFRESH THE PAGE TO VIEW NEW USER ROLE</p>
+                                @else
+                                    <p style="color:#f32828;">NO USER ROLE ASSIGNED</p>
+                                @endif
+
+                            </div>
+
+                            <h4 style="margin-bottom: 8px;">Assign New Role</h4>
+                            <div class="form-group ">
+                                <label for="name">Select Role</label>
+                                <select class="form-control" id="role_name" name="role_name"
+                                    wire:model.defer="role_name">
+                                    @foreach ($roles as $role)
+                                        <option name="role_name" value="{{ $role->name }}">
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('role_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="modal-footer mt-3" id="modal-footer">
+                                <button style="background-color: #1bad6c" type="submit"
+                                    class="btn btn-danger">Assign Role</button>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- Delete Modal HTML -->

@@ -203,7 +203,7 @@ class ZescoHome extends Component
                      'product.url as product_url','product.product_id as product_id',
                      'status.name as name','product.number_of_clicks as number_of_clicks')
             ->where('status.name','=','active')
-            ->where('category')
+            // ->where('category')
             ->orderBy('category.name')
             ->get();
 

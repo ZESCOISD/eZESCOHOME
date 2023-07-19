@@ -202,7 +202,7 @@ class Roles extends Component
             sleep(4);
             // $this->
             //  $this->current_role;
-             dd($this->viewRole());
+            //  dd($this->viewRole());
             //  dd($this->current_role);
             $this->loading = false;
         }

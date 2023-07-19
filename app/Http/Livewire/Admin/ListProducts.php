@@ -40,38 +40,6 @@ class ListProducts extends Component
     public $preview_image;
     public $search;
     public $allData = [];
-    // protected function rules(){
-
-
-    //     return[
-    //         'name' => 'required|min:3|max:200',
-    //         'icon_link' => 'nullable|image|max:15240',
-    //         'category_id' => '',
-    //         'status_id' => '',
-    //         'user_manual' => 'nullable|mimes:pdf|max:10240',
-    //          'video' => 'nullable|mimes:mp4|max:16240',
-    //          'cost_saving' => 'required|numeric',
-    //         'system_cover_image'=> 'nullable|image|max:5024',
-    //         'url' => 'required|url',
-    //         'test_url' => 'required|url',
-    //         'lead_developer' => '',
-    //         'short_description' => 'required|min:3|max:200',
-    //         'long_description' => 'required|min:3|max:300',
-    //         'tutorial_url' => 'required|url',
-    //         'date_launched' => 'nullable|date',
-    //         'date_decommissioned' => 'nullable|date',
-    //     ];
-
-
-
-
-    // }
-
-
-    // public function updated($fields)
-    // {
-    //     $this->validateOnly($fields);
-    // }
 
     public function saveProduct(){
 

@@ -27,9 +27,9 @@ class UpcomingEvent extends Component
         'venue' => 'required|min:3|max:50',
         'fee' => 'nullable|numeric',
         'time' => 'required|date_format:H:i',
-        'date' => 'required|date',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date',
+        'date' => '',
+        'start_date' => '',
+        'end_date' => '',
         ];
 
     }
@@ -91,10 +91,10 @@ class UpcomingEvent extends Component
         sleep(2);
 
         //  dd(111);
-        $validateData = $this ->validate();
+        $validateData = $this->validate();
         dd(222);
         dd($validateData);
-        // dd($validateData);
+        dd($validateData);
         UpcomingEvents::where('id',$this->event_id)->update([
             'event_name' => $validateData['event_name'],
             'event_description' => $validateData['event_description'],

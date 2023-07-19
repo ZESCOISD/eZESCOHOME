@@ -19,6 +19,7 @@ class ListUsers extends Component
     protected $paginationTheme = 'bootstrap';
 
      public $activeTab = 'tab1';
+    public $current_role;
     public $user_id, $fname, $sname, $email, $staff_number, $role_name, $password, $password_confirmation;
     public $update_staff_number, $update_password, $update_password_confirmation;
 
@@ -26,17 +27,20 @@ class ListUsers extends Component
     public $loading = false;
     public $allData = [];
 
+
+    public function mount(){
+        $this->current_role;
+    }
     protected function rules(){
         return[
             'fname' => 'required|min:3|max:20',
             'sname' => 'required|min:3|max:20',
             'email' => 'required|email',
             'staff_number' => 'required|min:3|max:20',
-            'role_name' => '',
             'password' => 'required|min:8|same:password_confirmation',
             'password_confirmation' => 'required',
         ];
-        
+
     }
 
     public function updated($fields)
@@ -45,74 +49,73 @@ class ListUsers extends Component
     }
 
     public function register(){
-        $validateData = $this ->validate();
+        $validateData = $this->validate();
 
-        $loading = true;
+        $this->loading = true;
         sleep(2);
 
-        if ($this->role_name == "0") {
-            $this->addError('selectedOption', 'Please select a valid option.');
-            return;
-            $loading = false;
-        }elseif($this->role_name == "admin"){
+        $hashpassword = Hash::make($this->password);
+        $validateData = User::create([
+                        'fname' => $this->fname,
+                        'sname' => $this->sname,
+                        'email' => $this->email,
+                        'staff_number' => $this->staff_number,
+                        'password' => $hashpassword,
+                        'password_confirmation' => $hashpassword
+        ]);
 
-            $hashpassword = Hash::make($this->password);
-            $user = User::create([
-                        'fname' => $this->fname,
-                        'sname' => $this->sname,
-                       'email' => $this->email,
-                        'staff_number' => $this->staff_number,
-                        'name' => $this->role_name,
-                        'password' => $hashpassword,
-                        'password_confirmation' => $hashpassword
-            ])->assignRole('admin');
-            
-                session()->flash('registeredsuccessful','A new user was successfully added');
+            session()->flash('registeredsuccessful','User Was Added Successfully');
             $this->resetInput();
             $this->dispatchBrowserEvent('close-modal');
-            $this->resetPage();
-            $loading = false;
-           
-        } elseif($this->role_name == "management"){
+            session()->flash('error', 'Failed to Assign');
 
-            $hashpassword = Hash::make($this->password);
-            $user = User::create([
-                        'fname' => $this->fname,
-                        'sname' => $this->sname,
-                       'email' => $this->email,
-                        'staff_number' => $this->staff_number,
-                        'name' => $this->role_name,
-                        'password' => $hashpassword,
-                        'password_confirmation' => $hashpassword
-            ])->assignRole('management');
-            
-                session()->flash('registeredsuccessful','A new user was successfully added');
-            $this->resetInput();
-            $this->dispatchBrowserEvent('close-modal');
-            $this->resetPage();
-            $loading = false;
-           
-            
-        }else{
-              $hashpassword = Hash::make($this->password);
-            $user = User::create([
-                        'fname' => $this->fname,
-                        'sname' => $this->sname,
-                       'email' => $this->email,
-                        'staff_number' => $this->staff_number,
-                        'name' => $this->role_name,
-                        'password' => $hashpassword,
-                        'password_confirmation' => $hashpassword
-            ]);
-            
-                session()->flash('registeredsuccessful','A new user was successfully added');
-            $this->resetInput();
-            $this->dispatchBrowserEvent('close-modal');
-            $this->resetPage();
-            $loading = false;
-        }
-       
+        $this->loading = false;
+
     }
+
+     public function showRole(int $user_id){
+
+        $this->user_id = $user_id;
+        $user = User::find($user_id);
+
+        if($user){
+
+            $this->current_role = $user->name;
+            $this->role_name = $user->name;
+        }else{
+            return redirect()->to('/users.manage');
+        }
+    }
+
+    public function assignUserRole(){
+
+        $this->loading = true;
+        sleep(2);
+
+           $users = User::where('user_id','=', $this->user_id )->first();
+
+
+           $this->validate([
+            'role_name' => 'nullable|min:2|max:50',
+        ]);
+
+
+         $users->name = $this->role_name;
+        $result = $users->assignRole($this->role_name)->update();
+
+        // dd($result);
+
+          if ($result) {
+            session()->flash('updatesuccessful','Role Was Assigned to successfully');
+            $this->resetInput();
+            $this->dispatchBrowserEvent('close-modal');
+        } else {
+            session()->flash('error', 'Failed to Assign');
+        }
+
+        $this->loading = false;
+    }
+
 
     public function editUser(int $user_id){
         $user = User::find($user_id);
@@ -122,7 +125,7 @@ class ListUsers extends Component
             $this->sname = $user->sname;
             $this->email = $user->email;
             $this->staff_number = $user->staff_number;
-            $this->role_name = $user->name;
+            // $this->role_name = $user->name;
             $this->password = $user->password;
             $this->password_confirmation = $user->password_confirmation;
         }else{
@@ -164,7 +167,7 @@ class ListUsers extends Component
         $this->dispatchBrowserEvent('close-modal');
 
         $loading = false;
-        
+
     }
 
      public function updatePassword(){
@@ -230,14 +233,14 @@ class ListUsers extends Component
             session()->flash('error', 'Failed To Updated Password');
         }
        }
-   
+
         $this->loading = false;
-        
+
     }
 
-  
 
-   
+
+
 
     public function deleteUser(int $user_id){
         $this->user_id = $user_id;
@@ -256,13 +259,13 @@ class ListUsers extends Component
 
     public function logout()
     {
-       
+
         Auth::logout();
         return redirect('login');
 
     }
 
-    
+
     public function render()
     {
         $users = User::where('user_id', 'like', '%'.$this->search.'%')->orderBy('user_id','ASC')->paginate(5);
