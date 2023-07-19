@@ -203,14 +203,14 @@
 
                                     <td>
                                         @can('update')
-                                            <a type="button" href="#updateFaqModal" data-toggle="modal"
+                                            <a type="button" href="#editFaqModal" data-toggle="modal"
                                                 data-target="#updateFaqModal" wire:click="editFaq({{ $faq->id }})"
                                                 class="edit"><i class="material-icons" data-toggle="tooltip"
                                                     title="Edit">&#xE254;</i></a>
                                         @endcan
 
                                         @role('admin')
-                                            <a type="button" href="#updateFaqModal" data-toggle="modal"
+                                            <a type="button" href="#editFaqModal" data-toggle="modal"
                                                 data-target="#updateFaqModal" wire:click="editFaq({{ $faq->id }})"
                                                 class="edit"><i class="material-icons" data-toggle="tooltip"
                                                     title="Edit">&#xE254;</i></a>

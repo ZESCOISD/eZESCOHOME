@@ -181,3 +181,26 @@ $(function() {
       slider.scrollLeft = scrollLeft - walk;
       console.log(walk);
     });
+
+    // Get the modal element
+var modal = document.getElementById("modal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("openModal");
+
+// Get the close button element
+var closeBtn = document.getElementsByClassName("close")[0];
+
+// Function to open the modal
+function openModal() {
+  modal.style.display = "block";
+}
+
+// Function to close the modal
+function closeModal() {
+  modal.style.display = "none";
+}
+
+// Event listeners
+btn.addEventListener("click", openModal);
+closeBtn.addEventListener("click", closeModal);

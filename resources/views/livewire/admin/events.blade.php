@@ -277,7 +277,7 @@
                                     <td>{{ $upcoming_event->end_date }}</td>
                                     <td>
                                         @can('update')
-                                            <a type="button" href="#updateEventModal" data-toggle="modal"
+                                            <a type="button" href="#editEventModal" data-toggle="modal"
                                                 data-target="#updateEventModal"
                                                 wire:click="editEvent({{ $upcoming_event->id }})" class="edit"><i
                                                     class="material-icons" data-toggle="tooltip"
@@ -285,7 +285,7 @@
                                         @endcan
 
                                         @role('admin')
-                                            <a type="button" href="#updateEventModal" data-toggle="modal"
+                                            <a type="button" href="#editEventModal" data-toggle="modal"
                                                 data-target="#updateEventModal"
                                                 wire:click="editEvent({{ $upcoming_event->id }})" class="edit"><i
                                                     class="material-icons" data-toggle="tooltip"

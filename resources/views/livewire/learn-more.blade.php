@@ -95,7 +95,7 @@
                                         @endif --}}
 
                             @if ($product)
-                               {{-- @foreach($product as $video) --}}
+                                {{-- @foreach ($product as $video) --}}
                                 <div class="ratio ratio-16x9">
                                     <iframe width="100%" height="520px"
                                         src="{{ asset('storage') }}/{{ $product->video }}" title="How to?"
@@ -116,7 +116,9 @@
 
                             <h5 style="font-size: 25px; color:#1bad6c;">Active Since</h5>
                             <p wire:model.defer='name'>{{ $date_launched }}</p>
-                            <h4 id="visit-system" type="button" href="#learnMoreModal">Visit {{ $name }}
+                            <h4 onclick=" window.location='{{ $product_link }}'"
+                                wire:click="incrementClicks({{ $product_id }})" id="visit-system" type="button"
+                                href="#learnMoreModal">Visit {{ $name }}
                             </h4>
                         </div>
 

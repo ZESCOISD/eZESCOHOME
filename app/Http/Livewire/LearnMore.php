@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\ProductClicks;
+use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\Product;
 use App\Models\SuggestionBox;
@@ -9,11 +11,13 @@ use App\Models\SuggestionBox;
 class LearnMore extends Component
 {
 
-    
+
     public $product_id;
     public $name;
     public $video;
     public $icon_link;
+
+    public $product_link;
     public $short_description;
     public $long_description;
     public $date_launched;
@@ -55,6 +59,38 @@ class LearnMore extends Component
 
     }
 
+    public function incrementClicks($product_id)
+    {
+        //one - increment in system / products table
+        $product = Product::find($product_id);
+        // dd($product);
+        $product->number_of_clicks++;
+        $product->save();
+
+        $product_clicks = ProductClicks::where('product_id',  $product->product_id )
+        ->where('product_url',  $product->url )
+        ->whereDate('created_at', Carbon::today())->first();
+
+        //  dd($product_clicks);
+        // sleep(30);
+
+        if($product_clicks){   // if exits then update
+
+            // dd(1111);
+
+            $product_clicks->number_of_clicks++;
+            $product_clicks->save();
+        }else{
+            $product_clicks = new ProductClicks();
+            $product_clicks->product_url = $product->url;
+            $product_clicks->product_name = $product->name;
+            $product_clicks->product_id = $product->product_id;
+            $product_clicks->number_of_clicks = 1;
+            $product_clicks->save();
+        }
+
+    }
+
     public function closeModal(){
         $this->resetInput();
     }
@@ -65,13 +101,14 @@ class LearnMore extends Component
 
         if($product){
             $this->product_id = $product->product_id;
+            $this->product_link = $product->url;
             $this->name = $product->name;
             $this->video = $product->video;
             $this->icon_link = $product->icon_link;
             $this->short_description = $product->short_description;
             $this->long_description = $product->long_description;
             $this->date_launched = $product->date_launched;
-           
+
         }else{
             return redirect()->to('/ezesco-systems');
         }

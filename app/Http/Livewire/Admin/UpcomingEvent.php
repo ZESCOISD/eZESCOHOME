@@ -23,7 +23,7 @@ class UpcomingEvent extends Component
     protected function rules(){
         return[
         'event_name' => 'required|min:2|max:50',
-        'event_description' => 'required|min:3|max:200',
+        'event_description' => 'required|min:3|max:500',
         'venue' => 'required|min:3|max:50',
         'fee' => 'nullable|numeric',
         'time' => 'required|date_format:H:i',
@@ -90,8 +90,10 @@ class UpcomingEvent extends Component
         $this->loading = true;
         sleep(2);
 
+         dd(111);
         $validateData = $this ->validate();
-
+        dd(222);
+        dd($validateData);
         // dd($validateData);
         UpcomingEvents::where('id',$this->event_id)->update([
             'event_name' => $validateData['event_name'],
