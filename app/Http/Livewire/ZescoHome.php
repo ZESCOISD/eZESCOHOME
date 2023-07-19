@@ -184,10 +184,7 @@ class ZescoHome extends Component
     }
 
 
-    // public function shouldRender()
-    // {
-    //     return $this->searchedProduct !== null || $this->searchQuery !== null;
-    // }
+  
 
     public function render()
     {
