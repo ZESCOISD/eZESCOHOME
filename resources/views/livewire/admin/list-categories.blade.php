@@ -82,7 +82,11 @@
                                 <span class="input-group-append">
                             </div>
                             <div class="col-sm-4">
-                                {{-- <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Category</span></a> --}}
+
+                                @php
+                                    echo 'Evaluation' . app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create');
+                                @endphp
+
                                 @can('create')
                                     <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
                                         data-target="#addCategoryModal"><i class="material-icons">&#xE147;</i> <span>Add New

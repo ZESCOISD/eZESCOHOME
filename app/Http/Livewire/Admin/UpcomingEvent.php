@@ -90,7 +90,7 @@ class UpcomingEvent extends Component
         $this->loading = true;
         sleep(2);
 
-         dd(111);
+        //  dd(111);
         $validateData = $this ->validate();
         dd(222);
         dd($validateData);

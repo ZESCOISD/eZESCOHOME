@@ -39,17 +39,17 @@ class Roles extends Component
     }
 
     public function saveRole(){
-        $this->loading = true;     
+        $this->loading = true;
         sleep(2);
         $validateData = $this ->validate();
-        
+
             Role::create($validateData);
             session()->flash('savesuccessful','A new role was successfully added');
             $this->resetInput();
             $this->dispatchBrowserEvent('close-modal');
             $this->resetPage();
         $this->loading = false;
-        
+
     }
 
     public function editRole(int $role_id){
@@ -74,7 +74,7 @@ class Roles extends Component
     }
 
     public function updateRole(){
-        $this->loading = true;     
+        $this->loading = true;
         sleep(2);
         $validateData = $this ->validate();
         Role::where('id',$this->role_id)->update([
@@ -83,7 +83,7 @@ class Roles extends Component
         session()->flash('updatesuccessful','Role details where successfully updated');
         $this->resetInput();
         $this->dispatchBrowserEvent('close-modal');
-        $this->loading = false;   
+        $this->loading = false;
     }
 
     public function deleteRole(int $role_id){
@@ -91,17 +91,17 @@ class Roles extends Component
     }
 
     public function destroyRole(){
-        $this->loading = true;     
+        $this->loading = true;
         sleep(2);
 
         Role::find($this->role_id)->delete();
         session()->flash('deletesuccessful','Role was successfully deleted');
         $this->dispatchBrowserEvent('close-modal');
 
-        $this->loading = false;  
+        $this->loading = false;
     }
 
-    // 
+    //
 
      public function deletePermission($permission_id){
         $this->permission_id = $permission_id;
@@ -109,10 +109,10 @@ class Roles extends Component
 
 
      public function revokePermission( Role $role, Permission $permission){
-        $this->loading = true; 
+        $this->loading = true;
         sleep(2);
 
-        $permission_id = $this->permission_id; 
+        $permission_id = $this->permission_id;
 
         $role = Role::findById($this->role_id);
         $permission = Permission::findById($this->permission_id);
@@ -122,17 +122,18 @@ class Roles extends Component
              session()->flash('revoked','Permission Has Been Revoked.');
             // $this->resetInput();
             // $this->dispatchBrowserEvent('close-modal');
-            $this->loading = false; 
+            $this->loading = false;
             $this->current_role;
-            
+
         }
         return back()->with('nopermission','This Role has no "'.$permission->name.'" Permission.');
     }
 
-    // 
+    //
 
 
     public function viewRole(int $role_id){
+
         $role = Role::find($role_id);
 
 
@@ -142,10 +143,11 @@ class Roles extends Component
             ->where('role_has_permissions.role_id','=',$role_id)
             ->get();
         // dd($this->current_role);
-            
-        if($this->current_role == []){
-            $this->current_role = 'No permissions attached to this Role';
-        }
+
+        // if($this->current_role == []){
+        //     $this->current_role = 'No permissions attached to this Role';
+        // }
+
 
         if($role){
             $this->role_id = $role->id;
@@ -165,7 +167,7 @@ class Roles extends Component
     }
 
     public function givePermission( Role $role){
-       
+
 
          $this->validate([
             'permission_id' => 'required',
@@ -179,40 +181,40 @@ class Roles extends Component
                 // $this-> permission_id ='';
             $this->dispatchBrowserEvent('close-modal');
         }else{
-           
+
 
               $role = Role::findById($this->role_id);
             //   dd($this->role_id);
         $permission = Permission::findById($this->permission_id);
 
        if($role->hasPermissionTo($permission)){
-          $this->loading = true; 
+          $this->loading = true;
              sleep(2);
              session()->flash('message','Permission Already Exists.');
               $this-> name ='';
-                $this-> permission_name ='';    
-            $this->loading = false; 
+                $this-> permission_name ='';
+            $this->loading = false;
         }else{
             $role->givePermissionTo($permission);
-              $this->loading = true; 
-             
+              $this->loading = true;
+
             session()->flash('givepermissionsuccessful','Permission was successfully Added Wait For Page To Reload');
             sleep(4);
             // $this->
             //  $this->current_role;
              dd($this->viewRole());
             //  dd($this->current_role);
-            $this->loading = false;   
+            $this->loading = false;
         }
         }
 
-        // $permission_id = $this->permission_id; 
+        // $permission_id = $this->permission_id;
 
     }
 
     public function sync_Permission(){
 
-        
+
 
         // dd($current_role);
          $this->validate([
@@ -220,10 +222,10 @@ class Roles extends Component
         ]);
 
         if($this->permission_id === '0'){
-              
+
             session()->flash('empty','Field is required');
 
-          
+
             // $this->resetInput();
                  $this-> name ='';
                 $this-> permission_name ='';
@@ -231,7 +233,7 @@ class Roles extends Component
             $this->dispatchBrowserEvent('close-modal');
         }else{
 
-             $this->loading = true; 
+             $this->loading = true;
             sleep(2);
 
              $role = Role::find($this->role_id);
@@ -245,18 +247,18 @@ class Roles extends Component
         if($role->syncPermissions($permission)){
              session()->flash('syncsuccess','Permission(s) Synced Successfully');
               $this-> name ='';
-            $this-> permission_name ='';    
-           
-            $this->loading = false; 
+            $this-> permission_name ='';
+
+            $this->loading = false;
         }else{
-           
+
             session()->flash('syncerror','Role might have no Permission(s). Refresh and try again.');
-           
+
              $this->current_role;
-            $this->loading = false;   
+            $this->loading = false;
         }
         }
-         
+
     }
 
     public function close()
@@ -269,10 +271,10 @@ class Roles extends Component
 
     public function logout()
     {
-   
+
         Auth::logout();
         return redirect('login');
-       
+
     }
 
 

@@ -94,16 +94,12 @@ class ZescoHome extends Component
             ->get();
 
             if($categoryclick->isEmpty()){
-                // $this->getSelectedProducts = $categoryclick->push;
+
                   $this->getSelectedCategory = "No Applications are available for this Category";
             // dd(1);
             }else{
                  $this->getSelectedProducts = $categoryclick;
             }
-
-
-        // dd($this->getSelectedProducts);
-        // $this->getSelectedCategory = $categoryclick->category_name;
 
             $this->loading = false;
 
@@ -196,16 +192,8 @@ class ZescoHome extends Component
     public function render()
     {
         $showCategories = DB::table('category')
-        // ->join('product', 'category.category_id', '=', 'product.category_id')
-        // ->join('status', 'product.status_id', '=', 'status.status_id')
-        // ->select('category.category_id','category.name as category_name', 'product.name as product_name',
-        //          'product.url as product_url','product.product_id as product_id','product.url',
-        //          'status.name as name','product.number_of_clicks as number_of_clicks')
-        // ->where('status.name','=','active')
         ->orderBy('name')
         ->get();
-
-        // $groupedClickedCategories = $showCategories->groupBy('category_name');
 
         $system_carousel = Product::all();
         $categories = DB::table('category')
@@ -215,13 +203,13 @@ class ZescoHome extends Component
                      'product.url as product_url','product.product_id as product_id',
                      'status.name as name','product.number_of_clicks as number_of_clicks')
             ->where('status.name','=','active')
+            ->where('category')
             ->orderBy('category.name')
             ->get();
 
 
         $groupedCategories = $categories->groupBy('category_name');
 
-        // dd($groupedCategories);
         $getProducts = DB::table('product')
                     ->join('status','product.status_id','=','status.status_id')
                     ->select('product.name','product.number_of_clicks as clicks',
@@ -241,14 +229,6 @@ class ZescoHome extends Component
         $categories = $groupedCategories;
 
 
-        // $important_notice = DB::table('notices')
-        //     ->select('notice_name', 'description', 'staff_name', 'staff_title', 'department', 'start_date', 'end_date')
-        //     ->whereDate('start_date', '<=', Carbon::today())
-        //     ->whereDate('end_date', '>=', Carbon::today())
-        //     ->latest('created_at')
-        //     ->limit(1)
-        //     ->get();
-
         $more_notices = DB::table('notices')
             ->select('id','notice_name', 'description', 'staff_name', 'staff_title', 'department', 'start_date', 'end_date')
             ->whereDate('start_date', '<=', Carbon::today())
@@ -264,9 +244,7 @@ class ZescoHome extends Component
         $faqs = FAQ::all();
         $slides = Slide::all();
         $quotes = Quote::all();
-
         $ezesco_products = Product::all();
-        // dd($slides);
 
         return view('livewire.zesco-home',[
                 'groupedCategories' => $groupedCategories,

@@ -580,7 +580,7 @@
                                                                         <div class="card-body"
                                                                             id="categoryCards-body">
                                                                             <div class="row">
-                                                                                <div class="col-lg-12">
+                                                                                <div class="col-lg-12 text-center">
                                                                                     <h4 class="card-title"
                                                                                         id="categoryCards-title">
                                                                                         Results</h4>
