@@ -76,6 +76,8 @@ class LearnMore extends Component
             return redirect()->to('/ezesco-systems');
         }
 
+        // dd($product->video);
+
         return view('livewire.learn-more',[
             'product' => $product,
         ]);

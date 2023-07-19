@@ -95,18 +95,14 @@
                                         @endif --}}
 
                             @if ($product)
+                               {{-- @foreach($product as $video) --}}
                                 <div class="ratio ratio-16x9">
                                     <iframe width="100%" height="520px"
-                                        src="{{ asset('storage') }}{{ $product->video }}" title="How to?"
-                                        allowfullscreen></iframe>
+                                        src="{{ asset('storage') }}/{{ $product->video }}" title="How to?"
+                                        allowfullscreen>
+                                    </iframe>
                                 </div>
-
-                                {{-- <video width="100%" height="520px" poster="/img/watch.svg" autoplay controls>
-                                    <source src="{{ asset('storage') }}{{ $product->video }}"
-                                        type="{{ $product->mime_type }}">
-
-                                    Your browser does not support the video tag.
-                                </video> --}}
+                                {{-- @endforeach --}}
                             @endif
 
                             {{-- <h4 class="mt-2" wire:click="learnMore({{ $product_id }})" id="visit-system"
