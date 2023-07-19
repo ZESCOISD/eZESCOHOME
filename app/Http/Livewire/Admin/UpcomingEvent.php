@@ -92,9 +92,9 @@ class UpcomingEvent extends Component
 
         //  dd(111);
         $validateData = $this->validate();
-        dd(222);
-        dd($validateData);
-        dd($validateData);
+        // dd(222);
+        // dd($validateData);
+        // dd($validateData);
         UpcomingEvents::where('id',$this->event_id)->update([
             'event_name' => $validateData['event_name'],
             'event_description' => $validateData['event_description'],

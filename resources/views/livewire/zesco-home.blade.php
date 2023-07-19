@@ -1,13 +1,25 @@
 @push('custom-styles')
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/js/bootstrap.js" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="assets/bootstrap/bootstrap.css"> --}}
+
     <link href="assets/css/home.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
     <style>
         .copyright-info {
             color: #fff
+        }
+
+        /* Optional custom styles */
+        .carousel-item {
+            height: 300px;
+        }
+
+        .carousel-item img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
         }
     </style>
 @endpush
@@ -108,12 +120,6 @@
 
                                     <li>
 
-                                        <a href="#"> <i class="bi bi-person-lines-fill text-center"></i><br>About
-                                            us</a>
-                                    </li>
-
-                                    <li>
-
                                         <a href="#"><i class="bi bi-menu-up"></i><br> Contact</a>
                                     </li>
                                     <li>
@@ -137,8 +143,8 @@
                         <!-- /top nav -->
 
                         <section>
-                            {{-- <div class="container-fluid"> --}}
-                            {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"> --}}
+
+
                             <div id="carouselExampleIndicators" class="carousel slide carousel-fade"
                                 data-ride="carousel">
                                 <ol class="carousel-indicators">
@@ -171,8 +177,9 @@
                                     <span class="sr-only">Next</span>
                                 </a>
                             </div>
-                            {{-- </div> --}}
-                            {{-- </div> --}}
+
+
+
                         </section>
 
                         <section id="counts" class="counts section-bg text-center">
@@ -545,10 +552,12 @@
                                                                         <div class="text-center" type="button"
                                                                             onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
                                                                             wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
-                                                                            <i id="system-icon"
+                                                                            <i style="font-size: 30px; color:#5fcf80;"
+                                                                                id="system-icon"
                                                                                 class="bi bi-bar-chart-fill"></i>
                                                                         </div>
-                                                                        <p id="system-name" type="button"
+                                                                        <p style="font-size: 15px;" id="system-name"
+                                                                            type="button"
                                                                             onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
                                                                             class="text-center"
                                                                             wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
@@ -570,40 +579,6 @@
                                                                             display: none;
                                                                         }
                                                                     </style>
-                                                                </div>
-                                                            @else
-                                                                <div
-                                                                    class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                                                                    <div class="card category-card-animated flex-column"
-                                                                        id="categoryCards">
-
-                                                                        <div class="card-body"
-                                                                            id="categoryCards-body">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12 text-center">
-                                                                                    <h4 class="card-title"
-                                                                                        id="categoryCards-title">
-                                                                                        Results</h4>
-                                                                                    <p id="categoryCards-text"
-                                                                                        class="card-text mt-2">
-                                                                                        No Systems Are Available
-                                                                                        For
-                                                                                        This System Yet</p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                        <style>
-                                                                            #search-cards {
-                                                                                display: none;
-                                                                            }
-
-                                                                            #frequently-accessed-system {
-                                                                                display: none;
-                                                                            }
-                                                                        </style>
-                                                                        </a>
-                                                                    </div>
                                                                 </div>
                                                             @endif
                                                         @endforeach
@@ -649,9 +624,11 @@
                                                             <div class="col-md-6" data-aos="fade-up"
                                                                 data-aos-delay="200">
                                                                 <div class="icon-box">
-                                                                    <i class="bi bi-buildings"></i>
+                                                                    <i style="color: white;"
+                                                                        class="bi bi-buildings"></i>
                                                                     <h3>Getway</h3>
-                                                                    <p>eZesco is the getway to other system's you
+                                                                    <p style="text-indent: 0px;">eZesco is the getway
+                                                                        to other system's you
                                                                         wish to access</p>
                                                                 </div>
                                                             </div>
@@ -659,9 +636,11 @@
                                                             <div style="margin-top: 10px;" class="col-md-6"
                                                                 data-aos="fade-up" data-aos-delay="300">
                                                                 <div class="icon-box">
-                                                                    <i class="bi bi-clipboard-pulse"></i>
+                                                                    <i style="color: white;"
+                                                                        class="bi bi-clipboard-pulse"></i>
                                                                     <h3>Strategic Solutions</h3>
-                                                                    <p>Providing well-thought-out and effective
+                                                                    <p style="text-indent: 0px;">Providing
+                                                                        well-thought-out and effective
                                                                         approaches to problems.</p>
                                                                 </div>
                                                             </div>
@@ -669,9 +648,11 @@
                                                             <div style="margin-top: 50px" class="col-md-6"
                                                                 data-aos="fade-up" data-aos-delay="400">
                                                                 <div class="icon-box">
-                                                                    <i class="bi bi-command"></i>
+                                                                    <i style="color: white;"
+                                                                        class="bi bi-command"></i>
                                                                     <h3>Performance-Driven</h3>
-                                                                    <p> Focusing on achieving and exceeding
+                                                                    <p style="text-indent: 0px;"> Focusing on achieving
+                                                                        and exceeding
                                                                         performance goals and targets.</p>
                                                                 </div>
                                                             </div>
@@ -679,9 +660,11 @@
                                                             <div style="margin-top: -220px;" class="col-md-6"
                                                                 data-aos="fade-up" data-aos-delay="500">
                                                                 <div class="icon-box">
-                                                                    <i class="bi bi-graph-up-arrow"></i>
+                                                                    <i style="color: white;"
+                                                                        class="bi bi-graph-up-arrow"></i>
                                                                     <h3>Continuous improvement</h3>
-                                                                    <p> Committing to ongoing learning, growth, and
+                                                                    <p style="text-indent: 0px;"> Committing to ongoing
+                                                                        learning, growth, and
                                                                         refinement of processes and
                                                                         practices.</p>
                                                                 </div>

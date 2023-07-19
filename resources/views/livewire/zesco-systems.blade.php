@@ -14,7 +14,7 @@
 
     <body id="index-body">
 
-        <nav wire:ignore class="navbar navbar-inverse navbar-fixed-top">
+        <nav wire:ignore class="navbar navbar-inverse navbar-static-top">
 
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -27,10 +27,7 @@
 
                 <ul class="nav navbar-nav navbar-right navbar-item text-center">
 
-                    <li>
-                        <i class="bi bi-person-lines-fill text-center"></i><br>
-                        <a href="#"> About us</a>
-                    </li>
+
 
                     <li>
                         <i class="bi bi-menu-up"></i><br>

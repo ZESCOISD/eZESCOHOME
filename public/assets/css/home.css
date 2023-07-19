@@ -1193,3 +1193,9 @@ a span {
 #back-to-top .btn.btn-primary:hover {
     color: #fff;
 }
+
+
+.carousel-inner {
+    width: 100%;
+    max-height: 400px !important;
+}
