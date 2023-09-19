@@ -27,7 +27,7 @@ class ListProducts extends Component
     public $categories;
     public $product = [];
     public $selected = '';
-    public $developers = [] ;
+    public $developers = [];
     public $selectedReportType = false;
     public $loading = false;
     public $name, $product_id, $icon_link, $category_id,
@@ -40,6 +40,12 @@ class ListProducts extends Component
     public $search;
     public $allData = [];
     protected $paginationTheme = 'bootstrap';
+
+
+    protected $listeners = [
+        'link_status' => 'checkSystemStatus'
+    ];
+
 
     public function saveProduct()
     {
@@ -73,12 +79,13 @@ class ListProducts extends Component
         $filename4 = "";
 
 
-        if ($this->category_id == "0" || $this->status_id == "0"
-            || $this->lead_developer == "0") {
+        if (
+            $this->category_id == "0" || $this->status_id == "0"
+            || $this->lead_developer == "0"
+        ) {
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
             $loading = false;
-
         } else {
 
             if ($this->icon_link) {
@@ -89,7 +96,6 @@ class ListProducts extends Component
 
             if ($this->user_manual) {
                 $filename2 = $this->user_manual->storeAs('pdfs', $this->user_manual->getClientOriginalName(), 'public');
-
             } else {
                 $filename2 = null;
             }
@@ -137,16 +143,13 @@ class ListProducts extends Component
                 $this->resetInput();
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetPage();
-
             } else {
                 session()->flash('error', 'Product Not Added Successfully');
             }
-
         }
 
 
         $loading = false;
-
     }
 
     public function resetInput()
@@ -176,8 +179,10 @@ class ListProducts extends Component
 
         // dd($product);
         if ($this->product) {
-            if ($this->category_id == "0" || $this->status_id == "0"
-                || $this->lead_developer == "0") {
+            if (
+                $this->category_id == "0" || $this->status_id == "0"
+                || $this->lead_developer == "0"
+            ) {
                 $this->addError('selectedOption', 'Please select a valid option.');
                 return;
             } else {
@@ -227,8 +232,6 @@ class ListProducts extends Component
         } else {
             return redirect()->to('/product.manage');
         }
-
-
     }
 
     public function closeModal()
@@ -273,12 +276,13 @@ class ListProducts extends Component
         $filename4 = "";
 
 
-        if ($this->category_id == "0" || $this->status_id == "0"
-            || $this->lead_developer == "0") {
+        if (
+            $this->category_id == "0" || $this->status_id == "0"
+            || $this->lead_developer == "0"
+        ) {
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
             $loading = false;
-
         } else {
 
             if ($this->icon_link) {
@@ -329,11 +333,9 @@ class ListProducts extends Component
                 $this->resetInput();
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetPage();
-
             } else {
                 session()->flash('error', 'Product Not Added Successfully');
             }
-
         }
 
         $loading = false;
@@ -360,8 +362,6 @@ class ListProducts extends Component
 
         Auth::logout();
         return redirect('login');
-
-
     }
 
     public function render()
@@ -400,19 +400,27 @@ class ListProducts extends Component
     }
 
 
-//    public function checkSystemStatus(){
-//        //get a list of all systems
-//        $products = Product::get();
-//        //loop through
-//        foreach ($products as $product){
-//            $result = ProductService::heartBeatCheck($product->url) ;
-//            //check the result
-//            if($result == 1){
-//                $product->status = 1 ;
-//            }else{
-//                $product->status = 0 ;
-//            }
-//            $product->save();
-//        }
-//    }
+    public function checkSystemStatus($payload)
+    {
+
+        $link = json_decode($payload['links'], true);
+
+        //get a list of all systems
+        $products = Product::get();
+        //loop through
+        foreach ($products as $product) {
+            //    $result = ProductService::heartBeatCheck($product->url) ;
+            $failures = $link[$product->url]??"Not monitored";
+
+            // if ($failures != null)
+            //     dd($failures);
+            //check the result
+            if ($failures > 3) {
+                $product->status = "Not active";
+            } else {
+                $product->status = "Active";
+            }
+            $product->save();
+        }
+    }
 }
