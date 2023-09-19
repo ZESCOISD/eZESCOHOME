@@ -398,4 +398,21 @@ class ListProducts extends Component
             'roles' => $roles,
         ]);
     }
+
+
+//    public function checkSystemStatus(){
+//        //get a list of all systems
+//        $products = Product::get();
+//        //loop through
+//        foreach ($products as $product){
+//            $result = ProductService::heartBeatCheck($product->url) ;
+//            //check the result
+//            if($result == 1){
+//                $product->status = 1 ;
+//            }else{
+//                $product->status = 0 ;
+//            }
+//            $product->save();
+//        }
+//    }
 }
