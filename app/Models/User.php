@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-// use App\Permissions\HasPermissionsTrait;
 use Spatie\Permission\Traits\HasRoles;
+
+// use App\Permissions\HasPermissionsTrait;
 
 class User extends Authenticatable
 {
@@ -19,9 +19,20 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected  $table = 'users';
-    protected $primaryKey = 'user_id';
-    protected $fillable = ['user_id','fname','sname','email','staff_number','name','password','password_confirmation'];
+    protected $table = 'users';
+    protected $fillable = [
+        'job_title',
+        'phone',
+        'department',
+        'email',
+        'staff_number',
+        'name',
+        'password',
+        'password_confirmation',
+        'last_login',
+        'total_login',
+        'password_change'
+    ];
 
     // use HasPermissionsTrait;
     /**

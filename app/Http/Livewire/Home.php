@@ -38,7 +38,7 @@ class Home extends Component
     public $searchedProduct;
     public $getSelectedProducts = [];
     public $selected_category;
-    // public $categoryName;
+    public $products = [];
 
     // public $slides;
 
@@ -82,7 +82,7 @@ class Home extends Component
             ->join('product', 'category.category_id', '=', 'product.category_id')
             ->join('status', 'product.status_id', '=', 'status.status_id')
             ->select('category.name as category_name', 'product.name as product_name',
-                     'product.url as product_url','product.product_id as product_id',
+                     'product.url as product_url','product.id as product_id',
                      'status.name as name','product.number_of_clicks as number_of_clicks')
             ->where('status.name','=','active')
             ->where('category.category_id','=',$category_id)
@@ -99,10 +99,10 @@ class Home extends Component
         sleep(3);
 
         $this->searchedProduct = Product::join('status','product.status_id','=','status.status_id')
-        ->select('product.name as product_name','status.name','product.url as product_url','product.product_id as product_id')
+        ->select('product.name as product_name','status.name','product.url as product_url','product.id as product_id')
         ->where('status.name','=','active')
         ->where('product.name', 'like', '%' . $this->searchQuery . '%')
-        // ->where('product.product_id','>=','1B')
+        // ->where('product.id','>=','1B')
         ->first();
 
         $this->searchQuery ="";
@@ -125,14 +125,14 @@ class Home extends Component
 
        public function calculateActiveSystems(){
         return Product::join('status','product.status_id','=','status.status_id')
-        ->select('product.name as product_name','status.name','product.product_id as product_id')
+        ->select('product.name as product_name','status.name','product.id as product_id')
         ->where('status.name','=','active')
         ->count('status.name');
     }
 
        public function getTotalSystemsInProduction(){
         return Product::join('status','product.status_id','=','status.status_id')
-        ->select('product.name as product_name','status.name','product.product_id as product_id')
+        ->select('product.name as product_name','status.name','product.id as product_id')
         ->where('status.name','=','production')
         ->orWhere('status.name','=','in production')
         ->count('status.name');
@@ -156,7 +156,7 @@ class Home extends Component
         // ->join('product', 'category.category_id', '=', 'product.category_id')
         // ->join('status', 'product.status_id', '=', 'status.status_id')
         // ->select('category.category_id','category.name as category_name', 'product.name as product_name',
-        //          'product.url as product_url','product.product_id as product_id','product.url',
+        //          'product.url as product_url','product.id as product_id','product.url',
         //          'status.name as name','product.number_of_clicks as number_of_clicks')
         // ->where('status.name','=','active')
         ->orderBy('name')
@@ -169,7 +169,7 @@ class Home extends Component
             ->join('product', 'category.category_id', '=', 'product.category_id')
             ->join('status', 'product.status_id', '=', 'status.status_id')
             ->select('category.name as category_name', 'product.name as product_name',
-                     'product.url as product_url','product.product_id as product_id',
+                     'product.url as product_url','product.id as product_id',
                      'status.name as name','product.number_of_clicks as number_of_clicks')
             ->where('status.name','=','active')
             ->orderBy('category.name')
@@ -182,7 +182,7 @@ class Home extends Component
         $getProducts = DB::table('product')
                     ->join('status','product.status_id','=','status.status_id')
                     ->select('product.name','product.number_of_clicks as clicks',
-                            'product.url as product_url','product.product_id',
+                            'product.url as product_url','product.id',
                              'status.name as status_name')
                     ->where('status.name','=','active')
                     ->orderBy('product.number_of_clicks', 'desc')
@@ -224,7 +224,7 @@ class Home extends Component
         $ezesco_products = Product::all();
         // dd($slides);
 
-        return view('livewire.home',[
+        return view('livewire.site.home',[
                 'groupedCategories' => $groupedCategories,
                 'more_notices' => $more_notices,
                 'upcoming_events' => $upcoming_events,

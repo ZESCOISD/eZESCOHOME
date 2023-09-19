@@ -26,7 +26,7 @@ class ZescoSystems extends Component
     public $product_id;
     public $name;
     public $video;
-    
+
     public $icon_link;
     public $user_manual;
     public $short_description;
@@ -80,24 +80,24 @@ class ZescoSystems extends Component
        return redirect()->to('/how-to/learn-more/' . $product_id);
     }
 
-   
+
 
     public function render()
     {
         $getProducts = DB::table('product')
                 ->join('status','product.status_id','=','status.status_id')
                 ->select('product.name','product.icon_link','product.user_manual','product.number_of_clicks as clicks',
-                        'product.url as product_url','product.product_id',
+                        'product.url as product_url','product.id',
                         'product.system_cover_image', 'product.video',
                         'status.name as status_name','product.short_description')
-                ->where('status.name','=','active')
+                ->where('status.slug','=',config('constants.statuses.production'))
                 ->where('product.name', 'like', '%'.$this->searchQuery.'%')
                 ->orderBy('product.number_of_clicks', 'desc')
                 ->paginate(6);
 
 
         return view('livewire.zesco-systems',[
-     
+
                 'getProducts' => $getProducts,
             ]);
     }

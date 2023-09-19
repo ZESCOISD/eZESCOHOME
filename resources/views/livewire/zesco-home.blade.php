@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Str; @endphp
+@php use Carbon\Carbon; @endphp
 @push('custom-styles')
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/js/bootstrap.js" rel="stylesheet">
@@ -40,7 +42,7 @@
                             <div wire:loading wire:target="search" class="loading-bar" style="margin: 0;"></div>
                             <div class="navbar-header">
                                 <button class="navbar-toggle" type="button" data-toggle="collapse"
-                                    data-target=".navbar-collapse">
+                                        data-target=".navbar-collapse">
                                     <span class="sr-only">Toggle</span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
@@ -48,7 +50,7 @@
                                 </button>
                                 <a href="{{ route('zesco-home') }}" class="navbar-brand logo">
                                     <img src="/img/Zesco.png" alt="" width="125" height="50"
-                                        class="d-inline-block align-text-top"></a>
+                                         class="d-inline-block align-text-top"></a>
                             </div>
                             <nav class="collapse navbar-collapse" role="navigation">
 
@@ -59,21 +61,22 @@
 
                                                 @csrf
                                                 <input type="text" wire:model.defer="searchQuery"
-                                                    placeholder="Search for system..." id="search" required>
+                                                       placeholder="Search for system..." id="search" required>
                                                 <button type="submit" class="btn btn-primary"
-                                                    id="search-btn">Search</button>
+                                                        id="search-btn">Search
+                                                </button>
                                             </form>
                                             @if ($searchedProduct)
                                                 {{-- @foreach ($searchedProduct as $products) --}}
                                                 <div id="search-cards">
                                                     <a id="searchedcard-link" class="card-link"
-                                                        href="{{ $searchedProduct->product_url }}"
-                                                        wire:click="incrementClicks({{ $searchedProduct->product_id }})"
-                                                        data-product-id="{{ $searchedProduct->product_id }}">
+                                                       href="{{ $searchedProduct->product_url }}"
+                                                       wire:click="incrementClicks({{ $searchedProduct->product_id }})"
+                                                       data-product-id="{{ $searchedProduct->product_id }}">
                                                         <div class="card-body text-center" id="searched-card-body">
                                                             <i id="system-icon" class="bi bi-bar-chart-fill"></i>
                                                             <p style="font-size: 18px; text-decoration:none;"
-                                                                id="searchedcard-card-text" class="text-center mt-4">
+                                                               id="searchedcard-card-text" class="text-center mt-4">
                                                                 {{ $searchedProduct->product_name }}</p>
                                                         </div>
                                                     </a>
@@ -89,7 +92,7 @@
                                                         <div class="text-center" id="index-card-body">
 
                                                             <p style="font-size: 18px;" id="index-card-text"
-                                                                class="text-center mt-4">No
+                                                               class="text-center mt-4">No
                                                                 results
                                                                 found</p>
                                                         </div>
@@ -125,17 +128,16 @@
                                     <li>
 
                                         <a href="{{ route('login') }}"><i id="i-login"
-                                                class="bi bi-box-arrow-in-right"></i><br>
+                                                                          class="bi bi-box-arrow-in-right"></i><br>
                                             Login</a>
                                     </li>
                                 </ul>
                             </nav>
 
 
-                            <div class="text-center" id="home-text">
-                                Welcome to eZESCO Dashboard
+                            <div class="text-bold text-center text-success" id="home-text">
+                                Welcome to E-ZESCO Home
                             </div>
-
 
 
                         </div>
@@ -146,7 +148,7 @@
 
 
                             <div id="carouselExampleIndicators" class="carousel slide carousel-fade"
-                                data-ride="carousel">
+                                 data-ride="carousel">
                                 <ol class="carousel-indicators">
 
                                     @foreach ($slides as $index => $image)
@@ -160,24 +162,23 @@
                                     @foreach ($slides as $index => $image)
                                         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                                             <img src="{{ asset('storage') }}/{{ $image['image'] }}"
-                                                class="d-block w-100" alt="carousel image">
+                                                 class="d-block w-100" alt="carousel image">
                                         </div>
                                     @endforeach
 
 
                                 </div>
                                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
-                                    data-slide="prev">
+                                   data-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                                 <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
-                                    data-slide="next">
+                                   data-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Next</span>
                                 </a>
                             </div>
-
 
 
                         </section>
@@ -185,12 +186,11 @@
                         <section id="counts" class="counts section-bg text-center">
                             <div class="container text-center">
 
-                                <div class="row counters text-center">
-                                    <div class="col-lg-3 col-3 text-center">
+                                <div class="row counters text-center mt-3  ">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 text-center">
                                         @if ($cost_savings == 0)
                                             <span class="purecounter">
-
-                                                loading..</span>
+                                                0 </span>
                                         @elseif($cost_savings > 999 && $cost_savings <= 999999)
                                             <span class="purecounter"> ${{ substr($cost_savings, 0, -3) }}K+</span>
                                         @elseif($cost_savings > 999999 && $cost_savings <= 999999999)
@@ -207,13 +207,13 @@
                                     </div>
 
                                     <div class="col-lg-3 col-4 text-center">
-                                        <span class="purecounter text-center">{{ $active_systems }}</span>
-                                        <p class="text-center">Active System's</p>
+                                        <span class="purecounter text-center">{{ $in_production  }}</span>
+                                        <p class="text-center">live System's</p>
                                     </div>
 
                                     <div class="col-lg-3 col-4 text-center">
-                                        <span class="purecounter">{{ $in_production }}</span>
-                                        <p class="text-center">System's In Production</p>
+                                        <span class="purecounter">{{ $in_development }}</span>
+                                        <p class="text-center">System's In Development</p>
                                     </div>
 
                                     <div class="col-lg-3 col-4 text-center">
@@ -238,7 +238,7 @@
 
                                         <div class="panel panel-default">
                                             <div class="panel-heading text-center"><a href="#"
-                                                    class="pull-right">
+                                                                                      class="pull-right">
                                                     @if (count($more_notices) > 1)
                                                         View
                                                         all
@@ -268,60 +268,61 @@
                                                             <h4 style="font-weight: bold">{{ $notice->notice_name }}
                                                             </h4>
                                                             <p style=" text-indent: 0px;" id="description">
-                                                                {{ \Illuminate\Support\Str::limit($notice->description, 190) }}
+                                                                {{ Str::limit($notice->description, 190) }}
                                                                 @if (strlen($notice->description) > 190)
                                                                     <a wire:ignore href="#editRoleModal"
-                                                                        class="edit" data-toggle="modal"
-                                                                        data-target="#updateRoleModal"
-                                                                        wire:click="editRole({{ $notice->id }})"></a>
+                                                                       class="edit" data-toggle="modal"
+                                                                       data-target="#updateRoleModal"
+                                                                       wire:click="editRole({{ $notice->id }})"></a>
 
                                                                     <button type="button" id="openModal"
-                                                                        wire:click="readMore({{ $notice->id }})">
-                                                                        Read more</button>
-                                                                    <div wire:ignore.self id="modal"
-                                                                        class="modal">
-                                                                        <div class="modal-content">
-                                                                            <span class="close">&times;</span>
-                                                                            <h2 style="color:#d3882b;"
-                                                                                wire:model.defer="notice_name">
-                                                                                {{ $notice->notice_name }}</h2>
-                                                                            <p wire:model.defer="description"
-                                                                                style="text-indent: 0px;">
-                                                                                {{ $notice->description }}</p>
+                                                                            wire:click="readMore({{ $notice->id }})">
+                                                                        Read more
+                                                                    </button>
+                                                            <div wire:ignore.self id="modal"
+                                                                 class="modal">
+                                                                <div class="modal-content">
+                                                                    <span class="close">&times;</span>
+                                                                    <h2 style="color:#d3882b;"
+                                                                        wire:model.defer="notice_name">
+                                                                        {{ $notice->notice_name }}</h2>
+                                                                    <p wire:model.defer="description"
+                                                                       style="text-indent: 0px;">
+                                                                        {{ $notice->description }}</p>
 
-                                                                            <hr>
+                                                                    <hr>
 
-                                                                            <div style="" class="row mt-5">
-                                                                                <div class="col-xl-6">
-                                                                                    <div id="notice-data"
-                                                                                        class="text-start">
-                                                                                        <h5 wire:model.defer="staff_title"
-                                                                                            style="font-weight: bold; color:#d3882b;">
-                                                                                            From
-                                                                                            {{ $notice->staff_title }}
-                                                                                        </h5>
-                                                                                        <p wire:model.defer="staff_name"
-                                                                                            style=" text-indent: 0px; ">
-                                                                                            {{ $notice->staff_name }}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-xl-6">
-                                                                                    <div style="margin-right: -550px;"
-                                                                                        class="text-left">
-                                                                                        <h5
-                                                                                            style="font-weight: bold; color:#d3882b;">
-                                                                                            Department</h5>
-                                                                                        <p wire:model.defer="department"
-                                                                                            style="text-align: left; text-indent: 0px;">
-                                                                                            {{ $notice->department }}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
+                                                                    <div style="" class="row mt-5">
+                                                                        <div class="col-xl-6">
+                                                                            <div id="notice-data"
+                                                                                 class="text-start">
+                                                                                <h5 wire:model.defer="staff_title"
+                                                                                    style="font-weight: bold; color:#d3882b;">
+                                                                                    From
+                                                                                    {{ $notice->staff_title }}
+                                                                                </h5>
+                                                                                <p wire:model.defer="staff_name"
+                                                                                   style=" text-indent: 0px; ">
+                                                                                    {{ $notice->staff_name }}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-xl-6">
+                                                                            <div style="margin-right: -550px;"
+                                                                                 class="text-left">
+                                                                                <h5
+                                                                                    style="font-weight: bold; color:#d3882b;">
+                                                                                    Department</h5>
+                                                                                <p wire:model.defer="department"
+                                                                                   style="text-align: left; text-indent: 0px;">
+                                                                                    {{ $notice->department }}
+                                                                                </p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                @endif
+                                                                </div>
+                                                            </div>
+                                                            @endif
 
                                                             </p>
                                                         </div>
@@ -352,15 +353,15 @@
 
                                         <div class="panel panel-default">
                                             <div class="panel-heading text-center"><a href="#"
-                                                    class="pull-right">
+                                                                                      class="pull-right">
                                                     @if (count($upcoming_events) > 1)
                                                         View
                                                         all
                                                     @endif
                                                 </a>
                                                 <h4 style="margin-left: 15px;"><i style="margin-left: 15px;"
-                                                        id="upcoming-events-icon"
-                                                        class="bi bi-calendar-event-fill text-center">
+                                                                                  id="upcoming-events-icon"
+                                                                                  class="bi bi-calendar-event-fill text-center">
                                                     </i><Br> Upcoming Events</h4>
                                             </div>
                                             <div class="panel-body">
@@ -394,9 +395,9 @@
                                                                         Date and Time</h5>
                                                                     <p style="text-align: right;">
                                                                         {{ $event->date }}
-                                                                        {{ \Carbon\Carbon::parse($event->time)->format('H:i') }}
+                                                                        {{ Carbon::parse($event->time)->format('H:i') }}
                                                                     </p>
-                                                                    <p> </p>
+                                                                    <p></p>
 
                                                                 </div>
                                                             </div>
@@ -410,7 +411,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading text-center">
                                                 <h4><i id="quote-icon"
-                                                        class="bi bi-chat-square-quote-fill"></i><br>Quote Of the
+                                                       class="bi bi-chat-square-quote-fill"></i><br>Quote Of the
                                                     Day</h4>
                                             </div>
                                             <div class="panel-body">
@@ -455,7 +456,6 @@
                                         </div>
 
 
-
                                     </div>
 
                                     <!-- main col right -->
@@ -466,7 +466,7 @@
 
                                             <div class="panel-heading text-center">
 
-                                                <h4 style="color:#e09334;">eZESCO Categories</h4>
+                                                <h4 style="color:#e09334;">E-ZESCO Categories</h4>
                                             </div>
                                             <div wire:loading wire:target="showResult" class="loading-bar"></div>
 
@@ -475,14 +475,16 @@
                                                     <main class="grid-item main">
                                                         <div class="items text-center">
                                                             @foreach ($showCategories as $showCategory)
-                                                                <div class="item item2">
+                                                                <div class="item item2"  style="background-color:#{{$showCategory->html ?? "e09334"}};">
                                                                     <div id="categories-panel"
-                                                                        class="card shadow p-3 mb-5" type="button"
-                                                                        wire:click="showResult({{ $showCategory->category_id }})">
-                                                                        <div class="card-body">
+                                                                         class="card shadow p-3 mb-5" type="button"
+                                                                         wire:click="showResult({{ $showCategory->category_id }})">
+                                                                        <div class="card-body" >
+                                                                            <a href="#">
                                                                             <i style="color: white; margin-right:5px;"
-                                                                                class="bi bi-circle"></i>
+                                                                               class="bi bi-circle"></i>
                                                                             {{ $showCategory->name }}
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -501,42 +503,46 @@
 
 
                                         <div class="panel panel-default">
-                                            <div id="category-panel-heading" class="panel-heading text-center">
+
+
+                                            <div id="category-panel-heading11" class="panel-heading  text-center ">
                                                 <h4 style="color:#e09334;" id="frequently-accessed-header">
-                                                    @if ($getProducts)
-                                                        Frequently Accessed eZESCO
+                                                    @if (is_null( $getSelectedCategory->name ?? null ) )
+                                                        Frequently Accessed E-ZESCO
                                                         Applications
-                                                    @elseif($getSelectedProducts)
-                                                        {{ $getSelectedProducts }}
+                                                    @else
+                                                        E-ZESCO Applications
+                                                        under {{ $getSelectedCategory->name ?? "" }} Category
                                                     @endif
                                                 </h4>
                                             </div>
+
                                             <div class="panel-body">
                                                 @if ($getProducts->isEmpty())
                                                 @else
                                                     <div class="row text-center">
                                                         @foreach ($getProducts as $getProduct)
                                                             <div id="frequently-accessed-system"
-                                                                class="col-lg-2 col-md-2 text-center">
+                                                                 class="col-lg-2 col-md-2 text-center">
 
                                                                 <div class="text-center" type="button"
-                                                                    onclick=" window.location='{{ $getProduct->product_url }}'"
-                                                                    wire:click="incrementClicks({{ $getProduct->product_id }})">
+                                                                     onclick=" window.location='{{ $getProduct->product_url }}'"
+                                                                     wire:click="incrementClicks({{ $getProduct->id }})">
                                                                     <i id="system-icon"
-                                                                        class="bi bi-bar-chart-fill"></i>
+                                                                       class="bi bi-bar-chart-fill"></i>
                                                                 </div>
                                                                 <p id="system-name" type="button"
-                                                                    onclick=" window.location='{{ $getProduct->product_url }}'"
-                                                                    class="text-center"
-                                                                    wire:click="incrementClicks({{ $getProduct->product_id }})">
+                                                                   onclick=" window.location='{{ $getProduct->product_url }}'"
+                                                                   class="text-center"
+                                                                   wire:click="incrementClicks({{ $getProduct->id }})">
                                                                     {{ $getProduct->name }}
                                                                 </p>
                                                             </div>
                                                         @endforeach
                                                     </div>
-                                                    <div id="clickedCategorySection"
-                                                        class="row d-flex justify-content-center align-items-center">
 
+                                                    <div id="clickedCategorySection"
+                                                         class="row d-flex justify-content-center align-items-center">
                                                         @foreach ($getSelectedProducts as $getSelectedProduct)
                                                             @if (
                                                                 !empty($getSelectedProduct->product_id) ||
@@ -545,26 +551,26 @@
                                                                     (!empty($getSelectedProducts->product_url) && $getSelectedProduct != null))
                                                                 <div
                                                                     class="col-xl-3 col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                                                                    <div class="" id="categoryCards">
+                                                                    <div class="" id="categoryCards"   >
 
-                                                                        {{-- <div class="panel-heading text-center"> --}}
+                                                                        <div class="panel-heading text-center">
 
-                                                                        <div class="text-center" type="button"
-                                                                            onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
-                                                                            wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
-                                                                            <i style="font-size: 30px; color:#5fcf80;"
-                                                                                id="system-icon"
-                                                                                class="bi bi-bar-chart-fill"></i>
+                                                                            <div class="text-center" type="button"
+                                                                                 onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
+                                                                                 wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
+                                                                                <i style="font-size: 30px; color:#{{$getSelectedProduct->html ?? "e09334"}};"
+                                                                                   id="system-icon"
+                                                                                   class="bi bi-bar-chart-fill"></i>
+                                                                            </div>
+                                                                            <p style="font-size: 15px;" id="system-name"
+                                                                               type="button"
+                                                                               onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
+                                                                               class="text-center"
+                                                                               wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
+                                                                                {{ $getSelectedProduct->product_name }}  {{$getSelectedProduct->html ?? "e09334"}}
+                                                                            </p>
+
                                                                         </div>
-                                                                        <p style="font-size: 15px;" id="system-name"
-                                                                            type="button"
-                                                                            onclick=" window.location='{{ $getSelectedProduct->product_url }}'"
-                                                                            class="text-center"
-                                                                            wire:click="incrementClicks({{ $getSelectedProduct->product_id }})">
-                                                                            {{ $getSelectedProduct->product_name }}
-                                                                        </p>
-
-                                                                        {{-- </div> --}}
                                                                     </div>
                                                                     <style>
                                                                         #search-cards {
@@ -572,10 +578,6 @@
                                                                         }
 
                                                                         #frequently-accessed-system {
-                                                                            display: none;
-                                                                        }
-
-                                                                        #frequently-accessed-header {
                                                                             display: none;
                                                                         }
                                                                     </style>
@@ -598,12 +600,9 @@
 
                                         <section id="about" class="about">
 
-
-
                                             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-                                                <div class="row align-items-xl-center gy-5">
-
+                                                <div class="row ">
                                                     <div class="col-xl-5 content">
                                                         <h2>More About Zesco Applications</h2>
                                                         <p style="text-indent: 0px;">Know more about Zesco's in-house
@@ -613,19 +612,22 @@
                                                             to get started.
                                                         </p>
                                                         <a href="{{ route('ezesco-systems') }}"
-                                                            class="read-more"><span>Learn
+                                                           class="read-more"><span>Learn
                                                                 More</span><i class="bi bi-arrow-right"
-                                                                style="color: #d3882b"></i></a>
+                                                                              style="color: #d3882b"></i></a>
                                                     </div>
+                                                </div>
+
+                                                <div class="row align-items-xl-center gy-5">
 
                                                     <div id="about-section" class="col-xl-7">
-                                                        <div class="row gy-4 icon-boxes">
-
-                                                            <div class="col-md-6" data-aos="fade-up"
-                                                                data-aos-delay="200">
+                                                        <div class="row ">
+                                                            <div class="col-md-6 col-lg-6 col-sm-12"
+                                                                 style="margin-top: 20px" data-aos="fade-up"
+                                                                 data-aos-delay="200">
                                                                 <div class="icon-box">
                                                                     <i style="color: white;"
-                                                                        class="bi bi-buildings"></i>
+                                                                       class="bi bi-buildings"></i>
                                                                     <h3>Getway</h3>
                                                                     <p style="text-indent: 0px;">eZesco is the getway
                                                                         to other system's you
@@ -633,23 +635,26 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div style="margin-top: 10px;" class="col-md-6"
-                                                                data-aos="fade-up" data-aos-delay="300">
+                                                            <div class="col-md-6 col-lg-6 col-sm-12"
+                                                                 style="margin-top: 20px"
+                                                                 data-aos="fade-up" data-aos-delay="300">
                                                                 <div class="icon-box">
                                                                     <i style="color: white;"
-                                                                        class="bi bi-clipboard-pulse"></i>
+                                                                       class="bi bi-clipboard-pulse"></i>
                                                                     <h3>Strategic Solutions</h3>
                                                                     <p style="text-indent: 0px;">Providing
                                                                         well-thought-out and effective
                                                                         approaches to problems.</p>
                                                                 </div>
                                                             </div>
-
-                                                            <div style="margin-top: 50px" class="col-md-6"
-                                                                data-aos="fade-up" data-aos-delay="400">
+                                                        </div>
+                                                        <div class="row ">
+                                                            <div class="col-md-6 col-lg-6 col-sm-12"
+                                                                 style="margin-top: 20px"
+                                                                 data-aos="fade-up" data-aos-delay="400">
                                                                 <div class="icon-box">
                                                                     <i style="color: white;"
-                                                                        class="bi bi-command"></i>
+                                                                       class="bi bi-command"></i>
                                                                     <h3>Performance-Driven</h3>
                                                                     <p style="text-indent: 0px;"> Focusing on achieving
                                                                         and exceeding
@@ -657,11 +662,12 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div style="margin-top: -220px;" class="col-md-6"
-                                                                data-aos="fade-up" data-aos-delay="500">
+                                                            <div class="col-md-6 col-lg-6 col-sm-12"
+                                                                 style="margin-top: 20px"
+                                                                 data-aos="fade-up" data-aos-delay="500">
                                                                 <div class="icon-box">
                                                                     <i style="color: white;"
-                                                                        class="bi bi-graph-up-arrow"></i>
+                                                                       class="bi bi-graph-up-arrow"></i>
                                                                     <h3>Continuous improvement</h3>
                                                                     <p style="text-indent: 0px;"> Committing to ongoing
                                                                         learning, growth, and
@@ -693,13 +699,13 @@
                                                 @if ($product->icon_link == null)
                                                 @else
                                                     <div class="text-center"
-                                                        style=" margin:10px; border:solid #d3882b 1px; padding:15px;">
+                                                         style=" margin:10px; border:solid #d3882b 1px; padding:15px;">
                                                         <div class="slide text-center">
                                                             <div class="text-center">
                                                                 <img class="text-center"
-                                                                    src="{{ asset('storage') }}/{{ $product->icon_link }}"
-                                                                    style="margin-left:50px; width: 40px; height:40px;"
-                                                                    alt="system">
+                                                                     src="{{ asset('storage') }}/{{ $product->icon_link }}"
+                                                                     style="margin-left:50px; width: 40px; height:40px;"
+                                                                     alt="system">
                                                             </div>
 
                                                         </div>
@@ -794,18 +800,19 @@
                                     </div>
 
                                     <!-- Google tag (gtag.js) -->
-                                    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-F62MYGXDSQ"></script>
+                                    <script async=""
+                                            src="https://www.googletagmanager.com/gtag/js?id=G-F62MYGXDSQ"></script>
                                     <script>
                                         window.dataLayer = window.dataLayer || [];
 
                                         function gtag() {
                                             dataLayer.push(arguments);
                                         }
+
                                         gtag('js', new Date());
 
                                         gtag('config', 'G-F62MYGXDSQ');
                                     </script>
-
 
 
                                 </div><!-- Container end -->
@@ -832,8 +839,8 @@
 
 
     <script>
-        $(document).ready(function() {
-            $('[data-toggle=offcanvas]').click(function() {
+        $(document).ready(function () {
+            $('[data-toggle=offcanvas]').click(function () {
                 $(this).toggleClass('visible-xs text-center');
                 $(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
                 $('.row-offcanvas').toggleClass('active');

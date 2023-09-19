@@ -5,18 +5,17 @@ namespace App\Http\Livewire\Admin;
 // use Spatie\MediaLibrary\MediaCollections\Models\Media;
 // use Spatie\MediaLibrary\HasMedia;
 // use Spatie\MediaLibrary\InteractsWithMedia;
-use Livewire\WithFileUploads;
-
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Role;
+use App\Models\Status;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-use App\Models\Product;
-use App\Models\Status;
-use App\Models\Category;
-use App\Models\User;
-use App\Models\Role;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Auth;
 
 class ListProducts extends Component
 {
@@ -24,24 +23,26 @@ class ListProducts extends Component
     // use InteractsWithMedia;
     use WithFileUploads;
     use WithPagination;
-    protected $paginationTheme = 'bootstrap';
+
     public $categories;
     public $product = [];
+    public $selected = '';
+    public $developers = [] ;
+    public $selectedReportType = false;
     public $loading = false;
-
     public $name, $product_id, $icon_link, $category_id,
-    $status_id, $number_of_clicks = 0, $video, $user_manual,
-     $system_cover_image, $cost_saving, $url, $test_url,
-    $lead_developer, $short_description, $long_description,
-    $tutorial_url, $date_launched , $date_decommissioned ;
-
-
+        $status_id, $number_of_clicks = 0, $video, $user_manual,
+        $system_cover_image, $cost_saving, $url, $test_url,
+        $lead_developer, $short_description, $long_description,
+        $tutorial_url, $date_launched, $date_decommissioned, $dev_launch_date, $market_value, $project_cost;
     public $image;
     public $preview_image;
     public $search;
     public $allData = [];
+    protected $paginationTheme = 'bootstrap';
 
-    public function saveProduct(){
+    public function saveProduct()
+    {
 
         $loading = true;
         sleep(2);
@@ -52,9 +53,9 @@ class ListProducts extends Component
             'category_id' => 'required',
             'status_id' => 'required',
             'user_manual' => 'nullable|mimes:pdf|max:10240',
-             'video' => 'nullable|mimes:mp4|max:50000',
-             'cost_saving' => 'required|numeric',
-            'system_cover_image'=> 'nullable|image|max:5024',
+            'video' => 'nullable|mimes:mp4|max:50000',
+            'cost_saving' => 'required|numeric',
+            'system_cover_image' => 'nullable|image|max:5024',
             'url' => 'required|url',
             'test_url' => 'required|url',
             'lead_developer' => 'required',
@@ -64,174 +65,184 @@ class ListProducts extends Component
             'date_launched' => 'nullable|date_format:Y-m-d',
             'date_decommissioned' => 'nullable|date_format:Y-m-d',
         ]);
-          $files = new Product();
+        $product = new Product();
 
-           $filename1 = "";
-           $filename2 = "";
-           $filename3 = "";
-           $filename4 = "";
+        $filename1 = "";
+        $filename2 = "";
+        $filename3 = "";
+        $filename4 = "";
 
 
-           if ($this->category_id == "0" || $this->status_id == "0"
+        if ($this->category_id == "0" || $this->status_id == "0"
             || $this->lead_developer == "0") {
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
             $loading = false;
 
-           }else {
+        } else {
 
-            if($this->icon_link){
-              $filename1 =  $this->icon_link->storeAs('images', $this->icon_link->getClientOriginalName(),'public');
-            }else{
+            if ($this->icon_link) {
+                $filename1 = $this->icon_link->storeAs('images', $this->icon_link->getClientOriginalName(), 'public');
+            } else {
                 $filename1 = null;
             }
 
-             if($this->user_manual){
-              $filename2 =  $this->user_manual->storeAs('pdfs', $this->user_manual->getClientOriginalName(),'public');
+            if ($this->user_manual) {
+                $filename2 = $this->user_manual->storeAs('pdfs', $this->user_manual->getClientOriginalName(), 'public');
 
-            }else{
+            } else {
                 $filename2 = null;
             }
 
-             if($this->video){
-                 $filename3 = $this->video->storeAs('videos',$this->video->getClientOriginalName() ,'public');
-            }else{
+            if ($this->video) {
+                $filename3 = $this->video->storeAs('videos', $this->video->getClientOriginalName(), 'public');
+            } else {
                 $filename3 = null;
-        }
-
-             if($this->video){
-                 $filename4 = $this->system_cover_image->storeAs('images', $this->system_cover_image->getClientOriginalName(),'public');
-            }else{
-                $filename4 = null;
-            }
-
-        $files->name = $this->name;
-        $files->category_id = $this->category_id;
-        $files->status_id = $this->status_id;
-        $files->number_of_clicks = $this->number_of_clicks;
-        $files->url = $this->url;
-        $files->test_url = $this->test_url;
-        $files->cost_saving = $this->cost_saving;
-        $files->lead_developer = $this->lead_developer;
-        $files->short_description = $this->short_description;
-        $files->long_description = $this->long_description;
-        $files->tutorial_url = $this->tutorial_url;
-        $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
-        $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
-        $files->icon_link = $filename1;
-        // dd($files->icon_link);
-        $files->user_manual = $filename2;
-        $files->video = $filename3;
-        $files->system_cover_image = $filename4;
-        $result = $files->save();
-
-        if($result){
-             session()->flash('savesuccessful','Your Product was successfully added');
-            $this->resetInput();
-            $this->dispatchBrowserEvent('close-modal');
-            $this->resetPage();
-
-        }else{
-             session()->flash('error', 'Product Not Added Successfully');
-        }
-
-        }
-
-
-         $loading = false;
-
-    }
-
-    public function editProduct(int $product_id){
-        $this->product = Product::find($product_id);
-
-        // dd($product);
-        if($this->product){
-            if ($this->category_id == "0" || $this->status_id == "0"
-            || $this->lead_developer == "0") {
-            $this->addError('selectedOption', 'Please select a valid option.');
-            return;
-        }else{
-
-            // $this->searchResults = [];
-            // if ($this->icon_link) {
-            //     $this->product['icon_link'] = Storage::files('images');
-            // }
-
-            $this->icon_link = $this->product->icon_link;
-
-            // dd($this->icon_link);
-
-            if ($this->system_cover_image) {
-                $this->product['system_cover_image'] = Storage::files('images');
             }
 
             if ($this->video) {
-                $this->product['video'] = Storage::files('videos');
+                $filename4 = $this->system_cover_image->storeAs('images', $this->system_cover_image->getClientOriginalName(), 'public');
+            } else {
+                $filename4 = null;
             }
 
-            if ($this->user_manual) {
-                $this->product['user_manual'] = Storage::files('pdfs');
+            //save product
+            $product->name = $this->name;
+            $product->category_id = $this->category_id;
+            $product->status_id = $this->status_id;
+            $product->number_of_clicks = $this->number_of_clicks;
+            $product->url = $this->url;
+            $product->test_url = $this->test_url;
+            $product->market_value = $this->market_value;
+            $product->project_cost = $this->project_cost;
+            $product->cost_saving = $this->cost_saving;
+            $product->lead_developer = $this->lead_developer;
+            $product->short_description = $this->short_description;
+            $product->long_description = $this->long_description;
+            $product->tutorial_url = $this->tutorial_url;
+            $product->dev_launch_date = date('Y-m-d', strtotime($this->dev_launch_date));
+            $product->date_launched = date('Y-m-d', strtotime($this->date_launched));
+            $product->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
+            $product->icon_link = $filename1;
+            $product->user_manual = $filename2;
+            $product->video = $filename3;
+            $product->system_cover_image = $filename4;
+            $result = $product->save();
+
+            //product to developers
+            $product->developers()->syncWithoutDetaching($this->developers);
+
+            if ($result) {
+                session()->flash('savesuccessful', 'Your Product was successfully added');
+                $this->resetInput();
+                $this->dispatchBrowserEvent('close-modal');
+                $this->resetPage();
+
+            } else {
+                session()->flash('error', 'Product Not Added Successfully');
             }
 
-            $this->product_id = $this->product->product_id;
-            $this->name = $this->product->name;
-            // $this->icon_link = $product->icon_link;
-            $this->category_id = $this->product->category_id;
-            $this->status_id = $this->product->status_id;
-            $this->cost_saving = $this->product->cost_saving;
-            // $this->system_cover_image = $product->system_cover_image;
-            // $this->video = $product->video;
-            // $this->user_manual = $product->user_manual;
-            // $this->number_of_clicks = $product->number_of_clicks;
-            $this->url = $this->product->url;
-            $this->test_url = $this->product->test_url;
-            $this->lead_developer = $this->product->lead_developer;
-            $this->short_description = $this->product->short_description;
-            $this->long_description = $this->product->long_description;
-            $this->tutorial_url = $this->product->tutorial_url;
-            $this->date_launched = $this->product->date_launched;
-            $this->date_decommissioned = $this->product->date_decommissioned;
-          }
+        }
 
-        //   dd($this->icon_link->getClientOriginalName());
-        }else{
+
+        $loading = false;
+
+    }
+
+    public function resetInput()
+    {
+        $this->product_id = '';
+        $this->name = '';
+        $this->icon_link = '';
+        $this->category_id = '';
+        $this->video = '';
+        $this->system_cover_image = '';
+        $this->cost_saving = '';
+        $this->user_manual = '';
+        // $this-> number_of_clicks ='';
+        $this->url = '';
+        $this->test_url = '';
+        $this->lead_developer = '';
+        $this->short_description = '';
+        $this->long_description = '';
+        $this->tutorial_url = '';
+        $this->date_launched = '';
+        $this->date_decommissioned = '';
+    }
+
+    public function editProduct(int $product_id)
+    {
+        $this->product = Product::find($product_id);
+
+        // dd($product);
+        if ($this->product) {
+            if ($this->category_id == "0" || $this->status_id == "0"
+                || $this->lead_developer == "0") {
+                $this->addError('selectedOption', 'Please select a valid option.');
+                return;
+            } else {
+
+                // $this->searchResults = [];
+                // if ($this->icon_link) {
+                //     $this->product['icon_link'] = Storage::files('images');
+                // }
+
+                $this->icon_link = $this->product->icon_link;
+
+                // dd($this->icon_link);
+
+                if ($this->system_cover_image) {
+                    $this->product['system_cover_image'] = Storage::files('images');
+                }
+
+                if ($this->video) {
+                    $this->product['video'] = Storage::files('videos');
+                }
+
+                if ($this->user_manual) {
+                    $this->product['user_manual'] = Storage::files('pdfs');
+                }
+
+                $this->product_id = $this->product->id;
+                $this->name = $this->product->name;
+                // $this->icon_link = $product->icon_link;
+                $this->category_id = $this->product->category_id;
+                $this->status_id = $this->product->status_id;
+                $this->cost_saving = $this->product->cost_saving;
+                // $this->system_cover_image = $product->system_cover_image;
+                // $this->video = $product->video;
+                // $this->user_manual = $product->user_manual;
+                // $this->number_of_clicks = $product->number_of_clicks;
+                $this->url = $this->product->url;
+                $this->test_url = $this->product->test_url;
+                $this->lead_developer = $this->product->lead_developer;
+                $this->short_description = $this->product->short_description;
+                $this->long_description = $this->product->long_description;
+                $this->tutorial_url = $this->product->tutorial_url;
+                $this->date_launched = $this->product->date_launched;
+                $this->date_decommissioned = $this->product->date_decommissioned;
+            }
+
+            //   dd($this->icon_link->getClientOriginalName());
+        } else {
             return redirect()->to('/product.manage');
         }
 
 
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
         $this->resetInput();
     }
 
-    public function resetInput(){
-        $this-> product_id ='';
-        $this-> name ='';
-        $this-> icon_link ='';
-        $this-> category_id ='';
-        $this-> video ='';
-        $this-> system_cover_image ='';
-        $this-> cost_saving ='';
-        $this-> user_manual ='';
-        // $this-> number_of_clicks ='';
-        $this-> url ='';
-        $this-> test_url ='';
-        $this-> lead_developer ='';
-        $this-> short_description ='';
-        $this-> long_description ='';
-        $this-> tutorial_url ='';
-        $this-> date_launched ='';
-        $this-> date_decommissioned ='';
-    }
-
-    public function updateProduct(){
+    public function updateProduct()
+    {
 
         $loading = true;
         sleep(2);
 
-        $files = Product::where('product_id','like', '%' . $this->product_id . '%')->first();
+        $files = Product::where('id', 'like', '%' . $this->product_id . '%')->first();
 
         // dd($files);
 
@@ -241,9 +252,9 @@ class ListProducts extends Component
             'category_id' => '',
             'status_id' => '',
             'user_manual' => 'nullable|mimes:pdf|max:10240',
-             'video' => 'nullable|mimes:mp4|max:50000',
-             'cost_saving' => 'required|numeric',
-            'system_cover_image'=> 'nullable|image|max:5024',
+            'video' => 'nullable|mimes:mp4|max:50000',
+            'cost_saving' => 'required|numeric',
+            'system_cover_image' => 'nullable|image|max:5024',
             'url' => 'required|url',
             'test_url' => 'required|url',
             'lead_developer' => '',
@@ -256,90 +267,92 @@ class ListProducts extends Component
 
         //  $files = new Product();
 
-           $filename1 = "";
-           $filename2 = "";
-           $filename3 = "";
-           $filename4 = "";
+        $filename1 = "";
+        $filename2 = "";
+        $filename3 = "";
+        $filename4 = "";
 
 
-           if ($this->category_id == "0" || $this->status_id == "0"
+        if ($this->category_id == "0" || $this->status_id == "0"
             || $this->lead_developer == "0") {
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
             $loading = false;
 
-           }else{
+        } else {
 
-            if($this->icon_link){
-            $filename1 = $this->icon_link->store('images', 'public');
-            }else{
+            if ($this->icon_link) {
+                $filename1 = $this->icon_link->store('images', 'public');
+            } else {
                 $filename1 = null;
             }
 
-             if($this->user_manual){
-            $filename2 = $this->user_manual->store('pdfs', 'public');
-            }else{
+            if ($this->user_manual) {
+                $filename2 = $this->user_manual->store('pdfs', 'public');
+            } else {
                 $filename2 = null;
             }
 
-             if($this->video){
-            $filename3 = $this->video->store('videos', 'public');
-            }else{
+            if ($this->video) {
+                $filename3 = $this->video->store('videos', 'public');
+            } else {
                 $filename3 = null;
             }
 
-             if($this->video){
-            $filename4 = $this->system_cover_image->store('images', 'public');
-            }else{
+            if ($this->video) {
+                $filename4 = $this->system_cover_image->store('images', 'public');
+            } else {
                 $filename4 = null;
-        }
+            }
 
-        $files->name = $this->name;
-        $files->category_id = $this->category_id;
-        $files->status_id = $this->status_id;
-        $files->number_of_clicks = $this->number_of_clicks;
-        $files->url = $this->url;
-        $files->test_url = $this->test_url;
-        $files->cost_saving = $this->cost_saving;
-        $files->lead_developer = $this->lead_developer;
-        $files->short_description = $this->short_description;
-        $files->long_description = $this->long_description;
-        $files->tutorial_url = $this->tutorial_url;
-        $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
-        $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
-        $files->icon_link = $filename1;
-        $files->user_manual = $filename2;
-        $files->video = $filename3;
-        $files->system_cover_image = $filename4;
+            $files->name = $this->name;
+            $files->category_id = $this->category_id;
+            $files->status_id = $this->status_id;
+            $files->number_of_clicks = $this->number_of_clicks;
+            $files->url = $this->url;
+            $files->test_url = $this->test_url;
+            $files->cost_saving = $this->cost_saving;
+            $files->lead_developer = $this->lead_developer;
+            $files->short_description = $this->short_description;
+            $files->long_description = $this->long_description;
+            $files->tutorial_url = $this->tutorial_url;
+            $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
+            $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
+            $files->icon_link = $filename1;
+            $files->user_manual = $filename2;
+            $files->video = $filename3;
+            $files->system_cover_image = $filename4;
             $result = $files->update();
 
-        if($result){
-             session()->flash('updatesuccessful','Your Product was successfully added');
-            $this->resetInput();
-            $this->dispatchBrowserEvent('close-modal');
-            $this->resetPage();
+            if ($result) {
+                session()->flash('updatesuccessful', 'Your Product was successfully added');
+                $this->resetInput();
+                $this->dispatchBrowserEvent('close-modal');
+                $this->resetPage();
 
-        }else{
-             session()->flash('error', 'Product Not Added Successfully');
+            } else {
+                session()->flash('error', 'Product Not Added Successfully');
+            }
+
         }
 
-        }
-
-         $loading = false;
+        $loading = false;
     }
 
-    public function deleteProduct(int $product_id){
+    public function deleteProduct(int $product_id)
+    {
         $this->product_id = $product_id;
     }
 
-    public function destroyProduct(){
+    public function destroyProduct()
+    {
 
         $loading = true;
         sleep(2);
 
-      Product::find($this->product_id)->delete();
-      session()->flash('deletesuccessful','Your product was deleted successfully');
-      $loading = false;
+        Product::find($this->product_id)->delete();
+        session()->flash('deletesuccessful', 'Your product was deleted successfully');
+        $loading = false;
     }
 
     public function logout()
@@ -373,14 +386,14 @@ class ListProducts extends Component
         $statusfields = Status::all();
         $leaddevs = User::all();
         $roles = Role::all();
-        $products = Product::where('name', 'like', '%'.$this->search.'%')->orderBy('product_id','ASC')->paginate(5);
+        $products = Product::where('name', 'like', '%' . $this->search . '%')->orderBy('id', 'ASC')->paginate(5);
         // $show
-        return view('livewire.admin.list-products',[
+        return view('livewire.admin.list-products', [
             'products' => $products,
             'ezesco_products' => $ezesco_products,
-            'categoriesfields'=>$categoriesfields,
-            'statusfields'=>$statusfields,
-            'groupedCategories'=>$groupedCategories,
+            'categoriesfields' => $categoriesfields,
+            'statusfields' => $statusfields,
+            'groupedCategories' => $groupedCategories,
             'leaddevs' => $leaddevs,
             'roles' => $roles,
         ]);

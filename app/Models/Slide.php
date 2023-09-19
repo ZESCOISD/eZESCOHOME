@@ -9,7 +9,7 @@ class Slide extends Model
 {
     use HasFactory;
     protected $table = 'slides';
-    protected $fillable = ['id','name','image'];
+    protected $fillable = ['id','name','image', 'description', 'url'];
     protected $primaryKey = 'id';
     public $timestamps =true;
 }

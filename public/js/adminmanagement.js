@@ -1,19 +1,19 @@
 // $(document).ready(function(){
 // 	// Activate tooltip
 // 	$('[data-toggle="tooltip"]').tooltip();
-	
+
 // 	// Select/Deselect checkboxes
 // 	var checkbox = $('table tbody input[type="checkbox"]');
 // 	$("#selectAll").click(function(){
 // 		if(this.checked){
 // 			checkbox.each(function(){
-// 				this.checked = true;                        
+// 				this.checked = true;
 // 			});
 // 		} else{
 // 			checkbox.each(function(){
-// 				this.checked = false;                        
+// 				this.checked = false;
 // 			});
-// 		} 
+// 		}
 // 	});
 // 	checkbox.click(function(){
 // 		if(!this.checked){
@@ -31,14 +31,16 @@
 
 
 
-var requiredField =  json_encode($selectedReportType);
+var requiredField = 0; // json_encode($selectedReportType);
 
 // Get a reference to the submit button
 var submitButton = document.getElementById('submitButton');
 
 // Function to toggle the button's disabled attribute based on the value of `requiredField`
 function toggleButton() {
-	submitButton.disabled = requiredField;
+    if(submitButton) {
+        submitButton.disabled = requiredField;
+    }
 }
 
 // Call the function initially to set the initial state of the button
@@ -61,19 +63,19 @@ Object.defineProperty(window, 'selectedReportType', {
 $(document).ready(function(){
 	// Activate tooltip
 	$('[data-toggle="tooltip"]').tooltip();
-	
+
 	// Select/Deselect checkboxes
 	var checkbox = $('table tbody input[type="checkbox"]');
 	$("#selectAll").click(function(){
 		if(this.checked){
 			checkbox.each(function(){
-				this.checked = true;                        
+				this.checked = true;
 			});
 		} else{
 			checkbox.each(function(){
-				this.checked = false;                        
+				this.checked = false;
 			});
-		} 
+		}
 	});
 
 
@@ -85,7 +87,7 @@ $(document).ready(function(){
 });
 
 window.addEventListener('close-modal', event => {
-	$('#addCategoryModal').modal('hide'); 
+	$('#addCategoryModal').modal('hide');
 });
 
 
@@ -93,7 +95,7 @@ function hideContent() {
 	var elementToHide = document.getElementById("password");
 	elementToHide.classList.add("hidden");
   }
-  
+
 
 function hideContentde() {
 	var field1 = document.getElementById("fname");
@@ -103,7 +105,7 @@ function hideContentde() {
 	var field5 = document.getElementById("role_name");
 	var field6 = document.getElementById("password");
 	var field7 = document.getElementById("password_confirmation");
-  
+
 	// Toggle visibility of fields
 	if (field1.classList.contains("hiddenField")) {
 		field6.classList.add("hiddenField");
@@ -113,7 +115,7 @@ function hideContentde() {
 		field3.classList.remove("hiddenField");
 		field4.classList.remove("hiddenField");
 		field5.classList.remove("hiddenField");
-	} else {	
+	} else {
 	  field6.classList.remove("hiddenField");
 	  field7.classList.remove("hiddenField");
 	  field1.classList.add("hiddenField");
@@ -123,4 +125,4 @@ function hideContentde() {
 	  field5.classList.add("hiddenField");
 	}
   }
-  
+

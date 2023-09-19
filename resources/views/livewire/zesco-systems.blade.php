@@ -88,7 +88,7 @@
                                             alt="Cover Image">
                                         <div class="course-content">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h4 type="button" wire:click="learnMore({{ $products->product_id }})">
+                                                <h4 type="button" wire:click="learnMore({{ $products->id }})">
                                                     Learn more</h4>
                                             </div>
                                             <h3>{{ $products->name }}</h3>
