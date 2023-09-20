@@ -1,4 +1,3 @@
-
 @push('custom-styles')
 
     <!-- Favicons -->
@@ -6,7 +5,9 @@
     <link href="{{asset('home_template/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{{asset('home_template/assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -18,7 +19,6 @@
 
     <!-- Template Main CSS File -->
     <link href="{{asset('home_template/assets/css/style.css')}}" rel="stylesheet">
-
 
 @endpush
 
@@ -35,7 +35,8 @@
 
             <div class="carousel-inner" role="listbox">
                 @foreach ($slides as $index => $slide)
-                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}" style="background-image: url( {{ asset('storage') }}/{{ $slide['image'] }} )">
+                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}"
+                         style="background-image: url( {{ asset('storage') }}/{{ $slide['image'] }} )">
                         <div class="carousel-caption align-content-center">
                             <h1>{{$slide['name']}}</h1>
                             <h3>{{$slide['description']}}</h3>
@@ -58,50 +59,232 @@
 
     <main id="main">
         <section id="about" class="about" style="margin-top: -10px">
+
+
             <div class="container">
                 <div class="row content">
                     <div class="section-title">
                         <h2>E-ZESCO HOME</h2>
-                        <p>Systems by categories.</p>
+                        <p>Welcome to E-ZESCO, your comprehensive platform for accessing a wide range of sophisticated in-house developed systems seamlessly integrated in one place.</p>
                     </div>
-                    <div class="recent-photos-slider swiper">
-                        <div class="swiper-wrapper align-items-center">
-                            @foreach($categories as $category)
-                                <div class="swiper-slide  btn-categories  " style="background-color: #{{$category->html ?? "0a53be"}}">
-                                    <h5 class="text-center " > {{$category->name ?? "--"}}</h5>
-                                    <p class="fst-italic text-center">  {{$category->products->count() ?? "--"}}  @if( $category->products->count() == 1)system @else systems @endif </p>
+                    <div id="categoryCarousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach($categories->chunk(5) as $key => $chunk)
+                                <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                    <div class="row">
+                                        @foreach($chunk as $category)
+                                            <div class=" col-2  btn-categories m-3  "
+                                                 style="background-color: #{{$category->html ?? "0a53be"}}">
+                                                <a href="javascript:void(0)"
+                                                   wire:click="searchByCategory({{$category->id}})">
+                                                    <h5 class="text-center "> {{$category->name ?? "--"}}</h5>
+                                                    <p class="fst-italic text-center">  {{$category->products->count() ?? "--"}}  @if( $category->products->count() == 1)
+                                                            system
+                                                        @else
+                                                            systems
+                                                        @endif </p>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
-                        <div class="swiper-pagination"></div>
+
+
+                        <div class="row">
+
+                            <div class="col-lg-3 col-sm-6">
+                                <a class="btn btn-sm btn-outline-secondary rounded-2" href="#categoryCarousel"
+                                   role="link"
+                                   data-slide="prev">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <span class="carousel-control-prev-icon " aria-hidden="true"></span>
+                                        </div>
+                                        <div class="col-5 text-center mt-1">
+                                            <span class="sr-only text-danger ">Prev</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="btn btn-sm btn-outline-secondary  " href="#categoryCarousel" role="link"
+                                   data-bs-slide="next">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <span class="carousel-control-next-icon  " aria-hidden="true"></span>
+                                        </div>
+                                        <div class="col-5 text-center mt-1">
+                                            <span class="sr-only  text-danger  ">Next</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-8 col-sm-6">
+                                <div class="input-group mb-3">
+                                    <input type="text"  wire:model="search_term"  wire:keydown.debounce.300ms="searchByTerm"  class="form-control"
+                                           placeholder="Search system by name or category..." aria-label="Search"
+                                           aria-describedby="searchButton">
+                                    <div class="input-group-append">
+                            <span wire:loading class="input-group-text">
+                                <div class="spinner-border text-success" role="status"></div>
+                            </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
 
-            <div class="container" >
+            <div class="container">
                 <div class="row">
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-lg-5">
+                    <div class="col-md-7 col-lg-7 col-sm-12 mt-lg-5">
                         <div class="row content">
-                            <div class="section-title" >
+                            <div class="section-title">
                                 <h2>Frequently Accessed System</h2>
                                 <p style="margin-top: -10px">Most accessed systems by daily link clicks.</p>
                             </div>
-                            <div style="margin-top: -10px" >
+                            <div style="margin-top: -10px">
                                 <div class="align-items-center">
-                                    @foreach($products as $product)
-                                        <div class="btn-categories  " style="background-color: #{{$product->category->html ?? "0a53be"}}">
-                                            <h5 class="text-center " > {{$product->name ?? "--"}}</h5>
-                                            <p class="fst-italic text-center">  {{$product->number_of_clicks ?? "--"}}  @if( $product->number_of_clicks == 1)system @else systems @endif </p>
-                                        </div>
+                                    @foreach($frequent_products as $product)
+                                        <a href="javascript:void(0)" wire:click="recordClick({{$product->id}})">
+                                            <div class="btn-categories  "
+                                                 style="background-color: #{{$product->category->html ?? "0a53be"}}">
+                                                <h5 class="text-center "> {{$product->name ?? "--"}}</h5>
+                                                <p class="fst-italic text-center">  {{$product->number_of_clicks ?? "--"}}  @if( $product->number_of_clicks == 1)
+                                                        click
+                                                    @else
+                                                        clicks
+                                                    @endif </p>
+                                            </div>
+                                        </a>
                                     @endforeach
                                 </div>
                                 <div class="swiper-pagination"></div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-5 col-lg-5 col-sm-12 mt-lg-5">
+                        @if($selected_category_id )
+                            <div class="row content">
+                                <div class="section-title">
+                                    <h2>Systems By Category</h2>
+                                    <p style="margin-top: -10px">List of all systems under {{$my_category->name ??'--'}}
+                                        .</p>
+                                </div>
+                                <div style="margin-top: -10px">
+                                    <div class="align-items-center">
 
-                    <div class="col-md-6 col-lg-6 col-sm-12">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                @forelse($ezesco_products_by_cat as $key => $product_by)
+                                                    <div class="col-lg-6 col-sm-12">
+                                                        <a href="javascript:void(0)"
+                                                           wire:click="recordClick({{$product_by->id}})">
+                                                            {{ $key + 1 }}: {{ $product_by['name'] }} <img
+                                                                src="{{ $product_by['icon_url'] }}" alt=" Icon"
+                                                                class="img-fluid">
+                                                        </a>
+                                                        <hr>
+                                                    </div>
+                                                @empty
+                                                    <div class="col-lg-12 col-sm-12">
+                                                        No items under this Category
+                                                    </div>
+                                                @endforelse
+                                            </div>
+                                        </div>
 
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+                        @elseif($this->search_term)
+                            <div class="row content">
+                                <div class="section-title">
+                                    <h2>Search Results</h2>
+                                    <p style="margin-top: -10px">List of all systems containing
+                                        <b><i>'{{$this->search_term}}'</i></b> search term.</p>
+                                </div>
+                                <div style="margin-top: -10px">
+                                    <div class="align-items-center">
+
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                @forelse($ezesco_products_by_cat as $key => $product_by)
+                                                    <div class="col-lg-6 col-sm-12">
+                                                        <a href="javascript:void(0)"
+                                                           wire:click="recordClick({{$product_by->id}})">
+                                                            {{ $key + 1 }}: {{ $product_by['name'] }} <img
+                                                                src="{{ $product_by['icon_url'] }}" alt=" Icon"
+                                                                class="img-fluid">
+                                                        </a>
+                                                        <hr>
+                                                    </div>
+                                                @empty
+                                                    <div class="col-lg-12 col-sm-12">
+                                                        No items under this Category
+                                                    </div>
+                                                @endforelse
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="row content">
+                                <div class="section-title">
+                                    <h2>All Systems</h2>
+                                    <p style="margin-top: -10px">List of all systems.</p>
+                                </div>
+                                <div style="margin-top: -10px">
+                                    <div class="align-items-center">
+
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                @forelse($ezesco_products as $key => $product)
+                                                    <div class="col-lg-6 col-sm-12">
+                                                        <a href="javascript:void(0)"
+                                                           wire:click="recordClick({{$product->id}})">
+                                                            {{ $key + 1 }}: {{ $product['name'] }} <img
+                                                                src="{{ $product['icon_url'] }}" alt=" Icon"
+                                                                class="img-fluid">
+                                                        </a>
+                                                        <hr>
+                                                    </div>
+                                                @empty
+                                                    <div class="col-lg-12 col-sm-12">
+                                                        No Items found
+                                                    </div>
+                                                @endforelse
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -109,38 +292,200 @@
         </section>
 
 
-
-            <!-- ======= My & Family Section ======= -->
+        <!-- ======= My & Family Section ======= -->
         <section id="about" class="about">
             <div class="container">
 
                 <div class="section-title">
-                    <h2>E-ZESCO HOME</h2>
-                    <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+                    <h2>IN-HOUSE SYSTEMS</h2>
+                    <p>Know more about Zesco's in-house system's. Click the link below to get started..</p>
+                    <a href="{{ route('ezesco-systems') }}" class="btn-learn-more">Learn More</a>
                 </div>
-
 
 
                 <div class="row content">
                     <div class="col-lg-6">
-                        <img src="assets/img/about.jpg" class="img-fluid" alt="">
+                        <div class="panel panel-default">
+                            <div class="panel-heading text-center"><a href="#"
+                                                                      class="pull-right">
+                                    @if (count($more_notices) > 1)
+                                        View
+                                        all
+                                    @endif
+
+                                </a>
+
+                                {{-- <div> --}}
+                                <h4 id="notice-header" style="margin-left: 15px; "><i
+                                        style="margin-left: 15px;" id="important-notice-icon"
+                                        class="bi bi-envelope-fill text-center"></i><br>
+                                    Important Notice
+                                </h4>
+                                {{-- </div> --}}
+                            </div>
+                            <div class="panel-body">
+                                @if ($more_notices->isEmpty())
+                                    <div id="notice-data" class="text-center">
+                                        <h5 id="no-notice" style="color: grey;" class="mt-5">No
+                                            Notices Found.
+                                        </h5>
+
+                                    </div>
+                                @elseif ($more_notices->isNotEmpty())
+                                    @foreach ($more_notices as $notice)
+                                        <div id="notice-data" class="text-left">
+                                            <h4 style="font-weight: bold">{{ $notice->notice_name }}
+                                            </h4>
+                                            <p style=" text-indent: 0px;" id="description">
+                                                {{ Str::limit($notice->description, 190) }}
+                                                @if (strlen($notice->description) > 190)
+                                                    <a wire:ignore href="#editRoleModal"
+                                                       class="edit" data-toggle="modal"
+                                                       data-target="#updateRoleModal"
+                                                       wire:click="editRole({{ $notice->id }})"></a>
+
+                                                    <button type="button" id="openModal"
+                                                            wire:click="readMore({{ $notice->id }})">
+                                                        Read more
+                                                    </button>
+                                            <div wire:ignore.self id="modal"
+                                                 class="modal">
+                                                <div class="modal-content">
+                                                    <span class="close">&times;</span>
+                                                    <h2 style="color:#d3882b;"
+                                                        wire:model.defer="notice_name">
+                                                        {{ $notice->notice_name }}</h2>
+                                                    <p wire:model.defer="description"
+                                                       style="text-indent: 0px;">
+                                                        {{ $notice->description }}</p>
+
+                                                    <hr>
+
+                                                    <div style="" class="row mt-5">
+                                                        <div class="col-xl-6">
+                                                            <div id="notice-data"
+                                                                 class="text-start">
+                                                                <h5 wire:model.defer="staff_title"
+                                                                    style="font-weight: bold; color:#d3882b;">
+                                                                    From
+                                                                    {{ $notice->staff_title }}
+                                                                </h5>
+                                                                <p wire:model.defer="staff_name"
+                                                                   style=" text-indent: 0px; ">
+                                                                    {{ $notice->staff_name }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <div style="margin-right: -550px;"
+                                                                 class="text-left">
+                                                                <h5
+                                                                    style="font-weight: bold; color:#d3882b;">
+                                                                    Department</h5>
+                                                                <p wire:model.defer="department"
+                                                                   style="text-align: left; text-indent: 0px;">
+                                                                    {{ $notice->department }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            </p>
+                                        </div>
+
+                                        <div style="display: flex;" class="row mt-5">
+                                            <div class="col-xl-6">
+                                                <div id="notice-data" class="text-start">
+                                                    <h5 style="font-weight: bold">From
+                                                        {{ $notice->staff_title }}</h5>
+                                                    <p style=" text-indent: 0px;">
+                                                        {{ $notice->staff_name }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div style="margin-right: -550px;" class="text-right">
+                                                    <h5 style="font-weight: bold">Department</h5>
+                                                    <p style="text-align: right;">
+                                                        {{ $notice->department }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    {{-- {{ $more_notices->links() }} --}}
+                                @endif
+
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading text-center"><a href="#"
+                                                                      class="pull-right">
+                                    @if (count($upcoming_events) > 1)
+                                        View
+                                        all
+                                    @endif
+                                </a>
+                                <h4 style="margin-left: 15px;"><i style="margin-left: 15px;"
+                                                                  id="upcoming-events-icon"
+                                                                  class="bi bi-calendar-event-fill text-center">
+                                    </i><Br> Upcoming Events</h4>
+                            </div>
+                            <div class="panel-body">
+                                @if ($upcoming_events->isEmpty())
+                                    <div id="notice-data" class="text-center">
+                                        <h5 id="no-event" style="color: grey;" class="mt-5">No
+                                            Upcoming
+                                            Events
+                                            Found.</h5>
+                                    </div>
+                                @elseif ($upcoming_events->isNotEmpty())
+                                    @foreach ($upcoming_events as $event)
+                                        <div class="text-start">
+                                            <h4 style="font-weight: bold" class="mt-4">
+                                                {{ $event->event_name }}</h4>
+                                            <p style=" text-indent: 0px;">
+                                                {{ $event->event_description }}</p>
+                                        </div>
+                                        <div class="row mt-5" style="display: flex;">
+                                            <div class="col-xl-6">
+                                                <div class="text-start">
+                                                    <h5 style="font-weight: bold">From
+                                                        {{ $event->venue }}</h5>
+                                                    <p style=" text-indent: 0px;">Fee
+                                                        K{{ $event->fee }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div class="text-right" style="margin-right: -500px;">
+                                                    <h5 class="text-right" style="font-weight: bold">
+                                                        Date and Time</h5>
+                                                    <p style="text-align: right;">
+                                                        {{ $event->date }}
+                                                        {{ Carbon::parse($event->time)->format('H:i') }}
+                                                    </p>
+                                                    <p></p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-6 pt-4 pt-lg-0">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                            magna aliqua.
-                        </p>
+
                         <ul>
-                            <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
-                            <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit</li>
-                            <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
+                            <li> <i class="ri-check-double-line"></i>E-ZESCO, designed to streamline your experience and processes and provide easy access to the tools and resources you need.</li>
+                            <li> <i class="ri-check-double-line"></i>Explore a diverse set of systems and services tailored to meet your specific needs. By providing you with integrated solutions, we're dedicated to providing you with a seamless experience that enhances your workflow and productivity.</li>
+                            <li> <i class="ri-check-double-line"></i>This platform brings together a suite of developed solutions, making it convenient and efficient for you to manage various aspects of your operations.</li>
+                            <li> <i class="ri-check-double-line"></i>Join us on this journey towards a more efficient and connected future. Explore the wide array of features and discover how E-ZESCO can revolutionize the way you work.</li>
                         </ul>
-                        <p>
-                            Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum.
-                        </p>
-                        <a href="our-story.html" class="btn-learn-more">Learn More</a>
+                        <p>From streamlined processes to powerful analytics, E-ZESCO empowers you with the tools you need to excel in your endeavors.</p>
+
+                        <a href="{{ route('ezesco-systems') }}" class="btn-learn-more">Learn More</a>
                     </div>
                 </div>
 
@@ -154,64 +499,42 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-6 icon-box">
                         <div class="icon"><i class="bi bi-laptop"></i></div>
-                        <h4 class="title"><a href="">Lorem ass asdasdsa Ipsum</a></h4>
-                        <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
+                        <h4 class="title"><a href="">Strategic Solutions</a></h4>
+                        <p class="description">Providing well-thought-out and effective approaches to problems.</p>
                     </div>
                     <div class="col-lg-4 col-md-6 icon-box">
                         <div class="icon"><i class="bi bi-bar-chart"></i></div>
-                        <h4 class="title"><a href="">Dolor Sitema</a></h4>
-                        <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+                        <h4 class="title"><a href="">Getaway</a></h4>
+                        <p>Your gateway to a unified platform for accessing a range of developed systems, all conveniently located in one place.</p>
+
                     </div>
                     <div class="col-lg-4 col-md-6 icon-box">
                         <div class="icon"><i class="bi bi-bounding-box"></i></div>
-                        <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
-                        <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+                        <h4 class="title"><a href="">Performance-Driven</a></h4>
+                        <p class="description">Focusing on achieving and exceeding performance goals and targets.</p>
                     </div>
                     <div class="col-lg-4 col-md-6 icon-box">
                         <div class="icon"><i class="bi bi-broadcast"></i></div>
-                        <h4 class="title"><a href="">Magni Dolores</a></h4>
-                        <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        <h4 class="title"><a href="">Continuous improvement</a></h4>
+                        <p class="description">Committing to ongoing learning, growth, and refinement of processes and practices.</p>
                     </div>
-                    <div class="col-lg-4 col-md-6 icon-box">
-                        <div class="icon"><i class="bi bi-camera"></i></div>
-                        <h4 class="title"><a href="">Nemo Enim</a></h4>
-                        <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
-                    </div>
-                    <div class="col-lg-4 col-md-6 icon-box">
-                        <div class="icon"><i class="bi bi-diagram-3"></i></div>
-                        <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
-                        <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-                    </div>
+{{--                    <div class="col-lg-4 col-md-6 icon-box">--}}
+{{--                        <div class="icon"><i class="bi bi-camera"></i></div>--}}
+{{--                        <h4 class="title"><a href="">Nemo Enim</a></h4>--}}
+{{--                        <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis--}}
+{{--                            praesentium voluptatum deleniti atque</p>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-lg-4 col-md-6 icon-box">--}}
+{{--                        <div class="icon"><i class="bi bi-diagram-3"></i></div>--}}
+{{--                        <h4 class="title"><a href="">Eiusmod Tempor</a></h4>--}}
+{{--                        <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero--}}
+{{--                            tempore, cum soluta nobis est eligendi</p>--}}
+{{--                    </div>--}}
                 </div>
 
             </div>
         </section><!-- End Features Section -->
 
-        <!-- ======= Recent Photos Section ======= -->
-        <section id="recent-photos" class="recent-photos">
-            <div class="container">
-
-                <div class="section-title">
-                    <h2>Recent Photos</h2>
-                    <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-                </div>
-
-{{--                <div class="recent-photos-slider swiper">--}}
-{{--                    <div class="swiper-wrapper align-items-center">--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-1.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-1.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-2.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-2.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-3.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-3.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-4.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-4.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-5.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-5.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-6.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-6.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-7.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-7.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                        <div class="swiper-slide"><a href="assets/img/recent-photos/recent-photos-8.jpg" class="glightbox"><img src="assets/img/recent-photos/recent-photos-8.jpg" class="img-fluid" alt=""></a></div>--}}
-{{--                    </div>--}}
-{{--                    <div class="swiper-pagination"></div>--}}
-{{--                </div>--}}
-
-            </div>
-        </section><!-- End Recent Photos Section -->
 
     </main><!-- End #main -->
 
@@ -229,6 +552,15 @@
     <script src="{{asset('home_template/assets/vendor/php-email-form/validate.js')}}"></script>
     <!-- Template Main JS File -->
     <script src="{{asset('home_template/assets/js/main.js')}}"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#categoryCarousel').carousel({
+                interval: 2000 // Set the interval in milliseconds (in this example, 2 seconds)
+            });
+        });
+    </script>
 
 @endpush
 

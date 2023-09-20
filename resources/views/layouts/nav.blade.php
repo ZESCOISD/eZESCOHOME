@@ -19,10 +19,13 @@
                 <li class="dropdown"><a href="#"><span>Systems By Categories</span> <i class="bi bi-chevron-down"></i></a>
                     <ul>
                         @foreach($categories as $category)
-                        <li class="dropdown"><a href="#"><span>{{$category->name }}</span> <i class="bi bi-chevron-right"></i></a>
+                        <li class="dropdown"><a href="#"><span>{{$category->name }} ({{$category->products->count() }})</span>  <i class="bi bi-chevron-right"></i></a>
                             <ul>
                                 @foreach($category->products as $product)
-                                <li><a href="{{$product->url ?? "#"}}">{{$product->name ?? "--"}}</a></li>
+                                <li>  <a href="javascript:void(0)" wire:click="recordClick({{$product->id}})" >
+                                       {{$product->name ?? "--"}}
+                                    </a>
+                                </li>
                                 @endforeach
                             </ul>
                         </li>

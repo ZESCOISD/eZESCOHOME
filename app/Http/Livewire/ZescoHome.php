@@ -32,7 +32,7 @@ class ZescoHome extends Component
     public $getSelectedProducts = [];
     public $products = [] ;
     public $getSelectedCategory;
-    public $selected_category;
+    public $category_id ;
     protected $paginationTheme = 'bootstrap';
 
 
@@ -75,13 +75,13 @@ class ZescoHome extends Component
         $this->loading = true;
         sleep(2);
         $this->getSelectedProducts = DB::table('category')
-            ->join('product', 'category.category_id', '=', 'product.category_id')
+            ->join('product', 'category.id', '=', 'product.category_id')
             ->join('status', 'product.status_id', '=', 'status.status_id')
             ->select('category.name as category_name', 'product.name as product_name', 'category.html',
                 'product.url as product_url', 'product.id as product_id',
                 'status.name as name', 'product.number_of_clicks as number_of_clicks')
             ->where('status.slug', '=', config('constants.statuses.production'))
-            ->where('category.category_id', '=', $category_id)
+            ->where('category.id', '=', $category_id)
             ->orderBy('category.name')
             ->get();
 
@@ -186,7 +186,7 @@ class ZescoHome extends Component
 
         $system_carousel = Product::all();
         $categories = DB::table('category')
-            ->join('product', 'category.category_id', '=', 'product.category_id')
+            ->join('product', 'category.id', '=', 'product.category_id')
             ->join('status', 'product.status_id', '=', 'status.status_id')
             ->select('category.name as category_name', 'product.name as product_name',
                 'product.url as product_url', 'product.id as product_id',
