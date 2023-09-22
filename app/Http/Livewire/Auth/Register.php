@@ -3,12 +3,13 @@
 namespace App\Http\Livewire\Auth;
 
 
-use App\Models\User;
 use Exception;
+use App\Models\User;
+use Livewire\Component;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Livewire\Component;
 
 
 class Register extends Component
@@ -53,12 +54,13 @@ class Register extends Component
                 'total_login' => 0,
                 'last_login' => now()->toDate(),
                 'password' => Hash::make($data['password']),
+                'api_token' => Str::random(60),
             ]);
 
 
 
             //login
-            if ( Auth::attempt( [ 'email'=>$this->email, 'password' => $this->password ])) {
+            if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
                 $user->total_login = $user->total_login + 1;
                 $user->last_login = now()->toDate();
                 $user->save();

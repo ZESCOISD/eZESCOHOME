@@ -7,6 +7,7 @@ use App\Http\Livewire\Admin\ListProducts;
 use App\Http\Livewire\Admin\Statuses;
 use App\Http\Livewire\Admin\ListUsers;
 use App\Http\Livewire\Admin\Notice;
+use App\Http\Livewire\Admin\ProductsLogs;
 use App\Http\Livewire\Admin\Quotes;
 use App\Http\Livewire\Admin\Slides;
 use App\Http\Livewire\Admin\SuggestionBoxs;
@@ -60,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
     // Authenticated routes here
     Route::get('/admin-menu',AdminHome::class)->name('admin-menu');
     Route::get('/products/manage',ListProducts::class)->name('products.manage');
+    Route::get('/products/logs',ProductsLogs::class)->name('products.logs');
     Route::get('/users/manage',ListUsers::class)->name('users.manage');
     Route::get('/categories/manage',Categories::Class)->name('categories.manage');
     Route::get('/permissions/manage',Permissions::Class)->name('permissions.manage');

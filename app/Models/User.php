@@ -31,7 +31,8 @@ class User extends Authenticatable
         'password_confirmation',
         'last_login',
         'total_login',
-        'password_change'
+        'password_change',
+        'api_token'
     ];
 
     // use HasPermissionsTrait;

@@ -16,37 +16,42 @@ use App\Http\Controllers\Admin\ProductController;
 |
 */
 
-Route::get('product', [ProductController::class, 'index'] );//{
+// Route::middleware('auth:api')->get('/ccivr/retreivetoken/{meterNumber}', [RetrieveTokenController::class, 'index']);
+
+
+//Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('product', [ProductController::class, 'index']); //{
     // If the Content-Type and Accept headers are set to 'application/json',
     // this will return a JSON structure. This will be cleaned up later.
     return ProductService::all();
+    //});
+
+
+    Route::get('product/{id}', [ProductController::class, 'show']);
+    // Route::get('product/{id}', function($id) {
+    //     return ProductService::find($id);
+    // });
+
+    Route::post('product', [ProductController::class, 'store']);
+    // Route::post('product', function(Request $request) {
+    //     return ProductService::create($request->all);
+    // });
+
+    Route::put('product/{id}', [ProductController::class, 'update']);
+    // Route::put('product/{id}', function(Request $request, $id) {
+    //     $product = ProductService::findOrFail($id);
+    //     $product->update($request->all());
+
+    //     return $product;
+    // });
+
+    Route::delete('product/{id}', [ProductController::class, 'delete']);
+    // Route::delete('product/{id}', function($id) {
+    //     ProductService::find($id)->delete();
+
+    //     return 204;
+    // });
 //});
-
-
-Route::get('product/{id}', [ProductController::class, 'show'] );
-// Route::get('product/{id}', function($id) {
-//     return ProductService::find($id);
-// });
-
-Route::post('product', [ProductController::class, 'store'] );
-// Route::post('product', function(Request $request) {
-//     return ProductService::create($request->all);
-// });
-
-Route::put('product/{id}', [ProductController::class, 'update'] );
-// Route::put('product/{id}', function(Request $request, $id) {
-//     $product = ProductService::findOrFail($id);
-//     $product->update($request->all());
-
-//     return $product;
-// });
-
-Route::delete('product/{id}', [ProductController::class, 'delete'] );
-// Route::delete('product/{id}', function($id) {
-//     ProductService::find($id)->delete();
-
-//     return 204;
-// });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
