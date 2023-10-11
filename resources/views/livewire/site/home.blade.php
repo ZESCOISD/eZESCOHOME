@@ -163,7 +163,9 @@
                                         </a>
                                     @endforeach
                                 </div>
-                                <div class="swiper-pagination"></div>
+                                <div class="swiper-pagination">
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -204,7 +206,9 @@
                                         </div>
 
                                     </div>
-                                    <div class="swiper-pagination"></div>
+                                    <div class="swiper-pagination">
+{{--                                        {{$ezesco_products_by_cat->links()}}--}}
+                                    </div>
                                 </div>
                             </div>
                         @elseif($this->search_term)
@@ -305,29 +309,27 @@
 
                 <div class="row content">
                     <div class="col-lg-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading text-center"><a href="#"
-                                                                      class="pull-right">
+                        <div class="card card-default">
+                            <div class="card-header text-center"><a href="#" class="pull-right">
                                     @if (count($more_notices) > 1)
                                         View
                                         all
                                     @endif
-
                                 </a>
 
                                 {{-- <div> --}}
-                                <h4 id="notice-header" style="margin-left: 15px; "><i
+                                <h4 class="text-success" style="margin-left: 15px; "><i
                                         style="margin-left: 15px;" id="important-notice-icon"
-                                        class="bi bi-envelope-fill text-center"></i><br>
+                                        class="bi bi-envelope-fill text-center"></i>
                                     Important Notice
                                 </h4>
                                 {{-- </div> --}}
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 @if ($more_notices->isEmpty())
                                     <div id="notice-data" class="text-center">
-                                        <h5 id="no-notice" style="color: grey;" class="mt-5">No
-                                            Notices Found.
+                                        <h5 class="mt-4 text-sm text-secondary disabled">No
+                                            notices found.
                                         </h5>
 
                                     </div>
@@ -419,26 +421,23 @@
 
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading text-center"><a href="#"
-                                                                      class="pull-right">
+                        <div class="card card-default mt-lg-3">
+                            <div class="card-header text-center text-success"><a href="#" class="pull-right">
                                     @if (count($upcoming_events) > 1)
                                         View
                                         all
                                     @endif
                                 </a>
-                                <h4 style="margin-left: 15px;"><i style="margin-left: 15px;"
-                                                                  id="upcoming-events-icon"
-                                                                  class="bi bi-calendar-event-fill text-center">
-                                    </i><Br> Upcoming Events</h4>
+                                <h4 style="margin-left: 15px;"><i style="margin-left: 15px;" id="upcoming-events-icon" class="bi bi-calendar-event-fill text-center">
+                                    </i> Upcoming Events</h4>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 @if ($upcoming_events->isEmpty())
                                     <div id="notice-data" class="text-center">
-                                        <h5 id="no-event" style="color: grey;" class="mt-5">No
-                                            Upcoming
-                                            Events
-                                            Found.</h5>
+                                        <h5 class="mt-4 text-sm text-secondary disabled">No
+                                            upcoming
+                                            events
+                                            found.</h5>
                                     </div>
                                 @elseif ($upcoming_events->isNotEmpty())
                                     @foreach ($upcoming_events as $event)
