@@ -478,7 +478,7 @@
                                                                 <div class="item item2"  style="background-color:#{{$showCategory->html ?? "e09334"}};">
                                                                     <div id="categories-panel"
                                                                          class="card shadow p-3 mb-5" type="button"
-                                                                         wire:click="showResult({{ $showCategory->category_id }})">
+                                                                         wire:click="showResult({{ $showCategory->id }})">
                                                                         <div class="card-body" >
                                                                             <a href="#">
                                                                             <i style="color: white; margin-right:5px;"
@@ -519,6 +519,7 @@
 
                                             <div class="panel-body">
                                                 @if ($getProducts->isEmpty())
+                                                    ss
                                                 @else
                                                     <div class="row text-center">
                                                         @foreach ($getProducts as $getProduct)

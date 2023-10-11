@@ -1,15 +1,15 @@
 <?php
 
 use App\Http\Livewire\Admin\AdminHome;
-use App\Http\Livewire\Admin\FAQS;
 use App\Http\Livewire\Admin\Categories;
-use App\Http\Livewire\Admin\ListProducts;
-use App\Http\Livewire\Admin\Statuses;
+use App\Http\Livewire\Admin\FAQS;
 use App\Http\Livewire\Admin\ListUsers;
 use App\Http\Livewire\Admin\Notice;
 use App\Http\Livewire\Admin\ProductsLogs;
+use App\Http\Livewire\Admin\Products\ProductsIndex;
 use App\Http\Livewire\Admin\Quotes;
 use App\Http\Livewire\Admin\Slides;
+use App\Http\Livewire\Admin\Statuses;
 use App\Http\Livewire\Admin\SuggestionBoxs;
 use App\Http\Livewire\Admin\UpcomingEvent;
 use App\Http\Livewire\Admin\ViewReports;
@@ -17,8 +17,8 @@ use App\Http\Livewire\Auth\ForgotPassword;
 use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Auth\Register;
 use App\Http\Livewire\Auth\ResetPassword;
-use App\Http\Livewire\Home;
 use App\Http\Livewire\LearnMore;
+use App\Http\Livewire\Site\Home;
 use App\Http\Livewire\System\Permissions;
 use App\Http\Livewire\System\Roles;
 use App\Http\Livewire\ZescoHome;
@@ -60,7 +60,7 @@ Route::get('/reset-password/{token}',ResetPassword::Class)->name('password.reset
 Route::middleware(['auth'])->group(function () {
     // Authenticated routes here
     Route::get('/admin-menu',AdminHome::class)->name('admin-menu');
-    Route::get('/products/manage',ListProducts::class)->name('products.manage');
+    Route::get('/products/manage',ProductsIndex::class)->name('products.manage');
     Route::get('/products/logs',ProductsLogs::class)->name('products.logs');
     Route::get('/users/manage',ListUsers::class)->name('users.manage');
     Route::get('/categories/manage',Categories::Class)->name('categories.manage');

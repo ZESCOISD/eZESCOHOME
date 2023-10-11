@@ -24,35 +24,48 @@ class Product extends Model
             'video',
             'cost_saving',
             'category_id',
+            'short_description',
+            'long_description',
             'image',
             'market_value',
             'project_cost',
             'dev_launch_date',
-            'status_id',
+            'status_code',
+            'heart_beat',
             'number_of_clicks',
             'url',
             'test_url',
             'lead_developer',
-            'short_description',
-            'long_description',
             'tutorial_url',
             'date_launched',
-            'date_decommissioned'
+            'date_decommissioned',
+
+            'prod_ip_address',
+            'test_ip_address',
+            'dr_ip_address',
+            'public_ip_address',
+
+
         ];
 
-    public function category(){
-        return $this->belongsTo( Category::class,'category_id') ;
-    }
-    public function status(){
-        return $this->belongsTo( Status::class,'status_id') ;
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function leadDeveloper(){
-        return $this->belongsTo( User::class,'lead_developer') ;
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_code', 'code');
     }
 
-    public function developers(){
-        return $this->belongsToMany( User::class,'products_users') ;
+    public function leadDeveloper()
+    {
+        return $this->belongsTo(User::class, 'lead_developer');
+    }
+
+    public function developers()
+    {
+        return $this->belongsToMany(User::class, 'products_users');
     }
 
 }

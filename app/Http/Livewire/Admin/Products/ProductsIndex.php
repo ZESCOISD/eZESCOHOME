@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin;
+namespace App\Http\Livewire\Admin\Products;
 
 // use Spatie\MediaLibrary\MediaCollections\Models\Media;
 // use Spatie\MediaLibrary\HasMedia;
@@ -11,13 +11,12 @@ use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
-class ListProducts extends Component
+class ProductsIndex extends Component
 {
 
     // use InteractsWithMedia;
@@ -31,10 +30,17 @@ class ListProducts extends Component
     public $selectedReportType = false;
     public $loading = false;
     public $name, $product_id, $icon_link, $category_id,
-        $status_id, $number_of_clicks = 0, $video, $user_manual,
+        $status_code, $number_of_clicks = 0, $video, $user_manual,
         $system_cover_image, $cost_saving, $url, $test_url,
         $lead_developer, $short_description, $long_description,
-        $tutorial_url, $date_launched, $date_decommissioned, $dev_launch_date, $market_value, $project_cost;
+        $tutorial_url, $date_launched, $date_decommissioned, $dev_launch_date, $market_value, $project_cost,
+        $prod_ip_address,
+        $test_ip_address,
+        $dr_ip_address,
+        $public_ip_address
+
+;
+
     public $image;
     public $preview_image;
     public $search;
@@ -57,7 +63,7 @@ class ListProducts extends Component
             'name' => 'required|min:3|max:200',
             'icon_link' => 'nullable|image|max:5024',
             'category_id' => 'required',
-            'status_id' => 'required',
+            'status_code' => 'required',
             'user_manual' => 'nullable|mimes:pdf|max:10240',
             'video' => 'nullable|mimes:mp4|max:50000',
             'cost_saving' => 'required|numeric',
@@ -73,16 +79,9 @@ class ListProducts extends Component
         ]);
         $product = new Product();
 
-        $filename1 = "";
-        $filename2 = "";
-        $filename3 = "";
-        $filename4 = "";
 
-
-        if (
-            $this->category_id == "0" || $this->status_id == "0"
-            || $this->lead_developer == "0"
-        ) {
+        if ($this->category_id == "0" || $this->status_code == "0"
+            || $this->lead_developer == "0") {
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
             $loading = false;
@@ -115,7 +114,7 @@ class ListProducts extends Component
             //save product
             $product->name = $this->name;
             $product->category_id = $this->category_id;
-            $product->status_id = $this->status_id;
+            $product->status_code = $this->status_code;
             $product->number_of_clicks = $this->number_of_clicks;
             $product->url = $this->url;
             $product->test_url = $this->test_url;
@@ -129,6 +128,12 @@ class ListProducts extends Component
             $product->dev_launch_date = date('Y-m-d', strtotime($this->dev_launch_date));
             $product->date_launched = date('Y-m-d', strtotime($this->date_launched));
             $product->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
+
+            $product->dr_ip_address = $this->dr_ip_address;
+            $product->prod_ip_address = $this->prod_ip_address;
+            $product->test_ip_address = $this->test_ip_address;
+            $product->public_ip_address = $this->public_ip_address;
+
             $product->icon_link = $filename1;
             $product->user_manual = $filename2;
             $product->video = $filename3;
@@ -139,7 +144,7 @@ class ListProducts extends Component
             $product->developers()->syncWithoutDetaching($this->developers);
 
             if ($result) {
-                session()->flash('savesuccessful', 'Your Product was successfully added');
+                session()->flash('save_successful', 'Your Product was successfully added');
                 $this->resetInput();
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetPage();
@@ -171,6 +176,11 @@ class ListProducts extends Component
         $this->tutorial_url = '';
         $this->date_launched = '';
         $this->date_decommissioned = '';
+
+        $this->public_ip_address = '';
+        $this->test_ip_address = '';
+        $this->prod_ip_address = '';
+        $this->dr_ip_address = '';
     }
 
     public function editProduct(int $product_id)
@@ -180,7 +190,7 @@ class ListProducts extends Component
         // dd($product);
         if ($this->product) {
             if (
-                $this->category_id == "0" || $this->status_id == "0"
+                $this->category_id == "0" || $this->status_code == "0"
                 || $this->lead_developer == "0"
             ) {
                 $this->addError('selectedOption', 'Please select a valid option.');
@@ -212,7 +222,7 @@ class ListProducts extends Component
                 $this->name = $this->product->name;
                 // $this->icon_link = $product->icon_link;
                 $this->category_id = $this->product->category_id;
-                $this->status_id = $this->product->status_id;
+                $this->status_code = $this->product->status_code;
                 $this->cost_saving = $this->product->cost_saving;
                 // $this->system_cover_image = $product->system_cover_image;
                 // $this->video = $product->video;
@@ -226,6 +236,12 @@ class ListProducts extends Component
                 $this->tutorial_url = $this->product->tutorial_url;
                 $this->date_launched = $this->product->date_launched;
                 $this->date_decommissioned = $this->product->date_decommissioned;
+
+
+                $this->test_ip_address = $this->product->test_ip_address;
+                $this->public_ip_address = $this->product->public_ip_address;
+                $this->dr_ip_address = $this->product->dr_ip_address;
+                $this->prod_ip_address = $this->product->prod_ip_address;
             }
 
             //   dd($this->icon_link->getClientOriginalName());
@@ -241,26 +257,20 @@ class ListProducts extends Component
 
     public function updateProduct()
     {
-
-        $loading = true;
         sleep(2);
-
-        $files = Product::where('id', 'like', '%' . $this->product_id . '%')->first();
-
-        // dd($files);
-
+        $product = Product::find( $this->product_id );
         $this->validate([
             'name' => 'required|min:3|max:200',
             'icon_link' => 'nullable|image|max:5024',
-            'category_id' => '',
-            'status_id' => '',
+            'category_id' => 'required',
+            'status_code' => 'required',
             'user_manual' => 'nullable|mimes:pdf|max:10240',
             'video' => 'nullable|mimes:mp4|max:50000',
             'cost_saving' => 'required|numeric',
             'system_cover_image' => 'nullable|image|max:5024',
             'url' => 'required|url',
             'test_url' => 'required|url',
-            'lead_developer' => '',
+            'lead_developer' => 'required',
             'short_description' => 'required|min:3|max:200',
             'long_description' => 'required|min:3|max:300',
             'tutorial_url' => 'required|url',
@@ -268,16 +278,11 @@ class ListProducts extends Component
             'date_decommissioned' => 'nullable|date_format:Y-m-d',
         ]);
 
-        //  $files = new Product();
 
-        $filename1 = "";
-        $filename2 = "";
-        $filename3 = "";
-        $filename4 = "";
 
 
         if (
-            $this->category_id == "0" || $this->status_id == "0"
+            $this->category_id == "0" || $this->status_code == "0"
             || $this->lead_developer == "0"
         ) {
             $this->addError('selectedOption', 'Please select a valid option.');
@@ -309,27 +314,33 @@ class ListProducts extends Component
                 $filename4 = null;
             }
 
-            $files->name = $this->name;
-            $files->category_id = $this->category_id;
-            $files->status_id = $this->status_id;
-            $files->number_of_clicks = $this->number_of_clicks;
-            $files->url = $this->url;
-            $files->test_url = $this->test_url;
-            $files->cost_saving = $this->cost_saving;
-            $files->lead_developer = $this->lead_developer;
-            $files->short_description = $this->short_description;
-            $files->long_description = $this->long_description;
-            $files->tutorial_url = $this->tutorial_url;
-            $files->date_launched = date('Y-m-d', strtotime($this->date_launched));
-            $files->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
-            $files->icon_link = $filename1;
-            $files->user_manual = $filename2;
-            $files->video = $filename3;
-            $files->system_cover_image = $filename4;
-            $result = $files->update();
+            $product->name = $this->name;
+            $product->category_id = $this->category_id;
+            $product->status_code = $this->status_code;
+            $product->number_of_clicks = $this->number_of_clicks;
+            $product->url = $this->url;
+            $product->test_url = $this->test_url;
+            $product->cost_saving = $this->cost_saving;
+            $product->lead_developer = $this->lead_developer;
+            $product->short_description = $this->short_description;
+            $product->long_description = $this->long_description;
+            $product->tutorial_url = $this->tutorial_url;
+            $product->date_launched = date('Y-m-d', strtotime($this->date_launched));
+            $product->date_decommissioned = date('Y-m-d', strtotime($this->date_decommissioned));
+
+            $product->public_ip_address = $this->public_ip_address;
+            $product->dr_ip_address = $this->dr_ip_address;
+            $product->prod_ip_address = $this->prod_ip_address;
+            $product->test_ip_address = $this->test_ip_address;
+
+            $product->icon_link = $filename1;
+            $product->user_manual = $filename2;
+            $product->video = $filename3;
+            $product->system_cover_image = $filename4;
+            $result = $product->update();
 
             if ($result) {
-                session()->flash('updatesuccessful', 'Your Product was successfully added');
+                session()->flash('update_successful', 'Your Product was successfully added');
                 $this->resetInput();
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetPage();
@@ -348,52 +359,32 @@ class ListProducts extends Component
 
     public function destroyProduct()
     {
-
-        $loading = true;
         sleep(2);
 
         Product::find($this->product_id)->delete();
         session()->flash('deletesuccessful', 'Your product was deleted successfully');
-        $loading = false;
     }
 
     public function logout()
     {
-
         Auth::logout();
         return redirect('login');
     }
 
     public function render()
     {
-
-        // $productsMedia = Product::with('media')->get();
-        $ezesco_products = Product::all();
-        // dd($productsMedia);
-        // $students = Student::with('media')->get();
-
-        $categories = DB::table('category')
-            ->join('product', 'category.category_id', '=', 'product.category_id')
-            ->select('category.name as category_name', 'product.name as product_name')
-            ->orderBy('category.name')
-            ->get();
-
-        $groupedCategories = $categories->groupBy('category_name');
-
-        $this->categories = $groupedCategories;
-
-        $categoriesfields = Category::all();
+        $this->categories = Category::all();
         $statusfields = Status::all();
         $leaddevs = User::all();
         $roles = Role::all();
-        $products = Product::where('name', 'like', '%' . $this->search . '%')->orderBy('id', 'ASC')->paginate(5);
-        // $show
-        return view('livewire.admin.list-products', [
+        $products = Product::with('status')
+            ->where('name', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'ASC')
+            ->paginate(5);
+
+        return view('livewire.admin.products.index', [
             'products' => $products,
-            'ezesco_products' => $ezesco_products,
-            'categoriesfields' => $categoriesfields,
             'statusfields' => $statusfields,
-            'groupedCategories' => $groupedCategories,
             'leaddevs' => $leaddevs,
             'roles' => $roles,
         ]);

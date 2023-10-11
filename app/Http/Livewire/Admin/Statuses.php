@@ -13,7 +13,7 @@ class Statuses extends Component
 
     use WithPagination;
 
-    public $status_id, $name, $slug;
+    public $status_id, $name, $code;
     public $search;
     public $loading = false;
     public $allData = [];
@@ -32,7 +32,7 @@ class Statuses extends Component
 
         $validateData = $this->validate();
         Status::create($validateData);
-        session()->flash('savesuccessful', 'A new status was successfully added');
+        session()->flash('save_successful', 'A new status was successfully added');
         $this->resetInput();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetPage();
@@ -43,7 +43,7 @@ class Statuses extends Component
     public function resetInput()
     {
         $this->name = '';
-        $this->slug = '';
+        $this->code = '';
     }
 
     public function editStatus(int $status_id)
@@ -52,7 +52,7 @@ class Statuses extends Component
         if ($status) {
             $this->status_id = $status->status_id;
             $this->name = $status->name;
-            $this->slug = $status->slug;
+            $this->code = $status->code;
         } else {
             return redirect()->to('/status.manage');
         }
@@ -71,9 +71,9 @@ class Statuses extends Component
         $validateData = $this->validate();
         Status::where('status_id', $this->status_id)->update([
             'name' => $validateData['name'],
-            'slug' => $validateData['slug'],
+            'code' => $validateData['code'],
         ]);
-        session()->flash('updatesuccessful', 'Status details where successfully updated');
+        session()->flash('update_successful', 'Status details where successfully updated');
         $this->resetInput();
         $this->dispatchBrowserEvent('close-modal');
 
@@ -91,7 +91,7 @@ class Statuses extends Component
         sleep(2);
 
         Status::find($this->status_id)->delete();
-        session()->flash('deletesuccessful', 'Status was successfully deleted');
+        session()->flash('delete_successful', 'Status was successfully deleted');
         $this->dispatchBrowserEvent('close-modal');
 
         $loading = false;
@@ -108,14 +108,14 @@ class Statuses extends Component
     public function render()
     {
         $statuses = Status::where('name', 'like', '%' . $this->search . '%')->orderBy('status_id', 'ASC')->paginate(5);
-        return view('livewire.admin.statuses', ['statuses' => $statuses]);
+        return view('livewire.admin.status.index', ['statuses' => $statuses]);
     }
 
     protected function rules()
     {
         return [
             'name' => 'required|min:3|max:50',
-            'slug' => 'required|min:3|max:50',
+            'code' => 'required|min:3|max:50',
         ];
     }
 }
