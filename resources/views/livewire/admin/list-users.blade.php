@@ -175,10 +175,10 @@
                                                                                         name</label>
                                                                                     <input type="text"
                                                                                         class="form-control mb-1"
-                                                                                        wire:model.defer="fname"
+                                                                                        wire:model.defer="name"
                                                                                         id="name"
                                                                                         placeholder="first name" required>
-                                                                                    @error('fname')
+                                                                                    @error('name')
                                                                                         <span
                                                                                             class="text-danger">{{ $message }}</span>
                                                                                     @enderror
@@ -187,10 +187,10 @@
                                                                                     <label for="name">Last name</label>
                                                                                     <input type="text"
                                                                                         class="form-control mb-1"
-                                                                                        wire:model.defer="sname"
+                                                                                        wire:model.defer="phone"
                                                                                         id="name"
-                                                                                        placeholder="last name" required>
-                                                                                    @error('sname')
+                                                                                        placeholder="phone number" required>
+                                                                                    @error('phone')
                                                                                         <span
                                                                                             class="text-danger">{{ $message }}</span>
                                                                                     @enderror
@@ -280,9 +280,9 @@
                                                                     <label for="selectAll"></label>
                                                                 </span>
                                                             </th>
-                                                            <th>User ID</th>
-                                                            <th> First name </th>
-                                                            <th> Last name</th>
+                                                            <th>Name </th>
+                                                            <th>Title</th>
+                                                            <th>Phone</th>
                                                             <th>Email</th>
                                                             <th>Staff Number</th>
                                                             <th>Role Type</th>
@@ -299,9 +299,9 @@
                                                                         <label for="checkbox1"></label>
                                                                     </span>
                                                                 </td>
-                                                                <td>{{ $user->user_id }}</td>
-                                                                <td>{{ $user->fname }}</td>
-                                                                <td>{{ $user->sname }}</td>
+                                                                <td>{{ $user->name }}</td>
+                                                                <td>{{ $user->job_title }}</td>
+                                                                <td>{{ $user->phone }}</td>
                                                                 <td>{{ $user->email }}</td>
                                                                 <td>{{ $user->staff_number }}</td>
                                                                 <td>{{ $user->name }}</td>
@@ -310,19 +310,19 @@
 
                                                                     <a href="#editUserModal" class="edit"
                                                                         data-toggle="modal" data-target="#updateUserModal"
-                                                                        wire:click="editUser({{ $user->user_id }})"><i
+                                                                        wire:click="editUser({{ $user->id }})"><i
                                                                             class="material-icons" data-toggle="tooltip"
                                                                             title="Edit">&#xE254;</i></a>
 
                                                                     <a href="#deleteUserModal" class="delete"
                                                                         data-toggle="modal" data-target="#deleteUserModal"
-                                                                        wire:click="deleteUser({{ $user->user_id }})"><i
+                                                                        wire:click="deleteUser({{ $user->id }})"><i
                                                                             class="material-icons" data-toggle="tooltip"
                                                                             title="Delete">&#xE872;</i></a>
 
                                                                     <a href="#showRoleModal"
                                                                         data-target="#assignRoleUserModal"
-                                                                        wire:click="showRole({{ $user->user_id }})"
+                                                                        wire:click="showRole({{ $user->id }})"
                                                                         class="role" data-toggle="modal"><i
                                                                             style="font-size: 25px; color:green;"
                                                                             class="bi bi-shield"></i></a>
@@ -429,18 +429,18 @@
                             <form wire:submit.prevent="editUser">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">First name</label>
-                                    <input type="text" class="form-control mb-1" wire:model.defer="fname"
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control mb-1" wire:model.defer="name"
                                         id="name" placeholder="first name" required>
-                                    @error('fname')
+                                    @error('name')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">Last name</label>
-                                    <input type="text" class="form-control mb-1" wire:model.defer="sname"
-                                        id="name" placeholder="last name" required>
-                                    @error('sname')
+                                    <label for="name">Phone number</label>
+                                    <input type="text" class="form-control mb-1" wire:model.defer="phone"
+                                        id="name" placeholder="phone number" required>
+                                    @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -508,17 +508,17 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name">First name</label>
-                                <input type="text" class="form-control mb-1" wire:model.defer="fname"
+                                <input type="text" class="form-control mb-1" wire:model.defer="name"
                                     id="name" placeholder="first name" required>
-                                @error('fname')
+                                @error('name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="name">Last name</label>
-                                <input type="text" class="form-control mb-1" wire:model.defer="sname"
-                                    id="sname" placeholder="last name" required>
-                                @error('sname')
+                                <input type="text" class="form-control mb-1" wire:model.defer="phone"
+                                    id="phone" placeholder="phone number" required>
+                                @error('phone')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

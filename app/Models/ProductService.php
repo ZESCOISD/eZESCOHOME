@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductService extends Model
 {
-    protected $table = "product_service";
+    protected $table = "product";
 
     protected $primarykey = 'id';
     protected $fillable = ['id','url','status','reason'];

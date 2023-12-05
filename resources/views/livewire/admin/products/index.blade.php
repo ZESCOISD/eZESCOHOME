@@ -99,7 +99,24 @@
                             <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#addProductModal"><i class="material-icons">&#xE147;</i> <span>Add new
                                         product</span></button>
+
+                                <button  class="btn btn-primary" wire:click="checkSystemStatus()"  > <span>Check Links</span></button>
                             @endrole
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                    @if (session()->has('successful'))
+                        <div id="dismiss"
+                             class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
+                             role="alert" style="border:none; font-size: 12px;">
+                            <p class="mt-3">{{ session('successful') }}</p>
+                            <button style="color:white;" type="button" class="btn-close mt-1"
+                                    wire:click="closeModal" data-dismiss="alert" aria-label="Close">
+                            </button>
+                        </div>
+                    @endif
                         </div>
                     </div>
                 </div>

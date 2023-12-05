@@ -36,7 +36,7 @@ class ViewReports extends Component
     public $suggestion_id, $subject, $system_name, $suggestion;
 
     public $name, $product_id, $icon_link, $category_id, $category_name,
-    $status_id, $status_name,  $number_of_clicks, $url, $test_url,
+    $status_code, $status_name,  $number_of_clicks, $url, $test_url,
     $lead_developer, $short_description, $long_description,
     $tutorial_url, $date_launched, $date_decommissioned;
 
@@ -49,7 +49,7 @@ class ViewReports extends Component
 
 
         $this->totalActiveSystems = DB::table('product')
-        ->join('status', 'product.status_id', '=', 'status.status_id')
+        ->join('status', 'product.status_code', '=', 'status.code')
         ->select('product.* ','status.name as status_name')
         ->where('status.name','like','%'.'active'.'%')
         ->count();
@@ -60,11 +60,11 @@ class ViewReports extends Component
 
     public function viewItem(int $product_id){
 
-        // ->join('status as s', 'product.status_id', '=', 's.status_id')
+        // ->join('status as s', 'product.status_code', '=', 's.status_code')
         // ->join('category as c', 'product.category_id', '=', 'c.category_id')
         // ->select('product.*','s.name as status_name','c.name as category_name');
 
-        $this->viewProduct = Product::join('status', 'product.status_id', '=', 'status.status_id')
+        $this->viewProduct = Product::join('status', 'product.status_code', '=', 'status.code')
         ->join('category', 'product.category_id', '=', 'product.category_id')
         ->where('product.product_id', $product_id)
         ->select('product.*', 'status.name as status_name', 'category.name as category_name')
@@ -72,7 +72,7 @@ class ViewReports extends Component
 
         // $product = Product::find($product_id);
         if($this->viewProduct){
-            if ($this->category_id == "0" || $this->status_id == "0"
+            if ($this->category_id == "0" || $this->status_code == "0"
             || $this->lead_developer == "0") {
             $this->addError('selectedOption', 'Please select a valid option.');
             return;
@@ -132,34 +132,34 @@ class ViewReports extends Component
 
         $reportType = $this->selectedReportType;
         if(!empty($reportType)){
-            $product = Product::join('status as s', 'product.status_id', '=', 's.status_id')
+            $product = Product::join('status as s', 'product.status_code', '=', 's.status_code')
             ->join('category as c', 'product.category_id', '=', 'c.category_id')
             ->select('product.*','s.name as status_name','c.name as category_name');
 
 
             if ( $reportType === "1" && !empty($this->search)) {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.name','like','%'. $this->search.'%');
 
                 // if date is inputed
                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','s1.name as status_name','c1.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -171,26 +171,26 @@ class ViewReports extends Component
 
 
             }elseif( $reportType === "1" ){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name');
 
                 // if date is inputed
                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -206,7 +206,7 @@ class ViewReports extends Component
             // Frequently Accessed System's Report
 
             if( $reportType === "2" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.name','like','%'. $this->search.'%')
@@ -216,20 +216,20 @@ class ViewReports extends Component
                 // If date is inputed
 
                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -239,7 +239,7 @@ class ViewReports extends Component
                 $this->selectedReportType = $reportType;
                 $this->products = $product->get();
             }elseif ( $reportType === "2") {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->orderBy('number_of_clicks', 'desc')
@@ -247,20 +247,20 @@ class ViewReports extends Component
 
                 //   if date is inputed
                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -275,7 +275,7 @@ class ViewReports extends Component
              // Active System's
 
              if( $reportType === "3" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.name','like','%'. $this->search.'%')
@@ -284,20 +284,20 @@ class ViewReports extends Component
 
                     // if date is inputed
                     if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                         ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                         ->select('product.*','status.name as status_name','category.name as category_name')
                         ->whereDate('product.created_at', '>=', $this->from)
                         ->whereDate('product.created_at', '<=', $this->to);
 
                     }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                         ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                         ->select('product.*','s2.name as status_name','c2.name as category_name')
                         ->whereDate('product.created_at','>=',$this->from);
 
                     }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                         ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                         ->select('product.*','s3.name as status_name','c3.name as category_name')
                         ->whereDate('product.created_at','<=',$this->to);
@@ -308,27 +308,27 @@ class ViewReports extends Component
                     $this->products = $product->get();
 
             }elseif ( $reportType === "3") {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('status.name','like','%'.'active'.'%');
 
                  // if date is inputed
                  if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -341,7 +341,7 @@ class ViewReports extends Component
               // Deactivated System's
 
               if( $reportType === "4" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.name','like','%'. $this->search.'%')
@@ -350,20 +350,20 @@ class ViewReports extends Component
 
                     // if date is inputed
                     if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                         ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                         ->select('product.*','status.name as status_name','category.name as category_name')
                         ->whereDate('product.created_at', '>=', $this->from)
                         ->whereDate('product.created_at', '<=', $this->to);
 
                     }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                         ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                         ->select('product.*','s2.name as status_name','c2.name as category_name')
                         ->whereDate('product.created_at','>=',$this->from);
 
                     }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                         ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                         ->select('product.*','s3.name as status_name','c3.name as category_name')
                         ->whereDate('product.created_at','<=',$this->to);
@@ -373,27 +373,27 @@ class ViewReports extends Component
                     $this->products = $product->get();
 
             }elseif ( $reportType === "4") {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('status.name','like','%'.'deactivated'.'%');
 
                  // if date is inputed
                  if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -406,7 +406,7 @@ class ViewReports extends Component
              // System's in production report
 
              if( $reportType === "5" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.name','like','%'. $this->search.'%')
@@ -415,20 +415,20 @@ class ViewReports extends Component
 
                     // if date is inputed
                     if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                         ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                         ->select('product.*','status.name as status_name','category.name as category_name')
                         ->whereDate('product.created_at', '>=', $this->from)
                         ->whereDate('product.created_at', '<=', $this->to);
 
                     }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                         ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                         ->select('product.*','s2.name as status_name','c2.name as category_name')
                         ->whereDate('product.created_at','>=',$this->from);
 
                     }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                         ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                         ->select('product.*','s3.name as status_name','c3.name as category_name')
                         ->whereDate('product.created_at','<=',$this->to);
@@ -438,27 +438,27 @@ class ViewReports extends Component
                     $this->products = $product->get();
 
             }elseif ( $reportType === "5") {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('status.name','like','%'.'production'.'%');
 
                  // if date is inputed
                  if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -472,7 +472,7 @@ class ViewReports extends Component
              //  System's in development report
 
              if( $reportType === "6" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.name','like','%'. $this->search.'%')
@@ -481,20 +481,20 @@ class ViewReports extends Component
 
                     // if date is inputed
                     if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                         ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                         ->select('product.*','status.name as status_name','category.name as category_name')
                         ->whereDate('product.created_at', '>=', $this->from)
                         ->whereDate('product.created_at', '<=', $this->to);
 
                     }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                         ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                         ->select('product.*','s2.name as status_name','c2.name as category_name')
                         ->whereDate('product.created_at','>=',$this->from);
 
                     }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                         ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                         ->select('product.*','s3.name as status_name','c3.name as category_name')
                         ->whereDate('product.created_at','<=',$this->to);
@@ -505,27 +505,27 @@ class ViewReports extends Component
                     $this->products = $product->get();
 
             }elseif ( $reportType === "6") {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('status.name','like','%'.'development'.'%');
 
                  // if date is inputed
                  if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -539,7 +539,7 @@ class ViewReports extends Component
              // Decommissioned System's
 
              if( $reportType === "7" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.name','like','%'. $this->search.'%')
@@ -548,20 +548,20 @@ class ViewReports extends Component
 
                     // if date is inputed
                     if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                         ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                         ->select('product.*','status.name as status_name','category.name as category_name')
                         ->whereDate('product.created_at', '>=', $this->from)
                         ->whereDate('product.created_at', '<=', $this->to);
 
                     }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                         ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                         ->select('product.*','s2.name as status_name','c2.name as category_name')
                         ->whereDate('product.created_at','>=',$this->from);
 
                     }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                         ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                         ->select('product.*','s3.name as status_name','c3.name as category_name')
                         ->whereDate('product.created_at','<=',$this->to);
@@ -572,27 +572,27 @@ class ViewReports extends Component
                     $this->products = $product->get();
 
             }elseif ( $reportType === "7") {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('status.name','like','%'.'decommissioned'.'%');
 
                  // if date is inputed
                  if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -607,7 +607,7 @@ class ViewReports extends Component
               // System Developer Report
 
               if( $reportType === "8" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.lead_developer','like','%'. $this->search.'%')
@@ -615,20 +615,20 @@ class ViewReports extends Component
 
                     // if date is inputed
                     if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                         ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                         ->select('product.*','status.name as status_name','category.name as category_name')
                         ->whereDate('product.created_at', '>=', $this->from)
                         ->whereDate('product.created_at', '<=', $this->to);
 
                     }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                         ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                         ->select('product.*','s2.name as status_name','c2.name as category_name')
                         ->whereDate('product.created_at','>=',$this->from);
 
                     }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                         ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                         ->select('product.*','s3.name as status_name','c3.name as category_name')
                         ->whereDate('product.created_at','<=',$this->to);
@@ -639,27 +639,27 @@ class ViewReports extends Component
                     $this->products = $product->get();
 
             }elseif ( $reportType === "8") {
-                $product = $product->join('status', 'product.status_id', '=', 'status.status_id')
+                $product = $product->join('status', 'product.status_code', '=', 'status.code')
                 ->join('category', 'product.category_id', '=', 'category.category_id')
                 ->select('product.*', 'status.name as status_name','category.name as category_name')
                 ->where('product.lead_developer','like','%'. $this->search.'%');
 
                  // if date is inputed
                  if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_id', '=', 's1.status_id')
+                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
                     ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
                     ->select('product.*','status.name as status_name','category.name as category_name')
                     ->whereDate('product.created_at', '>=', $this->from)
                     ->whereDate('product.created_at', '<=', $this->to);
 
                 }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_id', '=', 's2.status_id')
+                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
                     ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
                     ->select('product.*','s2.name as status_name','c2.name as category_name')
                     ->whereDate('product.created_at','>=',$this->from);
 
                 }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_id', '=', 's3.status_id')
+                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
                     ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
                     ->select('product.*','s3.name as status_name','c3.name as category_name')
                     ->whereDate('product.created_at','<=',$this->to);
@@ -735,7 +735,7 @@ class ViewReports extends Component
             $this->name = $product->name;
             $this->icon_link = $product->icon_link;
             $this->category_id = $product->category_id;
-            $this->status_id = $product->status_id;
+            $this->status_code = $product->status_code;
             $this->number_of_clicks = $product->number_of_clicks;
             $this->url = $product->url;
             $this->test_url = $product->test_url;

@@ -94,19 +94,21 @@ class HomeController extends Controller
     public static function checkSystemStateWithAGet(){
 
 
-        $products =
+        $products = Product::where('status_code', config('constants.status_codes.active'))->get();
         $client = new Client();
 
-        foreach ($urls as $url) {
+        foreach ($products as $product ) {
             try {
                 $response = $client->request('GET', $product->url);
                 $status = $response->getStatusCode();
 
                 // Assuming you have a column named 'status' in your 'urls' table
-                $url->update(['status' => $status == 200 ? 'on' : 'off']);
+                $product->update(['heart_beat' => $status == 200 ? 'on' : 'off']);
             } catch (\Exception $e) {
                 // Handle exception (e.g., timeout, unreachable, etc.)
-                $url->update(['status' => 'off']);
+                $product->update(['heart_beat' => 'off']);
+
+                //WRITE THE LOGS
             }
         }
 

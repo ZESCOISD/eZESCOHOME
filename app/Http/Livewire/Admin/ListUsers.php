@@ -20,7 +20,7 @@ class ListUsers extends Component
 
      public $activeTab = 'tab1';
     public $current_role;
-    public $user_id, $fname, $sname, $email, $staff_number, $role_name, $password, $password_confirmation;
+    public $user_id, $name, $phone, $email, $staff_number, $role_name, $password, $password_confirmation;
     public $update_staff_number, $update_password, $update_password_confirmation;
 
     public $search;
@@ -33,8 +33,8 @@ class ListUsers extends Component
     }
     protected function rules(){
         return[
-            'fname' => 'required|min:3|max:20',
-            'sname' => 'required|min:3|max:20',
+            'name' => 'required|min:3|max:20',
+            'phone' => 'required|min:3|max:20',
             'email' => 'required|email',
             'staff_number' => 'required|min:3|max:20',
             'password' => 'required|min:8|same:password_confirmation',
@@ -56,8 +56,8 @@ class ListUsers extends Component
 
         $hashpassword = Hash::make($this->password);
         $validateData = User::create([
-                        'fname' => $this->fname,
-                        'sname' => $this->sname,
+                        'name' => $this->name,
+                        'phone' => $this->phone,
                         'email' => $this->email,
                         'staff_number' => $this->staff_number,
                         'password' => $hashpassword,
@@ -92,7 +92,7 @@ class ListUsers extends Component
         $this->loading = true;
         sleep(2);
 
-           $users = User::where('user_id','=', $this->user_id )->first();
+           $users = User::where('id','=', $this->user_id )->first();
 
 
            $this->validate([
@@ -120,9 +120,9 @@ class ListUsers extends Component
     public function editUser(int $user_id){
         $user = User::find($user_id);
         if($user){
-            $this->user_id = $user->user_id;
-            $this->fname = $user->fname;
-            $this->sname = $user->sname;
+            $this->user_id = $user->id;
+            $this->name = $user->name;
+            $this->phone = $user->phone;
             $this->email = $user->email;
             $this->staff_number = $user->staff_number;
             // $this->role_name = $user->name;
@@ -138,8 +138,8 @@ class ListUsers extends Component
     }
 
     public function resetInput(){
-        $this-> fname ='';
-        $this-> sname ='';
+        $this-> name ='';
+        $this-> phone ='';
         $this-> email ='';
         $this-> staff_number ='';
         $this-> role_name ='';
@@ -153,9 +153,8 @@ class ListUsers extends Component
         sleep(2);
 
         $validateData = $this ->validate();
-        User::where('user_id',$this->user_id)->update([
-            'fname' => $validateData['fname'],
-            'sname' => $validateData['sname'],
+        User::where('id',$this->user_id)->update([
+            'name' => $validateData['name']+' '+$validateData['phone'] ,
             'email' => $validateData['email'],
             'staff_number' => $validateData['staff_number'],
             'name' => $validateData['role_name'],
@@ -206,7 +205,7 @@ class ListUsers extends Component
 
        }else{
          $user = Auth::user();
-         $userId = $user->user_id;
+         $userId = $user->id;
         //  dd($userId);
            $updatepassword = User::where('staff_number', '=',$userId)->first();
        $this->validate([
@@ -268,7 +267,7 @@ class ListUsers extends Component
 
     public function render()
     {
-        $users = User::where('user_id', 'like', '%'.$this->search.'%')->orderBy('user_id','ASC')->paginate(5);
+        $users = User::where('id', 'like', '%'.$this->search.'%')->orderBy('id','ASC')->paginate(5);
         $roles = Role::all();
         return view('livewire.admin.list-users',[
             'users' => $users,

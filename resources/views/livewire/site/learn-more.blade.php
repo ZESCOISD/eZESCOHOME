@@ -36,10 +36,10 @@
             <div class="container">
 
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2>Events</h2>
+                    <h2>System How-To</h2>
                     <ol>
                         <li><a href="index.html">Home</a></li>
-                        <li>Events</li>
+                        <li>System How-To</li>
                     </ol>
                 </div>
 
@@ -52,16 +52,55 @@
 
                 @foreach($categories as $category)
                 <div class="row">
+                    <div class="col-md-12 mt-3 text-center">
+                        <div class="card card-header p-2">
+                           <span class="text-uppercase text-bold " style="color: rgba(238,156,41,0.91)">{{$category->name}}</span>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
                     @foreach($products->where('category_id', $category->id) as $product )
-                    <div class="col-md-6 d-flex align-items-stretch">
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="{{$product->icon_link ?? "-"}}" alt="...">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">{{$product->name ?? "-"}}</h5>
-                                <p class="fst-italic text-center">{{$products->short_description ?? "--"}}</p>
-                                <p class="card-text">{{$products->long_description ?? "--"}}</p>
+                    <div class="col-md-6 d-flex  mt-3">
+                        <div class="card " style="min-width: 600px">
+                            <div class="card-body" >
+                                <h5 class="card-title">{{$product->name ?? "-"}}  <div class="card-img">
+                                        <img src="{{$product->icon_link ?? asset('home_template/assets/img/favicon.png')}}" alt="...">
+                                    </div> </h5>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="ratio ratio-16x9">
+                                            <iframe width="100%" height="520px"
+                                                    src="{{ asset('storage') }}/{{ $product->video }}" title="How to?"
+                                                    allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p class="fst-italic text-center">{{$products->short_description ?? "--"}}</p>
+                                        <p class="card-text">{{$products->long_description ?? "-"}}</p>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 mt-3" >
+                                        <a class="btn btn-sm btn-outline-secondary"  style="color: rgba(238,156,41,0.91)" href="{{$product->manual}}" title="Link to the user manual or user guide for this product">
+                                            <i class=" bi bi-file-pdf "></i> Manual
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-secondary"  style="color: rgba(238,156,41,0.91)" href="{{$product->url}}" title="Link to the Live environment for the product"  wire:click="recordClick({{$product->id}})" >
+                                            <i class=" bi bi-cursor "></i> Live
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-secondary"  style="color: rgba(238,156,41,0.91)" href="{{$product->test_url}}" title="Link to the Test Environment for the product">
+                                            <i class=" bi bi-cursor "></i> Test
+                                        </a>
+
+                                        <a class="btn btn-sm btn-outline-secondary"  style="color: rgba(238,156,41,0.91)" href="{{$product->tutorial_url}}" title="Tutorial link to the products">
+                                            <i class=" bi bi-cursor "></i> Tutorial
+                                        </a>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

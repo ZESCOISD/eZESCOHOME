@@ -47,7 +47,7 @@ class Categories extends Component
     public function editCategory(int $category_id){
         $category = Category::find($category_id);
         if($category){
-            $this->category_id = $category->category_id;
+            $this->category_id = $category->id;
             $this->name = $category->name;
             $this->description = $category->description;
             $this->html = $category->html;
@@ -71,7 +71,7 @@ class Categories extends Component
         sleep(2);
 
         $validateData = $this ->validate();
-        Category::where('category_id',$this->category_id)->update([
+        Category::where('id',$this->category_id)->update([
             'name' => $validateData['name'],
             'description' => $validateData['description'],
             'html' => $validateData['html'],
@@ -110,7 +110,7 @@ class Categories extends Component
 
     public function render()
     {
-        $categories = Category::where('name', 'like', '%'.$this->search.'%')->orderBy('category_id','ASC')->paginate(5);
+        $categories = Category::where('name', 'like', '%'.$this->search.'%')->orderBy('id','ASC')->paginate(5);
         return view('livewire.admin.categories',['categories' => $categories]);
     }
 

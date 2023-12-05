@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Products;
 // use Spatie\MediaLibrary\MediaCollections\Models\Media;
 // use Spatie\MediaLibrary\HasMedia;
 // use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Http\Controllers\HomeController;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Role;
@@ -391,27 +392,8 @@ class ProductsIndex extends Component
     }
 
 
-    public function checkSystemStatus($payload)
+    public function checkSystemStatus( )
     {
-
-        $link = json_decode($payload['links'], true);
-
-        //get a list of all systems
-        $products = Product::get();
-        //loop through
-        foreach ($products as $product) {
-            //    $result = ProductService::heartBeatCheck($product->url) ;
-            $failures = $link[$product->url]??"Not monitored";
-
-            // if ($failures != null)
-            //     dd($failures);
-            //check the result
-            if ($failures > 3) {
-                $product->status = "Not active";
-            } else {
-                $product->status = "Active";
-            }
-            $product->save();
-        }
+        session()->flash('successful', HomeController::checkSystemStateWithAGet()  );
     }
 }

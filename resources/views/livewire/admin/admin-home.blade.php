@@ -160,53 +160,53 @@
                 </div>
 
                 @role('admin')
-                    <div class="col-lg-3">
-                        <div class="card shadow rounded" id="card">
-                            <div class="card-body">
-                                <p class="card-text">Product<br>status</p>
+                <div class="col-lg-3">
+                    <div class="card shadow rounded" id="card">
+                        <div class="card-body">
+                            <p class="card-text">Product<br>status</p>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop8" data-backdrop="static"
-                                    data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Status</h5>
-                                                <button id="modal-close" type="button" class="close"
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop8" data-backdrop="static"
+                                 data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Status</h5>
+                                            <button id="modal-close" type="button" class="close"
                                                     data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
 
-                                                {{-- start of product satus --}}
+                                            {{-- start of product satus --}}
 
-                                                <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
                                                     data-dismiss="modal"
                                                     onclick=" window.location='{{ route('status.manage') }}'">Manage
-                                                    Product Status</button>
-                                            </div>
-                                            <div class="modal-footer">
+                                                Product Status</button>
+                                        </div>
+                                        <div class="modal-footer">
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- end of modal -->
                             </div>
-                            <div class="card-footer text-center">
-                                <div type="button" class="card-link">
-                                    <p type="button" data-toggle="modal" data-target="#staticBackdrop8">Manage product
-                                        status
-                                        <i class="bi bi-arrow-right-circle-fill"></i>
-                                    </p>
-                                </div>
 
+                            <!-- end of modal -->
+                        </div>
+                        <div class="card-footer text-center">
+                            <div type="button" class="card-link">
+                                <p type="button" data-toggle="modal" data-target="#staticBackdrop8">Manage product
+                                    status
+                                    <i class="bi bi-arrow-right-circle-fill"></i>
+                                </p>
                             </div>
+
                         </div>
                     </div>
+                </div>
                 @endrole
 
                 <div class="col-lg-3">
@@ -396,8 +396,12 @@
                                             {{-- start of roles --}}
 
                                             <button id="modal-btn" type="button" class="btn btn-secondary"
-                                                data-dismiss="modal"
-                                                onclick=" window.location='{{ route('notices.manage') }}'">Notices</button>
+                                                    data-dismiss="modal"
+                                                    onclick=" window.location='{{ route('contact.group.manage') }}'">Contact Groups</button>
+
+                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal"
+                                                    onclick=" window.location='{{ route('notices.manage') }}'">Notices</button>
 
                                             <button id="modal-btn" type="button" class="btn btn-secondary"
                                                 data-dismiss="modal"

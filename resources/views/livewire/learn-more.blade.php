@@ -104,13 +104,7 @@
                                 </div>
                                 {{-- @endforeach --}}
                             @endif
-
-                            {{-- <h4 class="mt-2" wire:click="learnMore({{ $product_id }})" id="visit-system"
-                                            type="button" href="#learnMoreModal"> {{ $name }}</h4> --}}
                             <hr style="width: auto;">
-                            {{-- <div>
-                                            {{$products->video}}
-                                        </div> --}}
                             <h5 style="font-size: 25px; color:#1bad6c;" class="mt-2">Description</h5>
                             <p wire:model.defer='name'>{{ $long_description }}</p>
 
@@ -120,6 +114,7 @@
                                 wire:click="incrementClicks({{ $product_id }})" id="visit-system" type="button"
                                 href="#learnMoreModal">Visit {{ $name }}
                             </h4>
+
                         </div>
 
                     </div>
@@ -131,10 +126,9 @@
         <!-- End Our Services Section -->
 
 
-
-
         <div id="suggestion-section" class="row text-center">
             <div wire:loading wire:target="saveSuggestion" class="loading-bar"></div>
+
             @if (session()->has('saveSuggestion'))
                 <div id="dismiss"
                     class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
@@ -145,6 +139,7 @@
                     </button>
                 </div>
             @endif
+
             <div id="suggestion-info-parent" class="col-xl-6 col-lg-6">
                 <div id="suggestion-info">
 

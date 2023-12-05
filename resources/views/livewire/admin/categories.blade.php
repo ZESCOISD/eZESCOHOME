@@ -207,7 +207,7 @@
                                             <label for="checkbox1"></label>
                                         </span>
                             </td>
-                            <td>{{ $category->category_id }}</td>
+                            <td>{{ $category->id }}</td>
                             <td>{{ $category->name }}</td>
                             <td>{{ $category->description }}</td>
                             <td>{{ $category->html }}</td>
@@ -218,7 +218,7 @@
                                 @can('update')
                                     <a type="button" href="#updateCategoryModal" data-toggle="modal"
                                        data-target="#updateCategoryModal"
-                                       wire:click="editCategory({{ $category->category_id }})" class="edit"><i
+                                       wire:click="editCategory({{ $category->id }})" class="edit"><i
                                             class="material-icons" data-toggle="tooltip"
                                             title="Edit">&#xE254;</i></a>
                                 @endcan
@@ -226,7 +226,7 @@
                                 @role('admin')
                                 <a type="button" href="#updateCategoryModal" data-toggle="modal"
                                    data-target="#updateCategoryModal"
-                                   wire:click="editCategory({{ $category->category_id }})" class="edit"><i
+                                   wire:click="editCategory({{ $category->id }})" class="edit"><i
                                         class="material-icons" data-toggle="tooltip"
                                         title="Edit">&#xE254;</i></a>
                                 @endrole
@@ -234,7 +234,7 @@
                                 @can('delete')
                                     <a type="button" href="#deleteCategoryModal" data-toggle="modal"
                                        data-target="#deleteCategoryModal"
-                                       wire:click="deleteCategory({{ $category->category_id }})" class="delete"
+                                       wire:click="deleteCategory({{ $category->id }})" class="delete"
                                        data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                                                               title="Delete">&#xE872;</i></a>
                                 @endcan
@@ -242,7 +242,7 @@
                                 @role('admin')
                                 <a type="button" href="#deleteCategoryModal" data-toggle="modal"
                                    data-target="#deleteCategoryModal"
-                                   wire:click="deleteCategory({{ $category->category_id }})" class="delete"
+                                   wire:click="deleteCategory({{ $category->id }})" class="delete"
                                    data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
                                                           title="Delete">&#xE872;</i></a>
                                 @endrole

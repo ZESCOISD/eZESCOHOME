@@ -290,7 +290,7 @@ class Roles extends Component
             ->where('role_has_permissions.role_id','=',$this->role_id)
             ->get();
 
-        return view('livewire.admin.list-roles',[
+        return view('livewire.system.list-roles',[
             'current_role' => $current_role,
             'roles' => $roles,
             'permissions' => $permissions

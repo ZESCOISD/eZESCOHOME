@@ -20,8 +20,6 @@ class Product extends Model
             'name',
             'icon_link',
             'system_cover_image',
-            'user_manual',
-            'video',
             'cost_saving',
             'category_id',
             'short_description',
@@ -29,15 +27,19 @@ class Product extends Model
             'image',
             'market_value',
             'project_cost',
-            'dev_launch_date',
             'status_code',
             'heart_beat',
             'number_of_clicks',
+
+            'user_manual',
+            'video',
             'url',
             'test_url',
-            'lead_developer',
             'tutorial_url',
+
+            'lead_developer',
             'date_launched',
+            'dev_launch_date',
             'date_decommissioned',
 
             'prod_ip_address',
@@ -66,6 +68,11 @@ class Product extends Model
     public function developers()
     {
         return $this->belongsToMany(User::class, 'products_users');
+    }
+
+    public function contactGroups()
+    {
+        return $this->belongsToMany(ContactGroup::class, 'contact_group_to_product');
     }
 
 }

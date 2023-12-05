@@ -67,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permissions/manage',Permissions::Class)->name('permissions.manage');
     Route::get('/roles/manage',Roles::Class)->name('roles.manage');
     Route::get('/status/manage',Statuses::Class)->name('status.manage');
+    Route::get('/contact-group/manage',\App\Http\Livewire\Admin\ContactGroupIndex::Class)->name('contact.group.manage');
     Route::get('/reports/manage',ViewReports::Class)->name('reports.manage');
     Route::get('/notices/manage', Notice::class)->name('notices.manage');
     Route::get('/events/manage', UpcomingEvent::class)->name('events.manage');

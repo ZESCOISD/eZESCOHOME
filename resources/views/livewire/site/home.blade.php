@@ -307,173 +307,114 @@
                 </div>
 
 
+                
+
                 <div class="row content">
                     <div class="col-lg-6">
-                        <div class="card card-default">
-                            <div class="card-header text-center"><a href="#" class="pull-right">
-                                    @if (count($more_notices) > 1)
-                                        View
-                                        all
-                                    @endif
-                                </a>
-
-                                {{-- <div> --}}
-                                <h4 class="text-success" style="margin-left: 15px; "><i
-                                        style="margin-left: 15px;" id="important-notice-icon"
-                                        class="bi bi-envelope-fill text-center"></i>
-                                    Important Notice
-                                </h4>
-                                {{-- </div> --}}
-                            </div>
-                            <div class="card-body">
-                                @if ($more_notices->isEmpty())
-                                    <div id="notice-data" class="text-center">
-                                        <h5 class="mt-4 text-sm text-secondary disabled">No
-                                            notices found.
-                                        </h5>
-
-                                    </div>
-                                @elseif ($more_notices->isNotEmpty())
-                                    @foreach ($more_notices as $notice)
-                                        <div id="notice-data" class="text-left">
-                                            <h4 style="font-weight: bold">{{ $notice->notice_name }}
-                                            </h4>
-                                            <p style=" text-indent: 0px;" id="description">
-                                                {{ Str::limit($notice->description, 190) }}
-                                                @if (strlen($notice->description) > 190)
-                                                    <a wire:ignore href="#editRoleModal"
-                                                       class="edit" data-toggle="modal"
-                                                       data-target="#updateRoleModal"
-                                                       wire:click="editRole({{ $notice->id }})"></a>
-
-                                                    <button type="button" id="openModal"
-                                                            wire:click="readMore({{ $notice->id }})">
-                                                        Read more
-                                                    </button>
-                                            <div wire:ignore.self id="modal"
-                                                 class="modal">
-                                                <div class="modal-content">
-                                                    <span class="close">&times;</span>
-                                                    <h2 style="color:#d3882b;"
-                                                        wire:model.defer="notice_name">
-                                                        {{ $notice->notice_name }}</h2>
-                                                    <p wire:model.defer="description"
-                                                       style="text-indent: 0px;">
-                                                        {{ $notice->description }}</p>
-
-                                                    <hr>
-
-                                                    <div style="" class="row mt-5">
-                                                        <div class="col-xl-6">
-                                                            <div id="notice-data"
-                                                                 class="text-start">
-                                                                <h5 wire:model.defer="staff_title"
-                                                                    style="font-weight: bold; color:#d3882b;">
-                                                                    From
-                                                                    {{ $notice->staff_title }}
-                                                                </h5>
-                                                                <p wire:model.defer="staff_name"
-                                                                   style=" text-indent: 0px; ">
-                                                                    {{ $notice->staff_name }}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-6">
-                                                            <div style="margin-right: -550px;"
-                                                                 class="text-left">
-                                                                <h5
-                                                                    style="font-weight: bold; color:#d3882b;">
-                                                                    Department</h5>
-                                                                <p wire:model.defer="department"
-                                                                   style="text-align: left; text-indent: 0px;">
-                                                                    {{ $notice->department }}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @endif
-
-                                            </p>
-                                        </div>
-
-                                        <div style="display: flex;" class="row mt-5">
-                                            <div class="col-xl-6">
-                                                <div id="notice-data" class="text-start">
-                                                    <h5 style="font-weight: bold">From
-                                                        {{ $notice->staff_title }}</h5>
-                                                    <p style=" text-indent: 0px;">
-                                                        {{ $notice->staff_name }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div style="margin-right: -550px;" class="text-right">
-                                                    <h5 style="font-weight: bold">Department</h5>
-                                                    <p style="text-align: right;">
-                                                        {{ $notice->department }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                    {{-- {{ $more_notices->links() }} --}}
-                                @endif
-
-                            </div>
-                        </div>
-                        <div class="card card-default mt-lg-3">
-                            <div class="card-header text-center text-success"><a href="#" class="pull-right">
-                                    @if (count($upcoming_events) > 1)
-                                        View
-                                        all
-                                    @endif
-                                </a>
-                                <h4 style="margin-left: 15px;"><i style="margin-left: 15px;" id="upcoming-events-icon" class="bi bi-calendar-event-fill text-center">
-                                    </i> Upcoming Events</h4>
-                            </div>
-                            <div class="card-body">
-                                @if ($upcoming_events->isEmpty())
-                                    <div id="notice-data" class="text-center">
-                                        <h5 class="mt-4 text-sm text-secondary disabled">No
-                                            upcoming
-                                            events
-                                            found.</h5>
-                                    </div>
-                                @elseif ($upcoming_events->isNotEmpty())
-                                    @foreach ($upcoming_events as $event)
-                                        <div class="text-start">
-                                            <h4 style="font-weight: bold" class="mt-4">
-                                                {{ $event->event_name }}</h4>
-                                            <p style=" text-indent: 0px;">
-                                                {{ $event->event_description }}</p>
-                                        </div>
-                                        <div class="row mt-5" style="display: flex;">
-                                            <div class="col-xl-6">
-                                                <div class="text-start">
-                                                    <h5 style="font-weight: bold">From
-                                                        {{ $event->venue }}</h5>
-                                                    <p style=" text-indent: 0px;">Fee
-                                                        K{{ $event->fee }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6">
-                                                <div class="text-right" style="margin-right: -500px;">
-                                                    <h5 class="text-right" style="font-weight: bold">
-                                                        Date and Time</h5>
-                                                    <p style="text-align: right;">
-                                                        {{ $event->date }}
-                                                        {{ Carbon::parse($event->time)->format('H:i') }}
-                                                    </p>
-                                                    <p></p>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
+                    <div class="card mt-lg-3">
+    <div class="card-header text-center text-success">
+        <a href="#" class="float-right">
+            @if (count($more_notices) > 1)
+                View all
+            @endif
+        </a>
+        <h4 class="ml-3">
+            <i id="upcoming-events-icon" class="bi bi-calendar-event-fill text-center"></i> Notices
+        </h4>
+    </div>
+    <div class="card-body">
+        @if ($more_notices->isEmpty())
+            <div id="notice-data" class="text-center">
+                <h5 class="mt-4 text-secondary">No new notices found.</h5>
+            </div>
+        @elseif ($more_notices->isNotEmpty())
+            @foreach ($more_notices as $more_notice)
+                <div class="mt-4">
+                    <h4 class="font-weight-bold">{{ $more_notice->notice_name }}</h4>
+                    <p>{{ $more_notice->description }}</p>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="font-weight-bold">From {{ $more_notice->department }}</div>
+                        <p>By {{ $more_notice->staff_title }} | {{ $more_notice->staff_name }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-md-right">
+                            <div class="font-weight-bold">Date and Time</div>
+                            <p>
+                                {{ $more_notice->start_date }}
+                                {{ \Carbon\Carbon::parse($more_notice->start_date)->format('H:i') }}
+                            </p>
                         </div>
                     </div>
+                </div>
+<hr>
+            @endforeach
+
+            <div class="row">
+            <div class="d-flex justify-content-center">
+            {{$more_notices->links()}}
+            </div>
+            </div>
+        @endif
+    </div>
+
+</div>
+
+
+<div class="card mt-lg-3">
+    <div class="card-header text-center text-success">
+        <a href="#" class="float-right">
+        @if (count($upcoming_events) > 1)
+                View all
+            @endif
+        </a>
+        <h4 class="ml-3">
+            <i id="upcoming-events-icon" class="bi bi-calendar-event-fill text-center"></i> Upcoming Events
+        </h4>
+    </div>
+    <div class="card-body">
+        @if ($upcoming_events->isEmpty())
+            <div id="notice-data" class="text-center">
+                <h5 class="mt-4 text-secondary">No upcoming events found.</h5>
+            </div>
+        @elseif ($upcoming_events->isNotEmpty())
+            @foreach ($upcoming_events as $event)
+                <div class="mt-4">
+                    <h4 class="font-weight-bold">{{ $event->event_name }}</h4>
+                    <p>{{ $event->event_description }}</p>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="font-weight-bold">From {{ $event->venue }}</div>
+                        <p>Fee K{{ $event->fee }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-md-right">
+                            <div class="font-weight-bold">Date and Time</div>
+                            <p>
+                                {{ $event->date }}
+                                {{ \Carbon\Carbon::parse($event->time)->format('H:i') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+<hr>
+            @endforeach
+            <div class="row">
+            <div class="d-flex justify-content-center">
+            {{$upcoming_events->links()}}
+            </div>
+            </div>
+           
+        @endif
+    </div>
+
+</div>
+
+                        
+                    </div>
+
                     <div class="col-lg-6 pt-4 pt-lg-0">
 
                         <ul>
@@ -486,7 +427,10 @@
 
                         <a href="{{ route('ezesco-systems') }}" class="btn-learn-more">Learn More</a>
                     </div>
+
                 </div>
+
+
 
             </div>
         </section><!-- End My & Family Section -->

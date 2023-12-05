@@ -104,7 +104,7 @@ class Permissions extends Component
     public function render()
     {
         $permissions = Permission::where('name', 'like', '%' . $this->search . '%')->orderBy('id', 'ASC')->paginate(5);
-        return view('livewire.admin.list-permissions', ['permissions' => $permissions]);
+        return view('livewire.system.list-permissions', ['permissions' => $permissions]);
     }
 
     protected function rules()
