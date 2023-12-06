@@ -48,7 +48,7 @@
 
 
 
-    <div id="suggestion-section" class="row text-center">
+    <div id="suggestion-section" class="row text-center" style="display:none">
 
     @if (session()->has('success'))
                     <div id="dismiss"

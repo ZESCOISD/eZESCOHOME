@@ -112,6 +112,8 @@ class LearnMore extends Component
 
             $this->products =  Product::all() ;
 
+          //  return redirect()->route('ezesco-home.how.to');
+
 
         return view('livewire.site.learn-more' );
     }
