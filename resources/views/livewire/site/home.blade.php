@@ -66,6 +66,20 @@
                     <div class="section-title">
                         <h2>E-ZESCO HOME</h2>
                         <p>Welcome to E-ZESCO, your comprehensive platform for accessing a wide range of sophisticated in-house developed systems seamlessly integrated in one place.</p>
+                   
+                   
+                        @if (session()->has('success'))
+                    <div id="dismiss"
+                         class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
+                         role="alert"  >
+                        <p class="mt-3">{{ session('success') }}</p>
+                        <button  type="button"
+                                class="btn-close mt-1" 
+                                data-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                @endif
+                   
                     </div>
                     <div id="categoryCarousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
@@ -303,7 +317,7 @@
                 <div class="section-title">
                     <h2>IN-HOUSE SYSTEMS</h2>
                     <p>Know more about Zesco's in-house system's. Click the link below to get started..</p>
-                    <a href="{{ route('ezesco-systems') }}" class="btn-learn-more">Learn More</a>
+                    <a href="{{ route('ezesco-home.learn.more', 0) }}" class="btn-learn-more">Learn More</a>
                 </div>
 
 
@@ -315,7 +329,7 @@
     <div class="card-header text-center text-success">
         <a href="#" class="float-right">
             @if (count($more_notices) > 1)
-                View all
+                <!-- View all -->
             @endif
         </a>
         <h4 class="ml-3">
@@ -366,7 +380,7 @@
     <div class="card-header text-center text-success">
         <a href="#" class="float-right">
         @if (count($upcoming_events) > 1)
-                View all
+                <!-- View all -->
             @endif
         </a>
         <h4 class="ml-3">
@@ -425,7 +439,7 @@
                         </ul>
                         <p>From streamlined processes to powerful analytics, E-ZESCO empowers you with the tools you need to excel in your endeavors.</p>
 
-                        <a href="{{ route('ezesco-systems') }}" class="btn-learn-more">Learn More</a>
+                        <a href="{{ route('ezesco-home.learn.more', 0 ) }}" class="btn-learn-more">Learn More</a>
                     </div>
 
                 </div>

@@ -395,28 +395,28 @@
 
                                             {{-- start of roles --}}
 
-                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            <button id="modal-btn" type="button" class="btn btn-secondary m-2"
                                                     data-dismiss="modal"
                                                     onclick=" window.location='{{ route('contact.group.manage') }}'">Contact Groups</button>
 
-                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            <button id="modal-btn" type="button" class="btn btn-secondary m-2"
                                                     data-dismiss="modal"
                                                     onclick=" window.location='{{ route('notices.manage') }}'">Notices</button>
 
-                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            <button id="modal-btn" type="button" class="btn btn-secondary m-2"
                                                 data-dismiss="modal"
                                                 onclick=" window.location='{{ route('events.manage') }}'">Events</button>
 
-                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            <button id="modal-btn" type="button" class="btn btn-secondary m-2"
                                                 data-dismiss="modal"
                                                 onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</button>
 
-                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            <button id="modal-btn" type="button" class="btn btn-secondary  m-2"
                                                 data-dismiss="modal"
                                                 onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion
                                                 Box</button>
 
-                                            <button id="modal-btn" type="button" class="btn btn-secondary"
+                                            <button id="modal-btn" type="button" class="btn btn-secondary  m-2"
                                                 data-dismiss="modal"
                                                 onclick=" window.location='{{ route('slides.manage') }}'">Slides</button>
 

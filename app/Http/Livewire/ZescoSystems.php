@@ -84,13 +84,13 @@ class ZescoSystems extends Component
 
     public function render()
     {
-        $getProducts = DB::table('product')
-                ->join('status','product.status_id','=','status.status_id')
+        $products  = DB::table('product')
+                ->join('status','product.status_code','=','status.code')
                 ->select('product.name','product.icon_link','product.user_manual','product.number_of_clicks as clicks',
                         'product.url as product_url','product.id',
                         'product.system_cover_image', 'product.video',
                         'status.name as status_name','product.short_description')
-                ->where('status.slug','=',config('constants.statuses.production'))
+                ->where('status.code','=',config('constants.statuses.production'))
                 ->where('product.name', 'like', '%'.$this->searchQuery.'%')
                 ->orderBy('product.number_of_clicks', 'desc')
                 ->paginate(6);
@@ -98,7 +98,8 @@ class ZescoSystems extends Component
 
         return view('livewire.zesco-systems',[
 
-                'getProducts' => $getProducts,
+            'products' => $products,
+            'getProducts' => $products,
             ]);
     }
 }

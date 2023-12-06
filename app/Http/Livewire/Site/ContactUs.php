@@ -33,6 +33,8 @@ class ContactUs extends Component
    public $receipient ;
    public $selectedProductId;
    public $contactGroups = [];
+   public $recipientEmails = [];
+   
 
    protected $paginationTheme = 'bootstrap';
 
@@ -74,11 +76,15 @@ class ContactUs extends Component
     {
         $validatedData = $this->validate();
 
+        // dd( $this->recipientEmails );
+        
+        $this->recipientEmails[] = 'nshubart@zesco.co.zm';
+
         Mail::send([], [], function ($message) use ($validatedData) {
-            $message->to('your@email.com')
-                ->subject($validatedData['subject'])
+            $message->setTo($this->recipientEmails)
+                ->setSubject($validatedData['subject'])
                 ->setBody($validatedData['message'])
-                ->from($validatedData['email']);
+                ->setFrom($validatedData['email']);
         });
 
         $this->resetForm();
@@ -100,20 +106,37 @@ class ContactUs extends Component
         // Perform necessary operations with $selectedProduct...
         
         $contactGroups = $selectedProduct->contactGroups ?? null ;
+     
+        $this->recipientEmails = [];
 
         if(!empty($contactGroups) ){
-            $this->contactGroups = $contactGroups ;
-           // 
+            $this->contactGroups = $contactGroups;
+            
+            foreach ($this->contactGroups as $contactGroup) {
+                $this->recipientEmails[] = $contactGroup->email;
+            }
+        
+            $this->receipient = implode(', ', $this->recipientEmails)  ;
+        
+            if( sizeof($this->recipientEmails) < 1){
+                $this->receipient =  $this->isd_email;
+                $this->recipientEmails[] = $this->isd_email;
+            }
+        
         }else{
             if($value == 'isd'){
                 $this->receipient  = $this->isd_email ;
+                $this->recipientEmails = $this->isd_email;
             }
             elseif($value == 'contact_isd'){
                 $this->receipient  = $this->isd_email ;
+                $this->recipientEmails = $this->isd_email;
             }elseif($value == 'contact_service_desk'){
                 $this->receipient  = $this->service_desk_email ;
+                $this->recipientEmails = $this->service_desk_email;
             }else{
                 $this->receipient  = $this->ist_email ;
+                $this->recipientEmails = $this->isd_email;
             }
         }
 

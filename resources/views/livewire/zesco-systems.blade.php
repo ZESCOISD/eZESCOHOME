@@ -113,7 +113,7 @@
                         </div>
                         <div id="pdfOverlay" onclick="closePDF()"></div>
                         <div id="pdfContainer">
-                            <embed src="{{ asset('storage') }}/{{ $products->user_manual }}" type="application/pdf">
+                            <embed src="{{ asset('storage') }}/{{ $products->user_manual ?? "-" }}" type="application/pdf">
                             <button onclick="closePDF()">Close</button>
                         </div>
                         <div class="clearfix">

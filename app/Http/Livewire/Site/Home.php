@@ -94,14 +94,14 @@ class Home extends Component
 
         $more_notices = DB::table('notices')
             ->select('notice_name', 'description', 'staff_name', 'staff_title', 'department', 'start_date', 'end_date')
-            // ->whereDate('start_date', '<=', Carbon::today())
-            // ->whereDate('end_date', '>=', Carbon::today())
+            ->whereDate('start_date', '<=', Carbon::today())
+            ->whereDate('end_date', '>=', Carbon::today())
             ->paginate(2);
 
         $upcoming_events = DB::table('upcoming_events')
             ->select('event_name', 'event_description', 'fee', 'venue', 'time', 'date', 'start_date', 'end_date')
-            // ->whereDate('start_date', '<=', Carbon::today())
-            // ->whereDate('end_date', '>=', Carbon::today())
+            ->whereDate('start_date', '<=', Carbon::today())
+            ->whereDate('end_date', '>=', Carbon::today())
             ->paginate(2);
 
         $faqs = FAQ::all();

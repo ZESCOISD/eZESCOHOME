@@ -1356,6 +1356,17 @@ section {
   text-decoration: none;
 }
 
+#footer .social-links button {
+ 
+  background-color: #be6c00;
+  transition: 0.3s;
+}
+
+#footer .social-links button:hover {
+
+  background-color: #be6c00;
+}
+
 #footer .copyright {
   margin: 0 0 5px 0;
 }
@@ -1372,3 +1383,5 @@ section {
 #footer .credits a:hover {
   color: #e78b00;
 }
+
+

@@ -36,7 +36,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>Contact</h2>
                     <ol>
-                        <li><a href="index.html">Home</a></li>
+                    <li><a href="{{route('ezesco-home')}}">Home</a></li>
                         <li>Contact</li>
                     </ol>
                 </div>
@@ -52,6 +52,19 @@
                     <iframe style="border:0; width: 100%; height: 270px;"
                             src="https://maps.google.com/maps?q=ZESCO%20HEad%20office&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=&amp;output=embed" frameborder="0" allowfullscreen></iframe>
                 </div>
+
+                
+                @if (session()->has('success'))
+                    <div id="dismiss"
+                         class="alert alert-info alert-dismissible mt-3 text-bg-success  p-2 text-center fade show"
+                         role="alert"  >
+                        <p class="mt-3">{{ session('success') }}</p>
+                        <button  type="button"
+                                class="btn-close mt-1" 
+                                data-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                @endif
 
                 <div class="row mt-5">
 
@@ -77,11 +90,24 @@
 
                         </div>
 
-                        @foreach($contactGroups as $contact_group)
-                        <div class ="card card-body">
-                            {{$contact_group->email ?? "--"}}
+                        @if( sizeof($contactGroups) > 0)
+                        <div class ="card mt-4">
+                        <div class ="card-header">
+                        <h4>Contact Groups</h4>
                         </div>
+                        <div class ="card-body">
+                        @foreach($contactGroups as $contact_group)
+                          <p> <b> Name :</b> {{$contact_group->name ?? "--"}} </p> 
+                          <p>   <b>  Email :</b>  {{$contact_group->email ?? "--"}}</p> 
+                          <p>   <b> Phone : </b> {{$contact_group->phone ?? "--"}}</p>
+                          <p>  <b>  Office :</b>  {{$contact_group->office_address ?? "--"}}</p> 
+                          <p>  <b>   Location :</b>  {{$contact_group->location ?? "--"}}
+                            <hr>
                         @endforeach
+                        </div>
+                       </div>
+                        @endif
+                       
 
                     </div>
 
@@ -114,31 +140,38 @@
 
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <input wire:model="name" type="text" class="form-control" placeholder="Your Name" required>
-                    @error('name') <span>{{ $message }}</span> @enderror
+                    <input wire:model.defer="name" type="text" class="form-control" placeholder="Your Name" required>
+                    @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
                 <div class="col-md-6 form-group mt-md-0">
-                    <input wire:model="email" type="email" class="form-control" placeholder="Your Email" required>
-                    @error('email') <span>{{ $message }}</span> @enderror
+                    <input wire:model.defer="email" type="email" class="form-control" placeholder="Your Email" required>
+                    @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
             </div>
 
             <div class="form-group mt-3">
-                <input wire:model="receipient" type="email" class="form-control" placeholder="Receipient" required>
-                @error('receipient') <span>{{ $message }}</span> @enderror
+                <input wire:model.defer="receipient" type="email" class="form-control" placeholder="Receipient" required readonly>
+                @error('receipient') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="form-group mt-3">
-                <input wire:model="subject" type="text" class="form-control" placeholder="Subject" required>
-                @error('subject') <span>{{ $message }}</span> @enderror
+                <input wire:model.defer="subject" type="text" class="form-control" placeholder="Subject" required>
+                @error('subject') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
 
             <div class="form-group mt-3">
-                <textarea wire:model="message" class="form-control" rows="5" placeholder="Message" required></textarea>
-                @error('message') <span>{{ $message }}</span> @enderror
+                <textarea wire:model.defer="message" class="form-control" rows="5" placeholder="Message" required></textarea>
+                @error('message') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
 
             <div class="my-3">
-                <div wire:loading>Loading...</div>
+                <div wire:loading>
+                <div class="spinner-border text-primary" role="status">
+  <span class="sr-only"></span>
+</div>    
+Loading...
+               </div>
+
+                
                 @if($successMessage)
                     <div class="alert alert-success">{{ $successMessage }}</div>
                 @endif

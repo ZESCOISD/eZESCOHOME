@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Site;
 
 use App\Models\ProductClicks;
 use Carbon\Carbon;
@@ -13,6 +13,8 @@ class LearnMore extends Component
 
 
     public $product_id;
+    public $product;
+    public $products = [] ;
     public $name;
     public $video;
     public $icon_link;
@@ -97,26 +99,20 @@ class LearnMore extends Component
 
     public function render()
     {
-          $product = Product::find($this->product_id);
+          $this->product = Product::find($this->product_id);
 
-        if($product){
-            $this->product_id = $product->product_id;
-            $this->product_link = $product->url;
-            $this->name = $product->name;
-            $this->video = $product->video;
-            $this->icon_link = $product->icon_link;
-            $this->short_description = $product->short_description;
-            $this->long_description = $product->long_description;
-            $this->date_launched = $product->date_launched;
+            $this->product_id = $product->product_id  ?? ""  ;
+            $this->product_link = $product->url  ?? "" ;
+            $this->name = $product->name  ?? "" ;
+            $this->video = $product->video  ?? "" ;
+            $this->icon_link = $product->icon_link  ?? "" ;
+            $this->short_description = $product->short_description  ?? "" ;
+            $this->long_description = $product->long_description  ?? "" ;
+            $this->date_launched = $product->date_launched  ?? "" ;
 
-        }else{
-            return redirect()->to('/ezesco-systems');
-        }
+            $this->products =  Product::all() ;
 
-        // dd($product->video);
 
-        return view('livewire.learn-more',[
-            'product' => $product,
-        ]);
+        return view('livewire.site.learn-more' );
     }
 }

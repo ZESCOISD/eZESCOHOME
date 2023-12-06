@@ -21,6 +21,9 @@ class ContactGroup extends Model
     ];
 
     
-       
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'contact_group_to_product');
+    } 
    
 }

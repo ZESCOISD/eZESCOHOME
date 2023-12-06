@@ -10,6 +10,7 @@ class SuggestionBox extends Model
     use HasFactory;
     protected $table = 'suggestion_box';
     protected $primaryKey = 'id';
-    protected $fillable = ['subject','system_name','suggestion'];
+    protected $fillable = ['subject','system_name','suggestion',  'name', 'email',  'department'];
+
     public $timestamps = true;
 }

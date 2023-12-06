@@ -22,7 +22,7 @@
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a class="active" href="{{ route('ezesco-home') }}">Home</a></li>
-                <li><a href="{{route('ezesco-home.learn.more')}}">How To</a></li>
+                <li><a href="{{route('ezesco-home.how.to')}}">How To</a></li>
                 <li><a href="{{route('ezesco-home.contact.us')}}">Contact Us</a></li>
                 <li class="dropdown"><a href="#"><span>Systems By Categories</span> <i class="bi bi-chevron-down"></i></a>
                     <ul>

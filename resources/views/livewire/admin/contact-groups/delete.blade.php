@@ -1,8 +1,8 @@
 <!-- Delete Modal HTML -->
-<div wire:ignore.self id="deleteStatusModal" class="modal fade">
+<div wire:ignore.self id="deleteContactGroupModal" class="modal fade">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form wire:submit.prevent="destroyStatus">
+            <form wire:submit.prevent="destroyContactGroup">
                 @csrf
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Contact Group</h4>
@@ -10,7 +10,7 @@
                             aria-hidden="true">&times;
                     </button>
                 </div>
-                <div wire:loading wire:target="destroy" class="loading-bar"></div>
+                <div wire:loading wire:target="destroyContactGroup" class="loading-bar"></div>
 
                 <div class="modal-body">
                     @if (session()->has('delete_successful'))

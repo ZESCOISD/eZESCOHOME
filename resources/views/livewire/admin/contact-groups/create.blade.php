@@ -23,6 +23,7 @@
                         </button>
                     </div>
                 @endif
+                
                 <form wire:submit.prevent="saveContactGroup">
                     @csrf
                     <div class="form-group">
@@ -35,14 +36,55 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="code">Code</label>
+                        <label for="description">Description</label>
                         <input type="text" class="form-control mb-1"
-                               wire:model.defer="code" id="code" placeholder="Code"
+                               wire:model.defer="description" id="description" placeholder="Code"
                                required>
-                        @error('code')
+                        @error('description')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label for="office_address">Office Number</label>
+                        <input type="text" class="form-control mb-1"
+                               wire:model.defer="office_address" id="office_address" placeholder="Office Number"
+                               required>
+                        @error('office_address')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" class="form-control mb-1"
+                               wire:model.defer="location" id="location" placeholder="Location e.g Lusaka HQ"
+                               required>
+                        @error('location')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control mb-1"
+                               wire:model.defer="email" id="email" placeholder="Email"
+                               required>
+                        @error('email')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone/Extension</label>
+                        <input type="text" class="form-control mb-1"
+                               wire:model.defer="phone" id="phone" placeholder="Phone/Extension"
+                               required>
+                        @error('phone')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
 
                     <div class="modal-footer mt-3" id="modal-footer">
                         <button style="background-color: #1bad6c" type="submit"

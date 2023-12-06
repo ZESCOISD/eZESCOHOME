@@ -7,62 +7,14 @@
 
     <body id="manage-body">
 
-    <nav class="navbar navbar-light bg-light">
-        <div wire:loading wire:target="logout" class="loading-bar"></div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 d-flex justify-content-start align-items-start">
-                    <a class="navbar-brand" onclick=" window.location='{{ route('admin-menu') }}'">
-                        <img src="/img/Zesco.png" alt="" width="125" height="50"
-                             class="d-inline-block align-text-top"></a>
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center">
-                    <div id="login-nav-bar-links" type="button"
-                         onclick=" window.location='{{ route('categories.manage') }}'"> Categories
-                    </div>
-                    <div id="login-nav-bar-links" type="button"
-                         onclick=" window.location='{{ route('products.manage') }}'"> Products
-                    </div>
-                    <div id="login-nav-bar-links" type="button"
-                         onclick=" window.location='{{ route('roles.manage') }}'">Roles
-                    </div>
-                    <div id="login-nav-bar-links" type="button"
-                         onclick=" window.location='{{ route('permissions.manage') }}'">Permissions
-                    </div>
-                    <div id="login-nav-bar-links" type="button"
-                         onclick=" window.location='{{ route('users.manage') }}'">Users
-                    </div>
-                    <div id="login-nav-bar-links" type="button"
-                         onclick=" window.location='{{ route('reports.manage') }}'"> Reports
-                    </div>
-                    <div id="login-nav-bar-links" class="dropdown">
-                        <div class="dropdown-toggle" id="dropdownMenuButton" type="button" aria-haspopup="true"
-                             data-toggle="dropdown" aria-expanded="false">Utilities
-                        </div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item"
-                               onclick=" window.location='{{ route('notices.manage') }}'">Notices</a>
-                            <a class="dropdown-item"
-                               onclick=" window.location='{{ route('events.manage') }}'">Events</a>
-                            <a class="dropdown-item"
-                               onclick=" window.location='{{ route('faqs.manage') }}'">FAQ's</a>
-                            <a class="dropdown-item"
-                               onclick=" window.location='{{ route('suggestions.manage') }}'">Suggestion Box</a>
-                            <a class="dropdown-item"
-                               onclick=" window.location='{{ route('slides.manage') }}'">Slides</a>
-                            <a class="dropdown-item"
-                               onclick=" window.location='{{ route('quotes.manage') }}'">Quote Of the Day</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 d-flex justify-content-end align-items-end">
-                    <div id="logout" type="button" wire:click="logout"> Logout</div>
-                </div>
-            </div>
-        </div>
-    </nav>
+   
+
+    @include('layouts.admin_nav')
+
+
+
     <div class="text-center" id="admin-menu-text">
-        Product Status
+        Product Contact Group
     </div>
     <div class="container">
         <div class="table-wrapper mt-5">
@@ -78,9 +30,8 @@
                         <span class="input-group-append"></span>
                     </div>
                     <div class="col-sm-4">
-                        {{-- <a href="#addCategoryModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Category</span></a> --}}
                         <button id="btn-add-new" type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#addStatusModal"><i class="material-icons">&#xE147;</i> <span>Add New
+                                data-target="#addContactGroupModal"><i class="material-icons">&#xE147;</i> <span>Add New
                                         Contact Group</span></button>
                     </div>
                 </div>
@@ -88,15 +39,12 @@
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th>
-                        <span class="custom-checkbox">
-                                        <input type="checkbox" id="selectAll">
-                                        <label for="selectAll"></label>
-                        </span>
-                    </th>
-                    <th>Status id</th>
                     <th>Name</th>
-                    <th>Code</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Office Location</th>
+                    <th>Office Address</th>
+                    <th>Description</th>
                     <th>Date Created</th>
                     <th>Date Updated</th>
                 </tr>
@@ -104,25 +52,28 @@
                 <tbody>
                 @forelse($contact_groups as $contact_group)
                     <tr>
-                        <td>
-                                        <span class="custom-checkbox">
-                                            <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                            <label for="checkbox1"></label>
-                                        </span>
-                        </td>
-                        <td>{{ $contact_group->status_id }}</td>
                         <td>{{ $contact_group->name }}</td>
-                        <td>{{ $contact_group->code }}</td>
+                        <td>{{ $contact_group->phone }}</td>
+                        <td>{{ $contact_group->email }}</td>
+                        <td>{{ $contact_group->location }}</td>
+                        <td>{{ $contact_group->location }}</td>
+                        <td>{{ $contact_group->office_address }}</td>
                         <td>{{ $contact_group->created_at }}</td>
                         <td>{{ $contact_group->updated_at }}</td>
                         <td>
-                            <a href="#editStatusModal" class="edit" data-toggle="modal"
-                               data-target="#updateStatusModal"
-                               wire:click="editStatus({{ $contact_group->status_id }})"><i class="material-icons"
+                        <a href="#viewContactGroupModal" class="edit" data-toggle="modal"
+                               data-target="#viewContactGroupModal"
+                               wire:click="findContactGroup({{ $contact_group->id }})">
+                               <i class="material-icons" data-toggle="tooltip" title="View">&#xe40c;</i>
+                            </a>
+
+                            <a href="#editContactGroupModal" class="edit" data-toggle="modal"
+                               data-target="#updateContactGroupModal"
+                               wire:click="editContactGroup({{ $contact_group->id }})"><i class="material-icons"
                                                                                     data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteStatusModal" class="delete" data-toggle="modal"
-                               data-target="#deleteStatusModal"
-                               wire:click="deleteStatus({{ $contact_group->status_id }})"><i class="material-icons"
+                            <a href="#deleteContactGroupModal" class="delete" data-toggle="modal"
+                               data-target="#deleteContactGroupModal"
+                               wire:click="deleteContactGroup({{ $contact_group->id }})"><i class="material-icons"
                                                                                       data-toggle="tooltip"
                                                                                       wire:click="closeModal"
                                                                                       title="Delete">&#xE872;</i></a>
@@ -140,13 +91,16 @@
             </div>
 
             <!-- Create Modal HTML -->
-            @include('livewire.admin.status.create')
+            @include('livewire.admin.contact-groups.create')
 
             <!-- Edit Modal HTML -->
-            @include('livewire.admin.status.edit')
+            @include('livewire.admin.contact-groups.edit')
 
             <!-- Delete Modal HTML -->
-            @include('livewire.admin.status.delete')
+            @include('livewire.admin.contact-groups.delete')
+
+            <!-- Attach Product Modal HTML -->
+            @include('livewire.admin.contact-groups.attach-product')
 
         </div>
     </div>

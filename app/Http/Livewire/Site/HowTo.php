@@ -37,7 +37,7 @@ class HowTo extends Component
 
         $categories = $products->pluck('category')->unique() ;
 
-        return view('livewire.site.learn-more', compact('categories', 'products'));
+        return view('livewire.site.how-to', compact('categories', 'products'));
     }
 
 
