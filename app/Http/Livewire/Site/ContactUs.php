@@ -24,7 +24,9 @@ class ContactUs extends Component
    public $isd_email = 'isd@zesco.co.zm' ;
    public $service_desk_email = 'isd@zesco.co.zm' ;
    public $isd_phone = '2035';
-
+   public $search_term, $nav_search;
+    public $search_results = [];
+    public $searchQuery;
    public $name;
    public $email;
    public $subject;

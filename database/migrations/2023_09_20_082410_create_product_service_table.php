@@ -21,8 +21,9 @@ class CreateProductServiceTable extends Migration
             $table->string('heart_beat');
             $table->string('status');
             $table->string('reason');
-            $table->timestamp('status_resolved_time');
-            $table->integer('updated_by');
+            $table->string('resolution_comment');
+            $table->timestamp('status_resolved_time')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

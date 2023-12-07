@@ -1358,13 +1358,16 @@ section {
 
 #footer .social-links button {
  
-  background-color: #be6c00;
+  display: inline-block;
+  background: #e09334;
+  color: #fff;
   transition: 0.3s;
 }
 
 #footer .social-links button:hover {
 
-  background-color: #be6c00;
+  background: #d86100;
+  color: #fff;
 }
 
 #footer .copyright {

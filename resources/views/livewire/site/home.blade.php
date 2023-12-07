@@ -196,8 +196,8 @@
 
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
-                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <!-- <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div> -->
                                             </div>
                                             <hr>
                                             <div class="row">
@@ -205,8 +205,15 @@
                                                     <div class="col-lg-6 col-sm-12">
                                                         <a href="javascript:void(0)"
                                                            wire:click="recordClick({{$product_by->id}})">
-                                                            {{ $key + 1 }}: {{ $product_by['name'] }} <img
-                                                                src="{{ $product_by['icon_url'] }}" alt=" Icon"
+                                                            {{ $key + 1 }}:
+                                                            @if(  $product_by['heart_beat']  == "on")
+                                                            &#128994;
+                                                            @else
+                                                            &#128992;
+                                                            @endif
+                                                            
+                                                            {{ $product_by['name'] }} <img
+                                                                src="{{ $product_by['icon_url'] }}" alt=" "
                                                                 class="img-fluid">
                                                         </a>
                                                         <hr>
@@ -237,8 +244,8 @@
 
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
-                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <!-- <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div> -->
                                             </div>
                                             <hr>
                                             <div class="row">
@@ -246,8 +253,16 @@
                                                     <div class="col-lg-6 col-sm-12">
                                                         <a href="javascript:void(0)"
                                                            wire:click="recordClick({{$product_by->id}})">
-                                                            {{ $key + 1 }}: {{ $product_by['name'] }} <img
-                                                                src="{{ $product_by['icon_url'] }}" alt=" Icon"
+                                                            {{ $key + 1 }}:
+                                                            
+                                                            @if(  $product_by['heart_beat']  == "on")
+                                                            &#128994;
+                                                            @else
+                                                            &#128992;
+                                                            @endif
+
+                                                            {{ $product_by['name'] }} <img
+                                                                src="{{ $product_by['icon_url'] }}" alt=" "
                                                                 class="img-fluid">
                                                         </a>
                                                         <hr>
@@ -275,8 +290,8 @@
 
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
-                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <!-- <div class="col-lg-6 col-sm-12 "><b>Product</b></div>
+                                                <div class="col-lg-6 col-sm-12 "><b>Product</b></div> -->
                                             </div>
                                             <hr>
                                             <div class="row">
@@ -284,8 +299,16 @@
                                                     <div class="col-lg-6 col-sm-12">
                                                         <a href="javascript:void(0)"
                                                            wire:click="recordClick({{$product->id}})">
-                                                            {{ $key + 1 }}: {{ $product['name'] }} <img
-                                                                src="{{ $product['icon_url'] }}" alt=" Icon"
+                                                        
+                                                            {{ $key + 1 }}:  
+                                                    
+                                                            @if(  $product['heart_beat']  == "on")
+                                                            &#128994;
+                                                            @else
+                                                            &#128992;
+                                                            @endif
+                                                            {{ $product['name'] }} <img
+                                                                src="{{ $product['icon_url'] }}" alt=" "
                                                                 class="img-fluid">
                                                         </a>
                                                         <hr>
@@ -316,7 +339,7 @@
 
                 <div class="section-title">
                     <h2>IN-HOUSE SYSTEMS</h2>
-                    <p>Know more about Zesco's in-house system's. Click the link below to get started..</p>
+                    <p>Know more about ZESCO's in-house system's. Click the link below to get started..</p>
                     <a href="{{ route('ezesco-home.learn.more', 0) }}" class="btn-learn-more">Learn More</a>
                 </div>
 
@@ -440,6 +463,11 @@
                         <p>From streamlined processes to powerful analytics, E-ZESCO empowers you with the tools you need to excel in your endeavors.</p>
 
                         <a href="{{ route('ezesco-home.learn.more', 0 ) }}" class="btn-learn-more">Learn More</a>
+                        <a  href="" class="btn-learn-more"   data-bs-toggle="modal" data-bs-target="#suggestionModal"
+                            title=" Suggest areas of system improvement to enhance and make ZESCO system's better "
+                            >
+                            Product Suggestion Box
+                        </a>
                     </div>
 
                 </div>

@@ -31,7 +31,13 @@
                             <ul>
                                 @foreach($category->products as $product)
                                 <li>  <a href="javascript:void(0)" wire:click="recordClick({{$product->id}})" >
-                                       {{$product->name ?? "--"}}
+                                     
+                                @if(  $product['heart_beat']  == "on")
+                                                            &#128994;
+                                                            @else
+                                                            &#128992;
+                                                            @endif
+                                {{$product->name ?? "--"}}
                                     </a>
                                 </li>
                                 @endforeach
@@ -58,6 +64,12 @@
                     @foreach($search_results as $result)
                         <div class="p-2 text-lowercase">
                             <a href="javascript:void(0)" wire:click="recordClick({{$result->id}})" >
+                           
+                            @if(  $result['heart_beat']  == "on")
+                                                            &#128994;
+                                                            @else
+                                                            &#128992;
+                                                            @endif
                             {{ $result->name }}
                                 </a> | </div>
                     @endforeach

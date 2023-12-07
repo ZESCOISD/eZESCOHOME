@@ -7,10 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductService extends Model
 {
-    protected $table = "product";
+    protected $table = "product_service";
 
     protected $primarykey = 'id';
-    protected $fillable = ['id','url','status','reason'];
+    protected $fillable = [
+        'product_name',
+        'url',
+        'status',
+        'reason', 
+        'product_id', 
+        'heart_beat',
+        'status_resolved_time', 
+        'resolution_comment', 
+        'updated_by' 
+    ];
     public $timestamps = TRUE;
     use HasFactory;
+
+
 }

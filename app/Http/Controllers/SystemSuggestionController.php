@@ -24,12 +24,13 @@ class SystemSuggestionController extends Controller
         SuggestionBox::create($validatedData);
 
         $this->recipientEmails[] = 'nshubart@zesco.co.zm';
+        $this->recipientEmails[] = 'pmudenda@zesco.co.zm';
         // $this->recipientEmails[] = 'isd@zesco.co.zm';
 
         Mail::send([], [], function ($message) use ($validatedData) {
             $message->setTo($this->recipientEmails)
-                ->setSubject($validatedData['subject']   .' | Proposed System : '.$validatedData['system_name'] )
-                ->setBody($validatedData['suggestion'])
+                ->setSubject($validatedData['subject']   )
+                ->setBody( ' Proposed System : '.$validatedData['system_name'].' </br> '.$validatedData['suggestion'])
                 ->setFrom($validatedData['email']);
         });
 
