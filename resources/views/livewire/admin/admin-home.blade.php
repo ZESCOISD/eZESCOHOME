@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">
-                        <a onclick=" window.location='{{ route('zesco-home') }}'">
+                        <a onclick=" window.location='{{ route('admin-menu') }}'">
                             <img src="/img/Zesco.png" alt="" width="125" height="50"
                                 class="d-inline-block align-text-top"></a>
                     </a>

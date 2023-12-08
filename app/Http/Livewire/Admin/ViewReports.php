@@ -51,8 +51,11 @@ class ViewReports extends Component
         $this->totalActiveSystems = DB::table('product')
         ->join('status', 'product.status_code', '=', 'status.code')
         ->select('product.* ','status.name as status_name')
-        ->where('status.name','like','%'.'active'.'%')
+        ->where('status.code','like','%'.config('constants.status_codes.active').'%')
         ->count();
+
+
+    
 
         $this->overallCategories = DB::table('category')
         ->count();
@@ -60,12 +63,12 @@ class ViewReports extends Component
 
     public function viewItem(int $product_id){
 
-        // ->join('status as s', 'product.status_code', '=', 's.status_code')
-        // ->join('category as c', 'product.category_id', '=', 'c.category_id')
+        // ->join('status as s', 'product.status_code', '=', 's.code')
+        // ->join('category as c', 'product.category_id', '=', 'c.id')
         // ->select('product.*','s.name as status_name','c.name as category_name');
 
         $this->viewProduct = Product::join('status', 'product.status_code', '=', 'status.code')
-        ->join('category', 'product.category_id', '=', 'product.category_id')
+        ->join('category', 'category.id', '=', 'product.category_id')
         ->where('product.product_id', $product_id)
         ->select('product.*', 'status.name as status_name', 'category.name as category_name')
         ->first();
@@ -132,597 +135,197 @@ class ViewReports extends Component
 
         $reportType = $this->selectedReportType;
         if(!empty($reportType)){
-            $product = Product::join('status as s', 'product.status_code', '=', 's.status_code')
-            ->join('category as c', 'product.category_id', '=', 'c.category_id')
-            ->select('product.*','s.name as status_name','c.name as category_name');
-
-
-            if ( $reportType === "1" && !empty($this->search)) {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.name','like','%'. $this->search.'%');
-
-                // if date is inputed
-                if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','s1.name as status_name','c1.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-
-
-            }elseif( $reportType === "1" ){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name');
-
-                // if date is inputed
-                if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
+          
+            $productQuery = Product::join('status', 'product.status_code', '=', 'status.code')
+            ->join('category', 'product.category_id', '=', 'category.id')
+            ->select('product.*', 'status.name as status_name', 'category.name as category_name');
+        
+        if ($reportType === "1") {
+            if (!empty($this->search)) {
+                $productQuery->where('product.name', 'like', '%' . $this->search . '%');
             }
-
+        
+            if (!empty($this->from)) {
+                $productQuery->whereDate('product.created_at', '>=', $this->from);
+            }
+        
+            if (!empty($this->to)) {
+                $productQuery->whereDate('product.created_at', '<=', $this->to);
+            }
+        
+            $this->selectedReportType = $reportType;
+            $this->products = $productQuery->get();
+        }
+        
 
 
             // Frequently Accessed System's Report
-
-            if( $reportType === "2" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.name','like','%'. $this->search.'%')
-                ->orderBy('number_of_clicks', 'desc')
-                ->take(1);
-
-                // If date is inputed
-
-                if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-            }elseif ( $reportType === "2") {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->orderBy('number_of_clicks', 'desc')
-                ->take(10);
-
-                //   if date is inputed
-                if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
+        
+        if ($reportType === "2") {
+            if (!empty($this->search)) {
+                $productQuery->where('product.name', 'like', '%' . $this->search . '%')->orderBy('number_of_clicks', 'desc')->take(1);
+            } else {
+                $productQuery->orderBy('number_of_clicks', 'desc')->take(10);
             }
-
+        
+            if (!empty($this->from)) {
+                $productQuery->whereDate('product.created_at', '>=', $this->from);
+            }
+        
+            if (!empty($this->to)) {
+                $productQuery->whereDate('product.created_at', '<=', $this->to);
+            }
+        
+            $this->selectedReportType = $reportType;
+            $this->products = $productQuery->get();
+        }
 
 
              // Active System's
 
-             if( $reportType === "3" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.name','like','%'. $this->search.'%')
-                ->where('status.name','like','%'.'active'.'%')
-                ->take(1);
-
-                    // if date is inputed
-                    if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                        ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                        ->select('product.*','status.name as status_name','category.name as category_name')
-                        ->whereDate('product.created_at', '>=', $this->from)
-                        ->whereDate('product.created_at', '<=', $this->to);
-
-                    }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                        ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                        ->select('product.*','s2.name as status_name','c2.name as category_name')
-                        ->whereDate('product.created_at','>=',$this->from);
-
-                    }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                        ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                        ->select('product.*','s3.name as status_name','c3.name as category_name')
-                        ->whereDate('product.created_at','<=',$this->to);
-
-                    }
-
-                    $this->selectedReportType = $reportType;
-                    $this->products = $product->get();
-
-            }elseif ( $reportType === "3") {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('status.name','like','%'.'active'.'%');
-
-                 // if date is inputed
-                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-            }
-
+            //  $productQuery = Product::join('status', 'product.status_code', '=', 'status.code')
+            //  ->join('category', 'product.category_id', '=', 'category.id')
+            //  ->select('product.*', 'status.name as status_name', 'category.name as category_name');
+         
+         if ($reportType === "3") {
+             if (!empty($this->search)) {
+                 $productQuery->where('product.name', 'like', '%' . $this->search . '%')
+                     ->where('status.code', 'like', '%' . config('constants.status_codes.active') . '%')
+                     ->take(1);
+             } else {
+                 $productQuery->where('status.code', 'like', '%' . config('constants.status_codes.active') . '%');
+             }
+         
+             if (!empty($this->from)) {
+                 $productQuery->whereDate('product.created_at', '>=', $this->from);
+             }
+         
+             if (!empty($this->to)) {
+                 $productQuery->whereDate('product.created_at', '<=', $this->to);
+             }
+         
+             $this->selectedReportType = $reportType;
+             $this->products = $productQuery->get();
+         }
+         
               // Deactivated System's
 
-              if( $reportType === "4" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.name','like','%'. $this->search.'%')
-                ->where('status.name','like','%'.'deactivated'.'%')
-                ->take(1);
-
-                    // if date is inputed
-                    if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                        ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                        ->select('product.*','status.name as status_name','category.name as category_name')
-                        ->whereDate('product.created_at', '>=', $this->from)
-                        ->whereDate('product.created_at', '<=', $this->to);
-
-                    }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                        ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                        ->select('product.*','s2.name as status_name','c2.name as category_name')
-                        ->whereDate('product.created_at','>=',$this->from);
-
-                    }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                        ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                        ->select('product.*','s3.name as status_name','c3.name as category_name')
-                        ->whereDate('product.created_at','<=',$this->to);
-
-                    }
-                    $this->selectedReportType = $reportType;
-                    $this->products = $product->get();
-
-            }elseif ( $reportType === "4") {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('status.name','like','%'.'deactivated'.'%');
-
-                 // if date is inputed
-                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-            }
+            //   $productQuery = Product::join('status', 'product.status_code', '=', 'status.code')
+            //   ->join('category', 'product.category_id', '=', 'category.id')
+            //   ->select('product.*', 'status.name as status_name', 'category.name as category_name');
+          
+          if ($reportType === "4") {
+              if (!empty($this->search)) {
+                  $productQuery->where('product.name', 'like', '%' . $this->search . '%')
+                      ->where('status.code', 'like', '%' . config('constants.status_codes.deactivated') . '%')
+                      ->take(1);
+              } else {
+                  $productQuery->where('status.code', 'like', '%' . config('constants.status_codes.deactivated') . '%');
+              }
+          
+              if (!empty($this->from)) {
+                  $productQuery->whereDate('product.created_at', '>=', $this->from);
+              }
+          
+              if (!empty($this->to)) {
+                  $productQuery->whereDate('product.created_at', '<=', $this->to);
+              }
+          
+              $this->selectedReportType = $reportType;
+              $this->products = $productQuery->get();
+          }
+          
 
              // System's in production report
 
-             if( $reportType === "5" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.name','like','%'. $this->search.'%')
-                ->where('status.name','like','%'.'production'.'%')
-                ->take(1);
-
-                    // if date is inputed
-                    if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                        ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                        ->select('product.*','status.name as status_name','category.name as category_name')
-                        ->whereDate('product.created_at', '>=', $this->from)
-                        ->whereDate('product.created_at', '<=', $this->to);
-
-                    }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                        ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                        ->select('product.*','s2.name as status_name','c2.name as category_name')
-                        ->whereDate('product.created_at','>=',$this->from);
-
-                    }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                        ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                        ->select('product.*','s3.name as status_name','c3.name as category_name')
-                        ->whereDate('product.created_at','<=',$this->to);
-
-                    }
-                    $this->selectedReportType = $reportType;
-                    $this->products = $product->get();
-
-            }elseif ( $reportType === "5") {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('status.name','like','%'.'production'.'%');
-
-                 // if date is inputed
-                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-            }
-
+            //  $productQuery = Product::join('status', 'product.status_code', '=', 'status.code')
+            //  ->join('category', 'product.category_id', '=', 'category.id')
+            //  ->select('product.*', 'status.name as status_name', 'category.name as category_name');
+         
+         if ($reportType === "5") {
+             if (!empty($this->search)) {
+                 $productQuery->where('product.name', 'like', '%' . $this->search . '%')
+                     ->where('status.code', 'like', '%' . config('constants.status_codes.production') . '%')
+                     ->take(1);
+             } else {
+                 $productQuery->where('status.code', 'like', '%' . config('constants.status_codes.production') . '%');
+             }
+         
+             if (!empty($this->from)) {
+                 $productQuery->whereDate('product.created_at', '>=', $this->from);
+             }
+         
+             if (!empty($this->to)) {
+                 $productQuery->whereDate('product.created_at', '<=', $this->to);
+             }
+         
+             $this->selectedReportType = $reportType;
+             $this->products = $productQuery->get();
+         }
+         
 
              //  System's in development report
 
-             if( $reportType === "6" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.name','like','%'. $this->search.'%')
-                ->where('status.name','like','%'.'development'.'%')
-                ->take(1);
+            //  $productQuery = Product::join('status', 'product.status_code', '=', 'status.code')
+            //  ->join('category', 'product.category_id', '=', 'category.id')
+            //  ->select('product.*', 'status.name as status_name', 'category.name as category_name');
+         
+         if ($reportType === "6") {
+             if (!empty($this->search)) {
+                 $productQuery->where('product.name', 'like', '%' . $this->search . '%')
+                     ->where('status.code', 'like', '%' . config('constants.status_codes.development') . '%')
+                     ->take(1);
+             } else {
+                 $productQuery->where('status.code', 'like', '%' . config('constants.status_codes.development') . '%');
+             }
+         } elseif ($reportType === "7") {
+             if (!empty($this->search)) {
+                 $productQuery->where('product.name', 'like', '%' . $this->search . '%')
+                     ->where('status.code', 'like', '%' . config('constants.status_codes.decommissioned') . '%')
+                     ->take(1);
+             } else {
+                 $productQuery->where('status.code', 'like', '%' . config('constants.status_codes.decommissioned') . '%');
+             }
+         } elseif ($reportType === "8") {
+             if (!empty($this->search)) {
+                 $productQuery->where('product.lead_developer', 'like', '%' . $this->search . '%')
+                     ->take(1);
+             } else {
+                 $productQuery->where('product.lead_developer', 'like', '%' . $this->search . '%');
+             }
+         }
+         
+         if (!empty($this->from)) {
+             $productQuery->whereDate('product.created_at', '>=', $this->from);
+         }
+         
+         if (!empty($this->to)) {
+             $productQuery->whereDate('product.created_at', '<=', $this->to);
+         }
+         
+         $this->selectedReportType = $reportType;
+         $this->products = $productQuery->get();
+         
+         $suggestionQuery = SuggestionBox::query();
 
-                    // if date is inputed
-                    if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                        ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                        ->select('product.*','status.name as status_name','category.name as category_name')
-                        ->whereDate('product.created_at', '>=', $this->from)
-                        ->whereDate('product.created_at', '<=', $this->to);
-
-                    }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                        ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                        ->select('product.*','s2.name as status_name','c2.name as category_name')
-                        ->whereDate('product.created_at','>=',$this->from);
-
-                    }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                        ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                        ->select('product.*','s3.name as status_name','c3.name as category_name')
-                        ->whereDate('product.created_at','<=',$this->to);
-
-                    }
-
-                    $this->selectedReportType = $reportType;
-                    $this->products = $product->get();
-
-            }elseif ( $reportType === "6") {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('status.name','like','%'.'development'.'%');
-
-                 // if date is inputed
-                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-            }
-
-             // Decommissioned System's
-
-             if( $reportType === "7" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.name','like','%'. $this->search.'%')
-                ->where('status.name','like','%'.'decommissioned'.'%')
-                ->take(1);
-
-                    // if date is inputed
-                    if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                        ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                        ->select('product.*','status.name as status_name','category.name as category_name')
-                        ->whereDate('product.created_at', '>=', $this->from)
-                        ->whereDate('product.created_at', '<=', $this->to);
-
-                    }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                        ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                        ->select('product.*','s2.name as status_name','c2.name as category_name')
-                        ->whereDate('product.created_at','>=',$this->from);
-
-                    }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                        ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                        ->select('product.*','s3.name as status_name','c3.name as category_name')
-                        ->whereDate('product.created_at','<=',$this->to);
-
-                    }
-
-                    $this->selectedReportType = $reportType;
-                    $this->products = $product->get();
-
-            }elseif ( $reportType === "7") {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('status.name','like','%'.'decommissioned'.'%');
-
-                 // if date is inputed
-                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-            }
-
-
-              // System Developer Report
-
-              if( $reportType === "8" && !empty($this->search)){
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.lead_developer','like','%'. $this->search.'%')
-                ->take(1);
-
-                    // if date is inputed
-                    if(!empty($this->from) && !empty($this->to)){
-                        $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                        ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                        ->select('product.*','status.name as status_name','category.name as category_name')
-                        ->whereDate('product.created_at', '>=', $this->from)
-                        ->whereDate('product.created_at', '<=', $this->to);
-
-                    }elseif(!empty($this->from)){
-                        $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                        ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                        ->select('product.*','s2.name as status_name','c2.name as category_name')
-                        ->whereDate('product.created_at','>=',$this->from);
-
-                    }elseif(!empty($this->to)){
-                        $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                        ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                        ->select('product.*','s3.name as status_name','c3.name as category_name')
-                        ->whereDate('product.created_at','<=',$this->to);
-
-                    }
-
-                    $this->selectedReportType = $reportType;
-                    $this->products = $product->get();
-
-            }elseif ( $reportType === "8") {
-                $product = $product->join('status', 'product.status_code', '=', 'status.code')
-                ->join('category', 'product.category_id', '=', 'category.category_id')
-                ->select('product.*', 'status.name as status_name','category.name as category_name')
-                ->where('product.lead_developer','like','%'. $this->search.'%');
-
-                 // if date is inputed
-                 if(!empty($this->from) && !empty($this->to)){
-                    $product = $product->join('status as s1', 'product.status_code', '=', 's1.status_code')
-                    ->join('category as c1', 'product.category_id', '=', 'c1.category_id')
-                    ->select('product.*','status.name as status_name','category.name as category_name')
-                    ->whereDate('product.created_at', '>=', $this->from)
-                    ->whereDate('product.created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $product = $product->join('status as s2', 'product.status_code', '=', 's2.status_code')
-                    ->join('category as c2', 'product.category_id', '=', 'c2.category_id')
-                    ->select('product.*','s2.name as status_name','c2.name as category_name')
-                    ->whereDate('product.created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $product = $product->join('status as s3', 'product.status_code', '=', 's3.status_code')
-                    ->join('category as c3', 'product.category_id', '=', 'c3.category_id')
-                    ->select('product.*','s3.name as status_name','c3.name as category_name')
-                    ->whereDate('product.created_at','<=',$this->to);
-
-                }
-                $this->selectedReportType = $reportType;
-                $this->products = $product->get();
-                // dd($product);
-            }
-
-            if( $reportType === "9" && !empty($this->search)){
-                $suggestions = SuggestionBox::all();
-
-                    // if date is inputed
-                    if(!empty($this->from) && !empty($this->to)){
-                        $suggestion = $suggestion->whereDate('created_at', '>=', $this->from)
-                        ->whereDate('created_at', '<=', $this->to);
-
-                    }elseif(!empty($this->from)){
-                        $suggestion = $suggestion->whereDate('created_at','>=',$this->from);
-
-                    }elseif(!empty($this->to)){
-                        $suggestion = $suggestion->whereDate('product.created_at','<=',$this->to);
-
-                    }
-
-                    $this->selectedReportType = $reportType;
-                    $this->suggestion = $suggestion->get();
-
-            }elseif ( $reportType === "9") {
-
-                $paginate = SuggestionBox::all();
-
-                // dd($suggestion);
-
-                $suggestion = SuggestionBox::where('system_name','like','%'. $this->search.'%');
-
-                // dd($suggestion);
-
-                 // if date is inputed
-                 if(!empty($this->from) && !empty($this->to)){
-                    $suggestion = $suggestion->whereDate('created_at', '>=', $this->from)
-                    ->whereDate('created_at', '<=', $this->to);
-
-                }elseif(!empty($this->from)){
-                    $suggestion = $suggestion->whereDate('created_at','>=',$this->from);
-
-                }elseif(!empty($this->to)){
-                    $suggestion = $suggestion->whereDate('created_at','<=',$this->to);
-
-                }
-                $this->selectedReportType = $reportType;
-
-                // dd($this->selectedReportType);
-
-                $suggest = $suggestion->paginate(5);
-                // $this->suggestions = collect($suggest->items());
-
-                // dd($this->suggestions);
-
-    //              $users = $usersQuery->paginate(10);
-    // $usersCollection = collect($users->items());
-            }
+         if ($reportType === "9") {
+             if (!empty($this->search)) {
+                 $suggestionQuery->where('system_name', 'like', '%' . $this->search . '%');
+             }
+         
+             if (!empty($this->from)) {
+                 $suggestionQuery->whereDate('created_at', '>=', $this->from);
+             }
+         
+             if (!empty($this->to)) {
+                 $suggestionQuery->whereDate('created_at', '<=', $this->to);
+             }
+         
+             $this->selectedReportType = $reportType;
+         
+             $this->suggestions = $suggestionQuery->paginate(5);
+         }
+         
         }
     }
 
