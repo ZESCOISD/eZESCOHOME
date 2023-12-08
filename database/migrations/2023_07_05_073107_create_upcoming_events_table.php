@@ -16,7 +16,7 @@ class CreateUpcomingEventsTable extends Migration
         Schema::create('upcoming_events', function (Blueprint $table) {
             $table->id();
             $table->string('event_name',50)->nullable();
-            $table->string('event_description',5000)->nullable();
+            $table->string('event_description',500)->nullable();
             $table->string('venue',50)->nullable();
             $table->integer('fee')->nullable();
             $table->time('time');

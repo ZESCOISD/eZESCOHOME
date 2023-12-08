@@ -17,7 +17,7 @@ class CreateSuggestionBoxesTable extends Migration
             $table->id();
             $table->string('subject',500);
             $table->string('system_name',500)->nullable();
-            $table->string('suggestion',10000);
+            $table->string('suggestion',500);
             $table->string('name');
             $table->string('email');
             $table->string('department');

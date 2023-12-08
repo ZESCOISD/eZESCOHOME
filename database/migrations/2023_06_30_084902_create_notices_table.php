@@ -16,7 +16,7 @@ class CreateNoticesTable extends Migration
         Schema::create('notices', function (Blueprint $table) {
             $table->id();
             $table->string('notice_name',100)->nullable();
-            $table->string('description',10000);
+            $table->string('description',500);
             $table->string('staff_name',60)->nullable();
             $table->string('staff_title',50)->nullable();
             $table->string('department',50)->nullable();
