@@ -15,6 +15,7 @@ class Categories extends Component
 
     public $name;
     public $category_id;
+    public $html;
     public $search;
     public $loading = false;
     public $allData = [];
