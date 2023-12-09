@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Route;
 
 // new routes
 Route::get('/',Home::class)->name('ezesco-home');
+Route::get('/home',Home::class)->name('ezesco-home');
 Route::get('/home/contact/us',\App\Http\Livewire\Site\ContactUs::class)->name('ezesco-home.contact.us');
 Route::get('/home/how/to',\App\Http\Livewire\Site\HowTo::class)->name('ezesco-home.how.to');
 Route::get('/home/learn/more/{product_id}',\App\Http\Livewire\Site\LearnMore::class)->name('ezesco-home.learn.more');

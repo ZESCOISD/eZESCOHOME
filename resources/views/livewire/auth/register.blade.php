@@ -18,7 +18,7 @@
                         <div wire:loading wire:target="register" class="loading-bar"></div>
 
                         <div class="col-lg-12 text-center">
-                            <div type="button" onclick=" window.location='{{ route('zesco-home') }}'" id="login-home">
+                            <div type="button" onclick=" window.location='{{ route('ezesco-home') }}'" id="login-home">
                                 <i style="font-size: 35px" class="bi bi-house-fill"></i>
                                 <p style="font-size: 20px">Home</p>
                             </div>
