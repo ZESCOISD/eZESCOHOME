@@ -66,7 +66,7 @@ class ProductsIndex extends Component
             'category_id' => 'required',
             'status_code' => 'required',
             'user_manual' => 'nullable|mimes:pdf|max:10240',
-            'video' => 'nullable|mimes:mp4|max:50000',
+            'video' => 'nullable|mimes:mp4,MP4|max:50000',
             'cost_saving' => 'required|numeric',
             'system_cover_image' => 'nullable|image|max:5024',
             'url' => 'required|url',

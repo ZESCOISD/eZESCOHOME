@@ -105,6 +105,7 @@ class HomeController extends Controller
         //loop through each product
         foreach ($products as $product ) {
             try {
+                //check 
                 $response = $client->request('GET', $product->url);
                 $status = $response->getStatusCode();
                

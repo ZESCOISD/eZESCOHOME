@@ -91,8 +91,7 @@ class Home extends Component
     {
         $heartBeatCheck =  HomeController::checkSystemStateWithAGet() ;
 
-      //  dd($heartBeatCheck);
-
+    
 
         $more_notices = DB::table('notices')
             ->select('notice_name', 'description', 'staff_name', 'staff_title', 'department', 'start_date', 'end_date')
